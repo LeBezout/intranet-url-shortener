@@ -50,7 +50,7 @@ TODO `Browser->URL Shortener->Cible`
 |---|---|---|
 | Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
 | Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Tomcat Embedded |
-| Base de données relationnelle | Stockage des éléments | H2,  MySQL, MariaDB, PostGreSQL, ... |
+| Base de données relationnelle | Stockage des éléments | H2, MySQL, MariaDB, PostGreSQL, ... |
 
 ## Annexes
 
@@ -62,15 +62,15 @@ TODO `Browser->URL Shortener->Cible`
 
 | Code | Message | Signification |
 |---|---|---|
-| `300` | **Multiple Choices** | L’URI demandée se rapporte à plusieurs ressources. |
+| `300` | **Multiple Choices** | L'URI demandée se rapporte à plusieurs ressources. |
 | `301` | **Moved Permanently** | Document déplacé de façon permanente. |
 | `302` | **Found** | Document déplacé de façon temporaire. |
 | `303` | **See Other** | La réponse à cette requête est ailleurs. |
 | `304` | **Not Modified** | Document non modifié depuis la dernière requête. |
 | `305` | **Use Proxy** | (depuis HTTP/1.1) La requête doit être ré-adressée au proxy. |
-| `306` | **Switch Proxy** | Code utilisé par une ancienne version de la RFC 26166, à présent réservé. Elle signifiait "Les requêtes suivantes doivent utiliser le proxy spécifié"7. |
-| `307` | **Temporary Redirect** | La requête doit être redirigée temporairement vers l’URI spécifiée. |
-| `308` | **Permanent Redirect** | La requête doit être redirigée définitivement vers l’URI spécifiée. |
+| `306` | **Switch Proxy** | Code utilisé par une ancienne version de la RFC 26166, à présent réservé. Elle signifiait "Les requêtes suivantes doivent utiliser le proxy spécifié". |
+| `307` | **Temporary Redirect** | La requête doit être redirigée temporairement vers l'URI spécifiée. |
+| `308` | **Permanent Redirect** | La requête doit être redirigée définitivement vers l'URI spécifiée. |
 | `310` | **Too many Redirects** | La requête doit être redirigée de trop nombreuses fois, ou est victime d’une boucle de redirection. |
 
 Source : [Wikipedia](https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP#3xx_-_Redirection)
