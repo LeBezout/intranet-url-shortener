@@ -48,9 +48,9 @@ TODO `Browser->URL Shortener->Cible`
 
 | Composant | Description | Technologies |
 |---|---|---|
-| Frontend Web | Interface permettant de'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
-| Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Tomcat Emebedded |
-| Base de données relationnelle | Stockage des éléments | H2,  MySQL, MariaDB, PostGreSQL |
+| Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
+| Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Tomcat Embedded |
+| Base de données relationnelle | Stockage des éléments | H2,  MySQL, MariaDB, PostGreSQL, ... |
 
 ## Annexes
 
