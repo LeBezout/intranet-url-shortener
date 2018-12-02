@@ -1,6 +1,6 @@
 # intranet-url-shortener
 
-An URL Shortener but for Intranet purpose
+A simple URL Shortener but for Intranet purpose
 
 :fr: [Version française](README_fr.md)
 
