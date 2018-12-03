@@ -24,10 +24,10 @@ on pourra citer YouTube, Facebook, Twitter. LinkedIn, Google.
 
 ### A.3- Les problématiques liées à l'utilisation des raccourcisseurs d'URL
 
-* Une URL réduite offerte par un service Internet dans une utilisation interne à l'entreprise génère des flux réseaux inutiles : on sort de l'intranet pour y ré-entrer ensuite : `intranet -> proxy web -> service internet -> firewall -> intranet`
+* Une URL réduite offerte par un service Internet dans une utilisation interne à l'entreprise génère des flux réseaux inutiles : on sort de l'intranet pour y ré-entrer immédiatement : `intranet -> proxy web -> service internet -> firewall -> intranet`
 * Une URL réduite masque l'adresse originale. Les différents services offrent généralement la possibilité de prévisualiser le site de destination au lieu d'y être redirigé directement, ... mais qui le fait vraiment ?
 * Il peut exister pour une même URL autant de liens courts différents qu'il existe de services de raccourcissement.
-* Si le service externe de réduction d'URL ferme alors toutes les adresses réduites l'utilisant deviennent inaccessibles, il est de plus dès lors impossible d'obtenir l'adresse d'origine.
+* Si le service externe de réduction d'URL ferme alors toutes les adresses réduites l'utilisant deviennent inaccessibles, il est donc dès lors impossible d'obtenir l'adresse d'origine.
 * Les services externes de réduction d'URL en profitent pour collecter des données et autres statistiques.
 * Une URL peut être une donnée sensible, elle peut contenir des informations importantes en paramètres (login, jeton, voire mot de passe, ...).
 * Dans le cas d'une utilisation en interne on peut indirectement exposer des informations concernant l'infrastructure interne d’une entreprise.
@@ -42,15 +42,27 @@ C'est tout l'intérêt de ce projet de pouvoir être déployé facilement (via d
 
 ### B.1- Architecture
 
-TODO `Browser->URL Shortener->Cible`
+TODO Redirection :  `Browser->URL Shortener->Cible`
+
+TODO GUI : `Browser->NGINX->TOMCAT->DB`
 
 ### B.2- Détail des composants
 
 | Composant | Description | Technologies |
 |---|---|---|
 | Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
-| Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Tomcat Embedded |
+| Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Liquibase + Tomcat Embedded |
 | Base de données relationnelle | Stockage des éléments | H2, MySQL, MariaDB, PostGreSQL, ... |
+
+## C- Guide d'utilisation
+
+### C.1- Configuration
+
+TODO
+
+### C.2- Installation
+
+TODO
 
 ## Annexes
 

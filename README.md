@@ -1,6 +1,4 @@
-# intranet-url-shortener
-
-A simple URL Shortener but for Intranet purpose
+# A simple URL Shortener for Intranet purpose
 
 :fr: [Version française](README_fr.md)
 
@@ -10,34 +8,63 @@ A simple URL Shortener but for Intranet purpose
 
 ### A.1- The Aim
 
-TODO
+On company's intranet sites regularly we can see the use of external URL shorteners,
+such as those from Google or bit.ly.
+
+It is a very practical and very popular service but **which is not without some problems**
+and in particular in an internal company use.
 
 ### A.2- What is a URL shortener?
 
-TODO
+A URL shortener or URL reducer is a short link generator, consisting of assigning a unique key
+of few characters to a specific web page and the ability to redirect to the original URL.
+
+The HTTP protocol natively provides the redirection issue by the statuses in the `3XX` range (usually` 301`, `302` or` 307`).
+
+:information_source: **A shortened link is obviously easier to share or remember.**
+
+Finally, note that many applications, especially social networks, have native integrations.
+We can cite YouTube, Facebook, Twitter. LinkedIn, Google.
 
 ### A.3- The issues related to URL shorteners
 
-TODO
+* A reduced URL offered by an Internet service in an internal company use generates useless network flows: we leave the intranet to re-enter it immediately: `intranet -> web proxy -> internet -> firewall -> intranet`
+* A reduced URL obscures the original address. The different providers usually offer the possibility of previewing the destination site instead of being redirected directly to it,...  but who really does it?
+* There may be as many different short links for the same URL as there are shortening services.
+* If the external URL reduction service then closes all the reduced addresses using it become inaccessible, it is therefore impossible to obtain the original address.
+* External URL reduction services take advantage of this to collect data and other statistics.
+* A URL can be a sensitive data, it can contain important information in parameters (login, token, even password, ...).
+* In the case of internal use, information about the internal infrastructure of the company can be indirectly disclosed.
 
-### A.4- Finding
+### A.4- The Facts
 
-TODO
+It seems that there is no tool on the place that can be installed "on premise" in the network of a company to make this service.
+
+It is all the aim of this project to be easily deployed (with _Docker_ images) and used in the intranet of a company.
 
 ## B- Project description
 
-### B.1- The Architecture
+### B.1- Architecture
 
 TODO
 
-### B.2- The Components
+### B.2- Components
 
 | Component | Purpose | Technologies |
 |---|---|---|
-| Frontend Web | TODO | Vue.js + Typescript within a NGINX http server |
-| Backend REST | TOOD | Spring Boot + with embedded Tomcat |
-| Database | Store the entries | H2,  MySQL, MariaDB, PostGreSQL, ... |
+| Web Frontend | GUI to add/update/delete.display the entries | Vue.js + Typescript within a NGINX http server |
+| Rest API | Expose  | Spring Boot + Liquibase + with embedded Tomcat |
+| Database | Store the entries | H2, MySQL, MariaDB, PostGreSQL, ... |
 
+## C- How To
+
+### C.1- Configuring
+
+TODO
+
+### C.2- Deploying
+
+TODO
 
 ## Annexes
 
