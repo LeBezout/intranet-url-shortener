@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog logicalFilePath="db.changelog-master.xml" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="urlshortener" id="V1.00">
+        <createTable tableName="link" remarks="the table to store the links with their generated ids">
+            <column name="id" remarks="ID" type="VARCHAR(10 CHAR)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(255 CHAR)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_by" remarks="Creation user code" type="VARCHAR(255 CHAR)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_date" remarks="Creation date" type="DATETIME">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="last_updated" remarks="Creation date" type="DATETIME">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="private" remarks="Link is author private" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="access_count" remarks="Access counter" type="BIGINT" defaultValueNumeric="0">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="urlshortener" id="V1.01">
+        <createIndex indexName="idx_target_url" tableName="link" unique="false">
+            <column name="target_url" type="VARCHAR(255 CHAR)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="urlshortener" id="V1.02">
+        <createIndex indexName="idx_created_by" tableName="link" unique="false">
+            <column name="created_by" type="VARCHAR(255 CHAR)"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

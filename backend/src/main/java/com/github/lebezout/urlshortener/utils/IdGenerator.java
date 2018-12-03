@@ -1,0 +1,79 @@
+package com.github.lebezout.urlshortener.utils;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * A simple random-based ID Generator for our short links
+ */
+public class IdGenerator {
+    private final char[] alphabet;
+
+    /** Constructor with array of primitives
+     * @param pChars array of chars
+     */
+    public IdGenerator(final char... pChars) {
+        alphabet = Objects.requireNonNull(pChars, "Alpahabet array cannot be null");
+    }
+
+    /** Constructor with array of wrapped characters
+     * @param pChars array of characters
+     */
+    public IdGenerator(final Character... pChars) {
+        Objects.requireNonNull(pChars, "Alpahabet array cannot be null");
+        alphabet = new char[pChars.length];
+        for (int i = 0; i < pChars.length; i++) {
+            alphabet[i] = pChars[i].charValue();
+        }
+    }
+
+    /** generate a new id with a bounded length
+     * @param minLength min length
+     * @param maxLength max length
+     * @return new Id
+     */
+    public String generate(final int minLength, final int maxLength) {
+        final int max = alphabet.length - 1;
+        final int length = maxLength == minLength
+                ? minLength
+                : ((maxLength < minLength)
+                    ? generateInt(maxLength, minLength)
+                    : generateInt(minLength, maxLength));
+        // 1st random step
+        final char[] shuffleAlpahbet = shuffleArray(alphabet);
+        // Generate (2nd random step)
+        final char[] buff = new char[length];
+        int count = 0;
+        while (count < length) {
+            // take a char in the alpahbet
+            buff[count++] = shuffleAlpahbet[generateInt(0, max)];
+        }
+        return new String(buff);
+    }
+
+    /** generate a new id with a fixed length
+     * @param length the fixed length
+     * @return new Id
+     */
+    public String generate(final int length) {
+        return generate(length, length);
+    }
+
+    private static int generateInt(final int min, final int max) {
+        return ThreadLocalRandom.current().nextInt(1 + max - min) + min;
+    }
+
+    private static char[] shuffleArray(char[] input) {
+        char[] result = Arrays.copyOf(input, input.length);
+        for (int i = result.length - 1; i > 0; i--) {
+            swap(result, i, ThreadLocalRandom.current().nextInt(i + 1));
+        }
+        return result;
+    }
+    private static void swap(char[] arr, int i, int j) {
+        char tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+}
