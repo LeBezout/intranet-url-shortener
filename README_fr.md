@@ -34,7 +34,9 @@ on pourra citer YouTube, Facebook, Twitter. LinkedIn, Google.
 
 ### A.4- Constat
 
-Il n'existe à priori pas d'outil sur le marché que l'on puisse installer dans le réseau de l'entreprise pour rendre ce service.
+Il n'existe pas beaucoup d'outils sur le marché que l'on puisse installer dans le réseau de l'entreprise pour rendre ce service.
+
+[YOURLS - Your Own URL Shortener](https://github.com/YOURLS/YOURLS) écrit en PHP en est un.
 
 C'est tout l'intérêt de ce projet de pouvoir être déployé facilement (via des images _Docker_) et utilisé dans l'intranet d'une entreprise.
 
@@ -52,11 +54,22 @@ TODO GUI : `Browser->NGINX->TOMCAT->DB`
 |---|---|---|
 | Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
 | Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Liquibase + Tomcat Embedded |
-| Base de données relationnelle | Stockage des éléments | H2, MySQL, MariaDB, PostGreSQL, ... |
+| Base de données relationnelle | Stockage des éléments | H2, MySQL, MariaDB, PostGreSQL |
 
 ## C- Guide d'utilisation
 
 ### C.1- Configuration
+
+
+#### C.1.1- Configuration URL Shortener
+
+TODO
+
+#### C.1.2- Configuration de la base données
+
+TODO
+
+#### C.1.3- Configuration LDAP
 
 TODO
 

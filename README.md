@@ -6,7 +6,7 @@
 
 ## A- Project introduction
 
-### A.1- The Aim
+### A.1- The purpose
 
 On company's intranet sites regularly we can see the use of external URL shorteners,
 such as those from Google or bit.ly.
@@ -38,7 +38,9 @@ We can cite YouTube, Facebook, Twitter. LinkedIn, Google.
 
 ### A.4- The Facts
 
-It seems that there is no tool on the place that can be installed "on premise" in the network of a company to make this service.
+It seems that there not a lot of tools on the place that can be installed "on premise" in the network of a company to make this service.
+
+A one is [YOURLS - Your Own URL Shortener](https://github.com/YOURLS/YOURLS) written in PHP.
 
 It is all the aim of this project to be easily deployed (with _Docker_ images) and used in the intranet of a company.
 
@@ -46,7 +48,9 @@ It is all the aim of this project to be easily deployed (with _Docker_ images) a
 
 ### B.1- Architecture
 
-TODO
+TODO Redirection :  `Browser->URL Shortener->Target`
+
+TODO GUI : `Browser->NGINX->TOMCAT->DB`
 
 ### B.2- Components
 
@@ -54,11 +58,21 @@ TODO
 |---|---|---|
 | Web Frontend | GUI to add/update/delete.display the entries | Vue.js + Typescript within a NGINX http server |
 | Rest API | Expose  | Spring Boot + Liquibase + with embedded Tomcat |
-| Database | Store the entries | H2, MySQL, MariaDB, PostGreSQL, ... |
+| Database | Store the entries | H2, MySQL, MariaDB, PostGreSQL |
 
 ## C- How To
 
 ### C.1- Configuring
+
+#### C.1.1- Configuring URL Shortener
+
+TODO
+
+#### C.1.2- Configuring Database
+
+TODO
+
+#### C.1.3- Configuring LDAP
 
 TODO
 
