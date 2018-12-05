@@ -5,7 +5,7 @@
 
     <changeSet author="urlshortener" id="V1.00">
         <createTable tableName="link" remarks="the table to store the links with their generated ids">
-            <column name="id" remarks="ID" type="VARCHAR(10 CHAR)">
+            <column name="id" remarks="ID" type="VARCHAR(15 CHAR)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(255 CHAR)">

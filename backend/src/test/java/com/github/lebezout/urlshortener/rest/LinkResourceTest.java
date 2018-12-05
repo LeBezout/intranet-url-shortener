@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lebezout.urlshortener.domain.LinkDTO;
 import com.github.lebezout.urlshortener.domain.LinkRepository;
+import com.github.lebezout.urlshortener.domain.NewLinkDTO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -110,9 +111,8 @@ public class LinkResourceTest {
 
     @Test
     @WithMockUser(username = "admin", password = "admin")
-    public void test_addNewLink() throws Exception {
-        LinkDTO newLink = new LinkDTO();
-        newLink.setCreator("TEST");
+    public void test_addNewLink_generated_ID() throws Exception {
+        NewLinkDTO newLink = new NewLinkDTO();
         newLink.setPrivateLink(true);
         newLink.setTarget("http://github.com");
 
@@ -129,9 +129,73 @@ public class LinkResourceTest {
         String response = httpResponse.getContentAsString();
         LOGGER.debug(response);
     }
-
     @Test
     @WithMockUser(username = "admin", password = "admin")
+    public void test_addNewLink_provided_ID() throws Exception {
+        NewLinkDTO newLink = new NewLinkDTO();
+        newLink.setId("TEST-ID");
+        newLink.setPrivateLink(true);
+        newLink.setTarget("http://github.com");
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsBytes(newLink));
+
+        MvcResult result = mvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        String response = httpResponse.getContentAsString();
+        LOGGER.debug(response);
+    }
+    @Test
+    @WithMockUser(username = "admin", password = "admin")
+    public void test_addNewLink_provided_ID_already_exists() throws Exception {
+        NewLinkDTO newLink = new NewLinkDTO();
+        newLink.setId("AZERTY");
+        newLink.setPrivateLink(true);
+        newLink.setTarget("http://github.com");
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsBytes(newLink));
+
+        MvcResult result = mvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        String response = httpResponse.getErrorMessage();
+        LOGGER.debug(response);
+        Assert.assertEquals("The provided ID already exists", response);
+    }
+    @Test
+    @WithMockUser(username = "admin", password = "admin")
+    public void test_addNewLink_provided_ID_too_long() throws Exception {
+        NewLinkDTO newLink = new NewLinkDTO();
+        newLink.setId("AZERTYAZERTYAZERTYAZERTYAZERTYAZERTYAZERTY");
+        newLink.setPrivateLink(true);
+        newLink.setTarget("http://github.com");
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsBytes(newLink));
+
+        MvcResult result = mvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        String response = httpResponse.getErrorMessage();
+        LOGGER.debug(response);
+        Assert.assertEquals("The provided ID is too long (must be lower than " + IDTooLongException.ID_MAX_LENGTH + " characters)", response);
+    }
+
+
+    @Test
+    @WithMockUser(username = "JUNIT", password = "admin")
     public void test_updateExistingLink() throws Exception {
         Assert.assertTrue(repository.findById("AZERTY").isPresent());
 
@@ -148,7 +212,7 @@ public class LinkResourceTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", password = "admin")
+    @WithMockUser(username = "JUNIT", password = "admin")
     public void test_deleteExistingLink() throws Exception {
         Assert.assertTrue(repository.findById("ABCDEF").isPresent());
 

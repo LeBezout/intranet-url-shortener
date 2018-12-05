@@ -1,5 +1,6 @@
 package com.github.lebezout.urlshortener.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,10 +15,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Value("${urlshortener.ldap_user_search_filter}") String userSearchFilter;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-       // auth.authenticationProvider(ldapAuthProvider); //TODO LDAPPRovider
+        auth.ldapAuthentication().userDnPatterns(userSearchFilter);
     }
 
     @Override
