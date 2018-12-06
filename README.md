@@ -2,7 +2,7 @@
 
 :fr: [Version française](README_fr.md)
 
-:uk: _English version under constuction_
+:uk: _under construction_
 
 ## A- Project introduction
 
@@ -11,7 +11,7 @@
 On company's intranet sites regularly we can see the use of external URL shorteners,
 such as those from Google or bit.ly.
 
-It is a very practical and very popular service but **which is not without some problems**
+It is a very easy and very popular service but **which is not without some problems**
 and in particular in an internal company use.
 
 ### A.2- What is a URL shortener?

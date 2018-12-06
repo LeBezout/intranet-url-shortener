@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -44,6 +45,20 @@ public class LinkResourceTest {
 
     @Test
     public void test_findLinks() throws Exception {
+        String startDate = URLEncoder.encode("2018-11-10T00:00:00.000-00:00", "UTF-8");
+        String endDate = URLEncoder.encode("2018-11-12T00:00:00.000-00:00", "UTF-8");
+        String uri = String.format("/api/link?creator=JUNIT&from=%s&to=%s", startDate, endDate);
+        LOGGER.debug("URI to call : {}", uri);
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI(uri));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        List<LinkDTO> dtoList =  mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
+        LOGGER.debug(dtoList.toString());
+        Assert.assertEquals(1, dtoList.size());
     }
 
     @Test

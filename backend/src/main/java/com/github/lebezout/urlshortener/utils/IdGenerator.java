@@ -14,14 +14,14 @@ public class IdGenerator {
      * @param pChars array of chars
      */
     public IdGenerator(final char... pChars) {
-        alphabet = Objects.requireNonNull(pChars, "Alpahabet array cannot be null");
+        alphabet = Objects.requireNonNull(pChars, "Alphabet array cannot be null");
     }
 
     /** Constructor with array of wrapped characters
      * @param pChars array of characters
      */
     public IdGenerator(final Character... pChars) {
-        Objects.requireNonNull(pChars, "Alpahabet array cannot be null");
+        Objects.requireNonNull(pChars, "Alphabet array cannot be null");
         alphabet = new char[pChars.length];
         for (int i = 0; i < pChars.length; i++) {
             alphabet[i] = pChars[i].charValue();
@@ -41,13 +41,13 @@ public class IdGenerator {
                     ? generateInt(maxLength, minLength)
                     : generateInt(minLength, maxLength));
         // 1st random step
-        final char[] shuffleAlpahbet = shuffleArray(alphabet);
+        final char[] shuffledAlphabet = shuffleArray(alphabet);
         // Generate (2nd random step)
         final char[] buff = new char[length];
         int count = 0;
         while (count < length) {
-            // take a char in the alpahbet
-            buff[count++] = shuffleAlpahbet[generateInt(0, max)];
+            // take a char in the alphabet
+            buff[count++] = shuffledAlphabet[generateInt(0, max)];
         }
         return new String(buff);
     }

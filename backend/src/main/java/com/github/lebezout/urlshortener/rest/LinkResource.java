@@ -8,6 +8,7 @@ import com.github.lebezout.urlshortener.domain.NewLinkDTO;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -57,8 +58,14 @@ public class LinkResource {
 
     @Transactional(readOnly = true)
     @GetMapping
-    public List<LinkDTO> findLinks(@RequestParam(name = "creator", required = false) String creator) {
-        return null;
+    public List<LinkDTO> findLinks(
+        @RequestParam(name = "creator", required = false) String creator,
+        @RequestParam(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+        @RequestParam(name = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+        LOGGER.info("Find links created by {} and updated between {} & {}", creator, start, end);
+
+        List<LinkEntity> entities = repository.findByCreatorAndLastUpdatedDate(creator, start, end);
+        return entities.stream().map(LinkDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -66,7 +73,7 @@ public class LinkResource {
     public List<LinkDTO> findLinksByCreator(@PathVariable("creator") String creator) {
         Assert.hasText(creator, "No creator provided");
         LOGGER.info("Find links created by {}", creator);
-        List<LinkEntity> entities = repository.findByCreatorOrderByLastUpdatedDate(creator);
+        List<LinkEntity> entities = repository.findByCreatorOrderByLastUpdatedDateDesc(creator);
         return entities.stream().map(LinkDTO::new).collect(Collectors.toList());
     }
 
