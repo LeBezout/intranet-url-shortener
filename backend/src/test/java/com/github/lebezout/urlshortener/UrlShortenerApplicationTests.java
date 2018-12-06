@@ -36,7 +36,7 @@ public class UrlShortenerApplicationTests {
 		Assert.assertEquals(307, params.getHttpRedirectStatus());
 		LOGGER.debug("NOT FOUND PAGE : " + params.getNotFoundPage());
 		Assert.assertEquals("http://localhost:8080/demo/404.html", params.getNotFoundPage());
-		LOGGER.debug("ALPAHBET ID LENGTH : " + params.getIdAlphabet().length);
+		LOGGER.debug("ALPHABET ID LENGTH : " + params.getIdAlphabet().length);
 		Assert.assertEquals(36, params.getIdAlphabet().length);
 		Stream.of(params.getIdAlphabet()).forEach(c -> LOGGER.debug(String.valueOf(c)));
 		String sampleId = generator.generate(params.getIdLength());

@@ -23,7 +23,7 @@ public class LinkDTO {
     }
 
     /**
-     * Cosntructor from the database entity
+     * Constructor from the database entity
      * @param entity db entity
      */
     public LinkDTO(LinkEntity entity) {

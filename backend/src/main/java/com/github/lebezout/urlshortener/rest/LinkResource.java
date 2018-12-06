@@ -92,7 +92,7 @@ public class LinkResource {
         Assert.hasText(idLink, "No ID provided");
         LOGGER.info("Find target url for {}", idLink);
         Optional<LinkEntity> link = repository.findById(idLink);
-        return link.isPresent() ? link.get().getTarget() : null;
+        return link.map(LinkEntity::getTarget).orElse(null);
     }
 
     @Transactional
@@ -120,7 +120,7 @@ public class LinkResource {
         entity.setLastUpdatedDate(LocalDateTime.now());
         entity.setPrivateLink(link.isPrivateLink());
         entity.setTarget(link.getTarget());
-        // acessCounter defaults to 0
+        // accessCounter defaults to 0
         repository.save(entity);
         LinkDTO newLink = new LinkDTO(entity);
         LOGGER.info("New link inserted : {}", newLink);

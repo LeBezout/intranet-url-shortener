@@ -1,9 +1,7 @@
 package com.github.lebezout.urlshortener.config;
 
-import com.github.lebezout.urlshortener.domain.LinkEntity;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +13,6 @@ import javax.annotation.PostConstruct;
  */
 @Configuration
 @ConfigurationProperties(prefix = "urlshortener")
-@EnableConfigurationProperties
 public class Params {
     private int httpRedirectStatus;
     private int idLength;
@@ -52,7 +49,7 @@ public class Params {
         this.httpRedirectStatus = httpRedirectStatus;
     }
 
-    /** @return The length of the genrated id. Defaults to 5. Must in range of 2-10. */
+    /** @return The length of the generated id. Defaults to 5. Must in range of 2-10. */
     public int getIdLength() {
         return idLength;
     }

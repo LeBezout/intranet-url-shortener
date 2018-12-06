@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        // allow redirections for everyone and get REST api
+        // allow redirects for everyone and get REST api
         http.authorizeRequests()
                 .antMatchers("/redirect/*").permitAll()
                 .antMatchers("/api/link/createdBy/*").permitAll()
