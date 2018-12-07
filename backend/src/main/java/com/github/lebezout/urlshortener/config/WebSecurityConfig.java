@@ -28,10 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // allow redirects for everyone and get REST api
         http.authorizeRequests()
                 .antMatchers("/redirect/*").permitAll()
-                .antMatchers("/api/link/createdBy/*").permitAll()
                 .antMatchers("/api/link/*/target").permitAll()
             .antMatchers(HttpMethod.GET, "/api/link").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/link/*").permitAll();
+            .antMatchers(HttpMethod.GET, "/api/link/**").permitAll();
         // other REST api calls must be authenticated
         http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
     }
