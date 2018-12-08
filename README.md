@@ -2,8 +2,6 @@
 
 :fr: [Version française](README_fr.md)
 
-:uk: _under construction_
-
 ## A- Project introduction
 
 ### A.1- The purpose
@@ -55,7 +53,7 @@ TODO GUI : `Browser->NGINX->TOMCAT->DB`
 ### B.2- Components
 
 | Component | Purpose | Technologies |
-|---|---|---|
+|-----------|---------|--------------|
 | Web Frontend | GUI to add/update/delete.display the entries | Vue.js + Typescript within a NGINX http server |
 | Rest API | Expose  | Spring Boot + Liquibase + with embedded Tomcat |
 | Database | Store the entries | H2, MySQL, MariaDB, PostGreSQL |
@@ -66,27 +64,56 @@ TODO GUI : `Browser->NGINX->TOMCAT->DB`
 
 #### C.1.1- Configuring URL Shortener
 
-TODO
+The URL shortener behavior can be configured with the following parameters, described below:
+
+| Parameter name | Description | Constraints | Default value |
+|----------------|-------------|-------------|---------------|
+| `urlshortener.http_redirect_status` | The HTTP status to use for the redirection | Must in range of [300-399] | `301` |
+| `urlshortener.id_alphabet` | The alphabet to use for the ID generation | Single characters only | `0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z` |
+| `urlshortener.id_length` | The length of the generated id | Integer between 2 & 10 | `5` |
+| `urlshortener.not_found_page` | The page to use when we redirect to a bad id | An accessible static web page | `static/not_found.html` |
 
 #### C.1.2- Configuring Database
 
-TODO
+The database used must be a SQL database and is only composed of an unique table named `link`.
+The following JDBC drivers are embedded:
+
+* H2: `com.h2database:h2`
+* MySQL: `mysql:mysql-connector-java`
+* MariaDB: `org.mariadb.jdbc:mariadb-java-client`
+* PostGreSQL: `org.postgresql:postgresql`
+
+TODO conf
+
+| Parameter name | Description | Default value |
+|----------------|-------------|---------------|
+| `spring.datasource.TODO` | TODO | :no_entry_sign: |
 
 #### C.1.3- Configuring LDAP
 
-TODO
+For simplicity's sake security is only based on a LDAP or AD directory, without any role management.
+
+The company directory can be configured with the following settings:
+
+| Parameter name | Description | Sample Value |Default value |
+|----------------|-------------|--------------|--------------|
+| `spring.ldap.urls` | The directory URL | `ldap://myserver.mycompany:389/` | :no_entry_sign: |
+| `spring.ldap.base` | The directory root | `dc=mycompany,dc=org` | :no_entry_sign: |
+| `spring.ldap.username` | Username used to connect to the directory | `uid=ldap_reader,ou=people` | :no_entry_sign: |
+| `spring.ldap.password` | The user password used to connect to the directory | :no_entry_sign: | :no_entry_sign: |
+| `urlshortener.ldap_user_search_filter` | The LDAP search filter to find the users, relative to the root | `uid={0},ou=people` | :no_entry_sign: |
 
 ### C.2- Deploying
 
 TODO
 
-## Annexes
+## Appendices
 
-### Annex 1: RFC HTTP protocol
+### Appendix A: RFC HTTP protocol
 
 :bulb: [RFC HTTP Status - section-6.4.2](https://tools.ietf.org/html/rfc7231#section-6.4.2)
 
-### Annex 2: Redirection HTTP status codes
+### Appendix B: Redirection HTTP status codes
 
 | Code | Message | Meaning |
 |---|---|---|
@@ -101,4 +128,4 @@ TODO
 | `308` | **Permanent Redirect** | The request and all future requests should be repeated using another URI. 307 and 308 parallel the behaviors of 302 and 301, but do not allow the HTTP method to change. So, for example, submitting a form to a permanently redirected resource may continue smoothly. |
 | `310` | **Too many Redirects** | - |
 
-Source : [Wikipedia](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+Source: [Wikipedia](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)

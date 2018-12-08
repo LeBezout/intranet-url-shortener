@@ -17,13 +17,13 @@
             <column name="created_date" remarks="Creation date" type="DATETIME">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="last_updated" remarks="Creation date" type="DATETIME">
+            <column name="last_updated" remarks="Last updated date" type="DATETIME">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="private" remarks="Link is author private" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="access_count" remarks="Access counter" type="BIGINT" defaultValueNumeric="0">
+            <column name="access_count" remarks="Redirection counter" type="BIGINT" defaultValueNumeric="0">
                 <constraints nullable="false" unique="false"/>
             </column>
         </createTable>

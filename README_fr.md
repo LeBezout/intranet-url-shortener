@@ -51,7 +51,7 @@ TODO GUI : `Browser->NGINX->TOMCAT->DB`
 ### B.2- Détail des composants
 
 | Composant | Description | Technologies |
-|---|---|---|
+|-----------|-------------|--------------|
 | Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
 | Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Liquibase + Tomcat Embedded |
 | Base de données relationnelle | Stockage des éléments | H2, MySQL, MariaDB, PostGreSQL |
@@ -63,15 +63,45 @@ TODO GUI : `Browser->NGINX->TOMCAT->DB`
 
 #### C.1.1- Configuration URL Shortener
 
-TODO
+Le comportement du raccourcisseur d'URL peut être configuré avec les paramètres suivants :
+
+| Paramètre | Description | Contraintes | Valeur par défaut |
+|-----------|-------------|------------|-------------------|
+| `urlshortener.http_redirect_status` | TODO | Doit être compris dans l'intervalle [300-399] | `301` |
+| `urlshortener.id_alphabet` | TODO | Uniquement des caractères, éviter les caractères spéciaux | `0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z` |
+| `urlshortener.id_length` | TODO | Entier entre 2 et 10 | `5` |
+| `urlshortener.not_found_page` | TODO | Une page HTML statique accessible | `static/not_found.html` |
+
 
 #### C.1.2- Configuration de la base données
 
-TODO
+La base de données utilisée doit être de type relationnelle et ne contient qu'une seule table nommée `link`. De base les drivers suivants sont embarqués :
+
+* H2 : `com.h2database:h2`
+* MySQL : `mysql:mysql-connector-java`
+* MariaDB : `org.mariadb.jdbc:mariadb-java-client`
+* PostGreSQL : `org.postgresql:postgresql`
+
+TODO conf
+
+| Paramètre | Description | Valeur par défaut |
+|-----------|-------------|-------------------|
+| `spring.datasource.TODO` | TODO | :no_entry_sign: |
 
 #### C.1.3- Configuration LDAP
 
-TODO
+Pour une question de simplicité la sécurité est uniquement basée sur un annuaire LDAP ou AD, sans aucune gestion de rôle.
+
+L'annuaire d'entreprise peut être configuré avec la paramètres suivants :
+
+| Paramètre | Description | Exemple |Valeur par défaut |
+|-----------|-------------|---------|------------------|
+| `spring.ldap.urls` | L'URL d'accès au serveur d'annuaire | `ldap://myserver.mycompany:389/` | :no_entry_sign: |
+| `spring.ldap.base` | La racine de l'annuaire | `dc=mycompany,dc=org` | :no_entry_sign: |
+| `spring.ldap.username` | Le nom d'utilisateur à utiliser pour se connecter | `uid=ldap_reader,ou=people` | :no_entry_sign: |
+| `spring.ldap.password` | Le mot de passe de l'utilisateur à utiliser pour se connecter | :no_entry_sign: | :no_entry_sign: |
+| `urlshortener.ldap_user_search_filter` | Le filtre pour la recherche des utilisateurs, relatif par rapport à la racine indiquée | `uid={0},ou=people` | :no_entry_sign: |
+
 
 ### C.2- Installation
 
@@ -79,11 +109,11 @@ TODO
 
 ## Annexes
 
-### Annexe 1 : RFC du protocole HTTP
+### Annexe A : RFC du protocole HTTP
 
 :bulb: [RFC HTTP Status - section-6.4.2](https://tools.ietf.org/html/rfc7231#section-6.4.2)
 
-### Annexe 2 : détail des statuts HTTP de redirection
+### Annexe B : détail des statuts HTTP de redirection
 
 | Code | Message | Signification |
 |---|---|---|
