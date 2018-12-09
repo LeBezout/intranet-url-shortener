@@ -83,7 +83,7 @@ The following JDBC drivers are embedded:
 * MariaDB: `org.mariadb.jdbc:mariadb-java-client`
 * PostGreSQL: `org.postgresql:postgresql`
 
-Les accès à la base peuvent être configurés via les paramètres décrits ci-dessous :
+Database access can be configured with the following parameters:
 
 | Parameter name | Description | Default value |
 |----------------|-------------|---------------|

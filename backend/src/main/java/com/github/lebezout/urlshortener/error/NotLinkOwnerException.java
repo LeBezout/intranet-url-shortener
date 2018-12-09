@@ -12,7 +12,7 @@ public class NotLinkOwnerException extends RuntimeException {
     /**
      * A convenient method to check and throw if needed this exception
      * @param creator creator of the link
-     * @param updater updator of the link
+     * @param updater updater of the link
      * @throws NotLinkOwnerException if creator not equals updater
      */
     public static void throwIfNeeded(String creator, String updater) {
