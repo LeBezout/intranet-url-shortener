@@ -53,8 +53,8 @@ TODO GUI : `Browser->NGINX->TOMCAT->DB`
 | Composant | Description | Technologies |
 |-----------|-------------|--------------|
 | Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
-| Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée | Spring Boot + Liquibase + Tomcat Embedded |
-| Base de données relationnelle | Stockage des éléments | H2, MySQL, MariaDB, PostGreSQL |
+| Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée. | Spring Boot + Liquibase + Tomcat Embedded |
+| Base de données relationnelle | Stockage des éléments. | H2, MySQL, MariaDB, PostGreSQL |
 
 ## C- Guide d'utilisation
 
@@ -68,7 +68,7 @@ Le comportement du raccourcisseur d'URL peut être configuré avec les paramètr
 | Paramètre | Description | Contraintes | Valeur par défaut |
 |-----------|-------------|------------|-------------------|
 | `urlshortener.http_redirect_status` | TODO | Doit être compris dans l'intervalle [300-399] | `301` |
-| `urlshortener.id_alphabet` | TODO | Uniquement des caractères, éviter les caractères spéciaux | `0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z` |
+| `urlshortener.id_alphabet` | TODO | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
 | `urlshortener.id_length` | TODO | Entier entre 2 et 10 | `5` |
 | `urlshortener.not_found_page` | TODO | Une page HTML statique accessible | `static/not_found.html` |
 
@@ -82,7 +82,7 @@ La base de données utilisée doit être de type relationnelle et ne contient qu
 * MariaDB : `org.mariadb.jdbc:mariadb-java-client`
 * PostGreSQL : `org.postgresql:postgresql`
 
-TODO conf
+The access can be configured by the settings below:
 
 | Paramètre | Description | Valeur par défaut |
 |-----------|-------------|-------------------|

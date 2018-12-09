@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lebezout.urlshortener.domain.LinkDTO;
 import com.github.lebezout.urlshortener.domain.LinkRepository;
 import com.github.lebezout.urlshortener.domain.NewLinkDTO;
+import com.github.lebezout.urlshortener.error.IDTooLongException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -98,7 +99,7 @@ public class LinkResourceTest {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/link/ZZZZZ"));
 
         MvcResult result = mvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
