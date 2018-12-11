@@ -44,9 +44,9 @@ C'est tout l'intérêt de ce projet de pouvoir être déployé facilement (via d
 
 ### B.1- Architecture
 
-TODO Redirection :  `Browser->URL Shortener->Cible`
+![redirection](docs/url-shortener-redirect.png)
 
-TODO GUI : `Browser->NGINX->TOMCAT->DB`
+![archi](docs/url-shortener-archi.png)
 
 ### B.2- Détail des composants
 

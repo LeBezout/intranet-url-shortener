@@ -46,9 +46,10 @@ It is all the aim of this project to be easily deployed (with _Docker_ images) a
 
 ### B.1- Architecture
 
-TODO Redirection :  `Browser->URL Shortener->Target`
+![redirection](docs/url-shortener-redirect.png)
 
-TODO GUI : `Browser->NGINX->TOMCAT->DB`
+![archi](doc/url-shortener-archi.png)
+
 
 ### B.2- Components
 
