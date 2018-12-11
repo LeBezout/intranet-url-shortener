@@ -44,7 +44,11 @@ C'est tout l'intérêt de ce projet de pouvoir être déployé facilement (via d
 
 ### B.1- Architecture
 
+Principe de redirection :
+
 ![redirection](docs/url-shortener-redirect.png)
+
+Flux entre composants :
 
 ![archi](docs/url-shortener-archi.png)
 

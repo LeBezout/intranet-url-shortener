@@ -46,10 +46,13 @@ It is all the aim of this project to be easily deployed (with _Docker_ images) a
 
 ### B.1- Architecture
 
+Redirection principle:
+
 ![redirection](docs/url-shortener-redirect.png)
 
-![archi](doc/url-shortener-archi.png)
+Components flow:
 
+![archi](doc/url-shortener-archi.png)
 
 ### B.2- Components
 
