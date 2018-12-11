@@ -52,7 +52,7 @@ Redirection principle:
 
 Components flow:
 
-![archi](doc/url-shortener-archi.png)
+![archi](docs/url-shortener-archi.png)
 
 ### B.2- Components
 
