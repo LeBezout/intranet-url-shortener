@@ -50,7 +50,7 @@ public class LinkService {
      * @param creator username
      * @return list of links
      */
-    @Cacheable(cacheNames="links-by-creator", key="#creator")
+    //TODO @Cacheable(cacheNames="links-by-creator", key="#creator")
     @Transactional(readOnly = true)
     public List<LinkDTO> findByCreator(String creator) {
         Assert.notNull(creator, "Link creator cannot be null");
@@ -74,10 +74,11 @@ public class LinkService {
     /**
      * Find a link by its ID
      * @param id id of the link
-     * @return lin data
-     * @throws LinkNotFoundException in the id is not found
+     * @return link data
+     * @throws LinkNotFoundException if the link is not found
      */
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames="links")
     public LinkDTO getByID(String id) {
         Assert.notNull(id, "Link ID cannot be null");
         Optional<LinkEntity> link = getLinkEntity(id);
@@ -90,8 +91,9 @@ public class LinkService {
      * @param creator username
      * @return new link data (with a new id if not provided)
      * @throws IDAlreadyExistsException if the provided id already exists
+     * @throws IDTooLongException if the provided id is too long
      */
-    @CachePut("links")
+    @CachePut(cacheNames="links") // the method is always executed and its result is placed into the cache
     public LinkDTO addNewLink(final NewLinkDTO link, final String creator) {
         Assert.notNull(link, "New link data cannot be null");
         Assert.notNull(creator, "Link creator cannot be null");
@@ -99,7 +101,7 @@ public class LinkService {
         LinkEntity entity = new LinkEntity();
         String id = link.getId();
         if (StringUtils.hasText(id)) {
-            LOGGER.info("ID provided {}", id);
+            LOGGER.info("Provided ID is {}", id);
             IDTooLongException.throwIfNeeded(id);
             Optional<LinkEntity> existingLink = getLinkEntity(id);
             IDAlreadyExistsException.throwIfNeeded(existingLink);
@@ -114,20 +116,20 @@ public class LinkService {
         entity.setPrivateLink(link.isPrivateLink());
         entity.setTarget(link.getTarget());
         // accessCounter defaults to 0
-        entity = repository.save(entity);
+        entity = saveLinkEntity(entity);
         LinkDTO newLink = new LinkDTO(entity);
-        LOGGER.info("New link inserted : {}", newLink);
+        LOGGER.info("New link inserted is {}", newLink);
         return newLink;
     }
 
     /**
-     * Update a specified link
+     * Update a specified link (the id can obviously not be updated)
      * @param link data of the link to update
      * @param updater username
      * @throws LinkNotFoundException if the id is not found
      * @throws NotLinkOwnerException if the updater is not the owner of the link
      */
-    @CachePut("links")
+    @CachePut(cacheNames="links")
     public void updateLink(LinkDTO link, final String updater) {
         Assert.notNull(link, "Link data cannot be null");
         Assert.notNull(updater, "Link updater cannot be null");
@@ -139,7 +141,7 @@ public class LinkService {
         entityToUpdate.setLastUpdatedDate(LocalDateTime.now());
         entityToUpdate.setPrivateLink(link.isPrivateLink());
         entityToUpdate.setTarget(link.getTarget());
-        repository.save(entityToUpdate);
+        saveLinkEntity(entityToUpdate);
     }
 
     /**
@@ -149,9 +151,10 @@ public class LinkService {
      * @throws LinkNotFoundException in the id is not found
      * @throws NotLinkOwnerException if the updater is not the owner of the link
      */
-    @CacheEvict("links")
+    @CacheEvict(cacheNames="links", key = "#id")
     public void deleteLink(String id, final String updater) {
         Assert.hasText(id, "No ID provided");
+        Assert.notNull(updater, "Link updater cannot be null");
         Optional<LinkEntity> entity = getLinkEntity(id);
         LinkEntity entityToDelete = entity.orElseThrow(LinkNotFoundException::new);
         NotLinkOwnerException.throwIfNeeded(entityToDelete.getCreator(), updater);
@@ -159,13 +162,13 @@ public class LinkService {
         repository.delete(entity.get());
     }
 
-    /**
-     * only for caching purpose
-     * @param id id of the expected link
-     * @return optional link
-     */
-    @Cacheable("links")
-    public Optional<LinkEntity> getLinkEntity(String id) {
+    private Optional<LinkEntity> getLinkEntity(String id) {
+        LOGGER.debug("Access the database: getLinkEntity by id {}", id);
         return repository.findById(id);
+    }
+
+    private LinkEntity saveLinkEntity(LinkEntity entity) {
+        LOGGER.debug("Access the database: saveLinkEntity by id {}", entity.getId());
+        return repository.save(entity);
     }
 }
