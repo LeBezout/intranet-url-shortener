@@ -94,11 +94,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- embedded ldap impl : com.unboundid:unboundid-ldapsdk -->
-		<dependency>
-			<groupId>com.unboundid</groupId>
-			<artifactId>unboundid-ldapsdk</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.unboundid</groupId>-->
+			<!--<artifactId>unboundid-ldapsdk</artifactId>-->
+			<!--<scope>runtime</scope>-->
+		<!--</dependency>-->
 		<!-- TEST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
