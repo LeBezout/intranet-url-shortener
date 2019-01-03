@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.Optional;
 
 /**
- * A custom exception to map the 400 HTTP status when a provided ID provided already exists when creating a new link.
+ * A custom exception to map the 400 HTTP status when a provided ID already exists when creating a new link.
  * @author lebezout@gmail.com
  */
 @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="The provided ID already exists")  // 400

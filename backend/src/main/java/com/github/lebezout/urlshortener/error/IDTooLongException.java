@@ -15,7 +15,7 @@ public class IDTooLongException extends RuntimeException {
     /**
      * A convenient method to check and throw if needed this exception
      * @param providedID ID
-     * @throws IDTooLongException if the provided ID length's is greater than ID_MAX_LENGTH
+     * @throws IDTooLongException if the provided ID's length is greater than ID_MAX_LENGTH
      */
     public static void throwIfNeeded(final String providedID) {
         if (providedID.length() > ID_MAX_LENGTH) {

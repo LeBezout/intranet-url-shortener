@@ -1,11 +1,8 @@
 package com.github.lebezout.urlshortener.rest;
 
-import com.github.lebezout.urlshortener.config.Params;
 import com.github.lebezout.urlshortener.domain.LinkDTO;
-import com.github.lebezout.urlshortener.domain.LinkRepository;
 import com.github.lebezout.urlshortener.domain.LinkService;
 import com.github.lebezout.urlshortener.domain.NewLinkDTO;
-import com.github.lebezout.urlshortener.utils.IdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,7 +38,7 @@ public class LinkResource {
      * Constructor for DI
      * @param service the autowired link service
      */
-    public LinkResource(LinkService service, Params config, LinkRepository repo, IdGenerator generator) {
+    public LinkResource(LinkService service) {
         linkService = service;
     }
 

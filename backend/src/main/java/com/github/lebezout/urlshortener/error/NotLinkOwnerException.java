@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(value= HttpStatus.FORBIDDEN, reason="Only the creator of the link can update it")
 public class NotLinkOwnerException extends RuntimeException {
+
     /**
      * A convenient method to check and throw if needed this exception
      * @param creator creator of the link
