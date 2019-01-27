@@ -1,5 +1,7 @@
 # Raccourcisseur d'URL pour l'intranet
 
+:uk: [English version](README.md)
+
 ## A- Présentation du projet
 
 ### A.1- Objet
@@ -19,15 +21,14 @@ Le protocole HTTP prévoit nativement la technique de redirection via notamment 
 
 :information_source: **Un lien raccourci est donc plus facile à partager ou à mémoriser.**
 
-A noter enfin que nombre d'applications, notamment dans le domaine des réseaux sociaux, possèdent des intégrations natives, 
-on pourra citer YouTube, Facebook, Twitter. LinkedIn, Google.
+A noter enfin que nombre d'applications, notamment dans le domaine des réseaux sociaux, possèdent des intégrations natives (leurs propres implémentations de réducteurs d'URL), on pourra citer par exemple YouTube, Facebook, Twitter. LinkedIn, Google.
 
 ### A.3- Les problématiques liées à l'utilisation des raccourcisseurs d'URL
 
 * Une URL réduite offerte par un service Internet dans une utilisation interne à l'entreprise génère des flux réseaux inutiles : on sort de l'intranet pour y ré-entrer immédiatement : `intranet -> proxy web -> service internet -> firewall -> intranet`
 * Une URL réduite masque l'adresse originale. Les différents services offrent généralement la possibilité de prévisualiser le site de destination au lieu d'y être redirigé directement, ... mais qui le fait vraiment ?
 * Il peut exister pour une même URL autant de liens courts différents qu'il existe de services de raccourcissement.
-* Si le service externe de réduction d'URL ferme alors toutes les adresses réduites l'utilisant deviennent inaccessibles, il est donc dès lors impossible d'obtenir l'adresse d'origine.
+* Si le service externe de réduction d'URL ferme alors toutes les adresses réduites l'utilisant deviennent inaccessibles, il est donc dès lors impossible d'obtenir les adresses d'origine.
 * Les services externes de réduction d'URL en profitent pour collecter des données et autres statistiques.
 * Une URL peut être une donnée sensible, elle peut contenir des informations importantes en paramètres (login, jeton, voire mot de passe, ...).
 * Dans le cas d'une utilisation en interne on peut indirectement exposer des informations concernant l'infrastructure interne d’une entreprise.
@@ -56,8 +57,8 @@ Flux entre composants :
 
 | Composant | Description | Technologies |
 |-----------|-------------|--------------|
-| Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détaisl d'un lien. | Vue.js + Typescript dans un serveur NGINX |
-| Backend REST | Exposer l'API nécessaire au frontend ainsi que la rédirection effective vers l'URL ciblée. | Spring Boot + Liquibase + Tomcat Embedded |
+| Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détail d'un lien. | Vue.js + Typescript dans un serveur NGINX |
+| Backend REST | Exposer l'API nécessaire au frontend ainsi que la redirection effective vers l'URL ciblée. | Spring Boot + Liquibase + Tomcat Embedded |
 | Base de données relationnelle | Stockage des éléments. | H2, MySQL, MariaDB, PostGreSQL |
 
 ## C- Guide d'utilisation
@@ -71,22 +72,22 @@ Le comportement du raccourcisseur d'URL peut être configuré avec les paramètr
 
 | Paramètre | Description | Contraintes | Valeur par défaut |
 |-----------|-------------|------------|-------------------|
-| `urlshortener.http_redirect_status` | TODO | Doit être compris dans l'intervalle [300-399] | `301` |
-| `urlshortener.id_alphabet` | TODO | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
-| `urlshortener.id_length` | TODO | Entier entre 2 et 10 | `5` |
-| `urlshortener.not_found_page` | TODO | Une page HTML statique accessible | `static/not_found.html` |
+| `urlshortener.http_redirect_status` | Statut HTTP à utiliser pour les redirections | Doit être compris dans l'intervalle [300-399] | `301` |
+| `urlshortener.id_alphabet` | Liste des caractères à utiliser pour générer un ID | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
+| `urlshortener.id_length` | Longueur de l'ID généré | Entier entre 2 et 10 | `5` |
+| `urlshortener.not_found_page` | Page web statique à afficher dans le cas où l'ID fourni n'est pas connu | Une page HTML statique accessible | `static/not_found.html` |
 
 
 #### C.1.2- Configuration de la base données
 
-La base de données utilisée doit être de type relationnelle et ne contient qu'une seule table nommée `link`. De base les drivers suivants sont embarqués :
+La base de données utilisée doit être de type relationnelle et ne contient qu'une seule table nommée `link`. Les drivers suivants sont embarqués :
 
 * H2 : `com.h2database:h2`
 * MySQL : `mysql:mysql-connector-java`
 * MariaDB : `org.mariadb.jdbc:mariadb-java-client`
 * PostGreSQL : `org.postgresql:postgresql`
 
-The access can be configured by the settings below:
+L'accès à la base de données peut être configuré via les paramètres suivants :
 
 | Paramètre | Description | Valeur par défaut |
 |-----------|-------------|-------------------|
@@ -105,7 +106,6 @@ L'annuaire d'entreprise peut être configuré avec la paramètres suivants :
 | `spring.ldap.username` | Le nom d'utilisateur à utiliser pour se connecter | `uid=ldap_reader,ou=people` | :no_entry_sign: |
 | `spring.ldap.password` | Le mot de passe de l'utilisateur à utiliser pour se connecter | :no_entry_sign: | :no_entry_sign: |
 | `urlshortener.ldap_user_search_filter` | Le filtre pour la recherche des utilisateurs, relatif par rapport à la racine indiquée | `uid={0},ou=people` | :no_entry_sign: |
-
 
 ### C.2- Installation
 

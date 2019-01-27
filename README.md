@@ -17,11 +17,11 @@ and in particular in an internal company use.
 A URL shortener or URL reducer is a short link generator, consisting of assigning a unique key
 of few characters to a specific web page and the ability to redirect to the original URL.
 
-The HTTP protocol natively provides the redirection issue by the statuses in the `3XX` range (usually` 301`, `302` or` 307`).
+The HTTP protocol natively provides the redirection issue by the statuses in the `3XX` range (usually `301`, `302` or `307`).
 
 :information_source: **A shortened link is obviously easier to share or remember.**
 
-Finally, note that many applications, especially social networks, have native integrations.
+Finally, note that many applications, especially social networks, have native integrations (their own reducers).
 We can cite YouTube, Facebook, Twitter. LinkedIn, Google.
 
 ### A.3- The issues related to URL shorteners
@@ -29,7 +29,7 @@ We can cite YouTube, Facebook, Twitter. LinkedIn, Google.
 * A reduced URL offered by an Internet service in an internal company use generates useless network flows: we leave the intranet to re-enter it immediately: `intranet -> web proxy -> internet -> firewall -> intranet`
 * A reduced URL obscures the original address. The different providers usually offer the possibility of previewing the destination site instead of being redirected directly to it,...  but who really does it?
 * There may be as many different short links for the same URL as there are shortening services.
-* If the external URL reduction service then closes all the reduced addresses using it become inaccessible, it is therefore impossible to obtain the original address.
+* If the external URL reduction service stops then all the reduced addresses using it become inaccessible, it is therefore impossible to obtain the original address.
 * External URL reduction services take advantage of this to collect data and other statistics.
 * A URL can be a sensitive data, it can contain important information in parameters (login, token, even password, ...).
 * In the case of internal use, information about the internal infrastructure of the company can be indirectly disclosed.
@@ -59,7 +59,7 @@ Components flow:
 | Component | Purpose | Technologies |
 |-----------|---------|--------------|
 | Web Frontend | GUI to add/update/delete or display the entries. | Vue.js + Typescript within a NGINX http server |
-| Rest API | Expose a REST API to manage the lifecycle of the shortened links and to redirect to the expected targets. | Spring Boot + Liquibase + with embedded Tomcat |
+| Rest API | Expose a REST API to manage the lifecycle of the shortened links and to redirect to the expected targets. | Spring Boot + Liquibase + embedded Tomcat |
 | Database | Store the entries. | H2, MySQL, MariaDB, PostGreSQL |
 
 ## C- How To
