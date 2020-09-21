@@ -47,7 +47,7 @@ public class Redirection {
      */
     @Transactional
     @GetMapping(path = "{idLink}")
-    public ResponseEntity redirectTo(@PathVariable("idLink") String idLink) {
+    public ResponseEntity<Void> redirectTo(@PathVariable("idLink") String idLink) {
         LOGGER.info("Redirect to {}", idLink);
         // Find the link data
         Optional<LinkEntity> link = repository.findById(idLink);

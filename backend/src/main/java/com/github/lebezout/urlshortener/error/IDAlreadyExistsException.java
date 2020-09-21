@@ -1,5 +1,6 @@
 package com.github.lebezout.urlshortener.error;
 
+import com.github.lebezout.urlshortener.domain.LinkEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -17,7 +18,7 @@ public class IDAlreadyExistsException extends RuntimeException {
      * @param entity entity attempted to be absent
      * @throws IDAlreadyExistsException if entity is present
      */
-    public static void throwIfNeeded(final Optional<?> entity) {
+    public static void throwIfNeeded(final Optional<LinkEntity> entity) {
         if (entity.isPresent()) {
             throw new IDAlreadyExistsException();
         }

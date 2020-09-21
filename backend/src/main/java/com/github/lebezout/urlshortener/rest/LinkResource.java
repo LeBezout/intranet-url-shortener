@@ -47,7 +47,7 @@ public class LinkResource {
         @RequestParam(name = "creator", required = false) String creator,
         @RequestParam(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
         @RequestParam(name = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        LOGGER.info("Find links created by {} and updated between {} & {}", creator, start, end);
+        LOGGER.info("Find links created by {} and updated between {} & {}", creator, start, end);
         return linkService.findByCriteria(creator, start, end);
     }
 
@@ -60,14 +60,14 @@ public class LinkResource {
 
     @GetMapping(path = "{idLink}")
     public LinkDTO getByID(@PathVariable("idLink") String idLink) {
-        Assert.hasText(idLink, "No ID provided");
+        assertIdIsProvided(idLink);
         LOGGER.info("Find link {}", idLink);
         return linkService.getByID(idLink);
     }
 
     @GetMapping(path = "{idLink}/target", produces = MediaType.TEXT_PLAIN_VALUE)
     public String getTargetLink(@PathVariable("idLink") String idLink) {
-        Assert.hasText(idLink, "No ID provided");
+        assertIdIsProvided(idLink);
         LOGGER.info("Find target url for {}", idLink);
         return linkService.getByID(idLink).getTarget();
     }
@@ -85,7 +85,7 @@ public class LinkResource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateExistingLink(@RequestBody final LinkDTO link, Principal principal) {
         Assert.notNull(link, "No data provided");
-        Assert.hasText(link.getId(), "No ID provided");
+        assertIdIsProvided(link.getId());
         Assert.hasText(link.getTarget(), "No target URL provided");
         Assert.notNull(principal, "No credentials provided");
         linkService.updateLink(link, principal.getName());
@@ -94,8 +94,12 @@ public class LinkResource {
     @DeleteMapping(path = "{idLink}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteExistingLink(@PathVariable("idLink") String idLink, Principal principal) {
-        Assert.hasText(idLink, "No ID provided");
+        assertIdIsProvided(idLink);
         LOGGER.info("Delete link {}", idLink);
         linkService.deleteLink(idLink, principal.getName());
+    }
+
+    private static void assertIdIsProvided(String idLink) {
+        Assert.hasText(idLink, "No ID provided");
     }
 }

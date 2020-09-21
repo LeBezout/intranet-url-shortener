@@ -24,7 +24,7 @@ public class IdGenerator {
         Objects.requireNonNull(pChars, "Alphabet array cannot be null");
         alphabet = new char[pChars.length];
         for (int i = 0; i < pChars.length; i++) {
-            alphabet[i] = pChars[i].charValue();
+            alphabet[i] = pChars[i];
         }
     }
 
@@ -35,11 +35,7 @@ public class IdGenerator {
      */
     public String generate(final int minLength, final int maxLength) {
         final int max = alphabet.length - 1;
-        final int length = maxLength == minLength
-                ? minLength
-                : ((maxLength < minLength)
-                    ? generateInt(maxLength, minLength)
-                    : generateInt(minLength, maxLength));
+        final int length = computeLength(minLength, maxLength);
         // 1st random step
         final char[] shuffledAlphabet = shuffleArray(alphabet);
         // Generate (2nd random step)
@@ -50,6 +46,13 @@ public class IdGenerator {
             buff[count++] = shuffledAlphabet[generateInt(0, max)];
         }
         return new String(buff);
+    }
+
+    private static int computeLength(final int minLength, final int maxLength) {
+        if (maxLength == minLength) {
+            return maxLength;
+        }
+        return generateInt(Math.min(maxLength, minLength), Math.max(maxLength, minLength));
     }
 
     /** generate a new id with a fixed length
@@ -64,10 +67,10 @@ public class IdGenerator {
         return ThreadLocalRandom.current().nextInt(1 + max - min) + min;
     }
 
-    private static char[] shuffleArray(char[] input) {
+    private static char[] shuffleArray(char... input) {
         char[] result = Arrays.copyOf(input, input.length);
-        for (int i = result.length - 1; i > 0; i--) {
-            swap(result, i, ThreadLocalRandom.current().nextInt(i + 1));
+        for (int i = result.length; i > 1; i--) {
+            swap(result, i - 1, ThreadLocalRandom.current().nextInt(i));
         }
         return result;
     }
