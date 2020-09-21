@@ -97,8 +97,6 @@ public class LinkService {
     public LinkDTO addNewLink(final NewLinkDTO link, final String creator) {
         Assert.notNull(link, "New link data cannot be null");
         Assert.notNull(creator, "Link creator cannot be null");
-        // create new entity
-        LinkEntity entity = new LinkEntity();
         String id = link.getId();
         if (StringUtils.hasText(id)) {
             LOGGER.info("Provided ID is {}", id);
@@ -109,6 +107,21 @@ public class LinkService {
             id = idGenerator.generate(params.getIdLength());
             LOGGER.info("New ID generated {}", id);
         }
+        // Target URL already exists ? FIXME what to do if link in private ?
+        Optional<LinkEntity> existingTargetLink = repository.findByTarget(link.getTarget());
+        if (existingTargetLink.isPresent()) {
+            LinkEntity entity = existingTargetLink.get();
+            // increment counter
+            long created = entity.getCreationCounter() + 1;
+            LOGGER.info("Attempt to create an existing target link : {}, {} times", link.getTarget(), created);
+            entity.setCreationCounter(created);
+            repository.save(entity);
+            // return data
+            return existingTargetLink.map(LinkDTO::new).orElseThrow(LinkNotFoundException::new);
+        }
+
+        // create new entity
+        LinkEntity entity = new LinkEntity();
         entity.setId(id);
         entity.setCreator(creator);
         entity.setCreatedDate(LocalDateTime.now());
@@ -159,7 +172,7 @@ public class LinkService {
         LinkEntity entityToDelete = entity.orElseThrow(LinkNotFoundException::new);
         NotLinkOwnerException.throwIfNeeded(entityToDelete.getCreator(), updater);
         // ok, delete this entity
-        repository.delete(entity.get());
+        repository.delete(entity.get()); // NOSONAR orElseThrow
     }
 
     private Optional<LinkEntity> getLinkEntity(String id) {

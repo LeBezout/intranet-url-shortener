@@ -20,10 +20,13 @@
             <column name="last_updated" remarks="Last updated date" type="DATETIME">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="private" remarks="Link is author private" type="BOOLEAN" defaultValueBoolean="false">
+            <column name="is_private" remarks="Link is author private" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="access_count" remarks="Redirection counter" type="BIGINT" defaultValueNumeric="0">
+            <column name="access_counter" remarks="Redirection counter" type="BIGINT" defaultValueNumeric="0">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="creation_counter" remarks="Creation attempt counter" type="BIGINT" defaultValueNumeric="0">
                 <constraints nullable="false" unique="false"/>
             </column>
         </createTable>

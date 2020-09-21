@@ -23,10 +23,12 @@ public class LinkEntity {
     private LocalDateTime createdDate;
     @Column(name = "last_updated")
     private LocalDateTime lastUpdatedDate;
-    @Column(name = "private")
+    @Column(name = "is_private")
     private boolean privateLink;
-    @Column(name = "access_count")
+    @Column(name = "access_counter")
     private long accessCounter;
+    @Column(name = "creation_counter")
+    private long creationCounter;
 
     public String getId() {
         return id;
@@ -82,5 +84,13 @@ public class LinkEntity {
 
     public void setAccessCounter(long accessCounter) {
         this.accessCounter = accessCounter;
+    }
+
+    public long getCreationCounter() {
+        return creationCounter;
+    }
+
+    public void setCreationCounter(long creationCounter) {
+        this.creationCounter = creationCounter;
     }
 }

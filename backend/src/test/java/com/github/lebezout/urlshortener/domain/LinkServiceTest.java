@@ -47,6 +47,19 @@ public class LinkServiceTest {
     }
 
     @Test
+    public void test_addNewLink_exists() {
+        // attempt to create 'https://github.com' defined in data-sql.test  (author=JUNIT, creation_counter=4)
+        NewLinkDTO dto = new NewLinkDTO();
+        dto.setTarget("https://github.com");
+        LinkDTO existing = service.addNewLink(dto, "OTHER1");
+        Assert.assertEquals("JUNIT", existing.getCreator()); // not OTHER1
+        Assert.assertEquals(4 + 1, existing.getCreationCounter());
+        existing = service.addNewLink(dto, "OTHER2");
+        Assert.assertEquals("JUNIT", existing.getCreator()); // not OTHER2
+        Assert.assertEquals(4 + 2, existing.getCreationCounter());
+    }
+
+    @Test
     public void test_findByCreator() {
         List<LinkDTO> result =  service.findByCreator("JUNIT");
         Assert.assertEquals(2, result.size());
@@ -65,7 +78,7 @@ public class LinkServiceTest {
     public void test_updateLink() {
         LinkDTO link = service.getByID("ABCDEF");
         Assert.assertEquals("JUNIT", link.getCreator());
-        Assert.assertEquals("http://github.com", link.getTarget());
+        Assert.assertEquals("https://github.com", link.getTarget());
         Assert.assertFalse(link.isPrivateLink());
         link.setTarget("TEST");
         link.setPrivateLink(true);

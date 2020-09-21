@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * A simple random-based ID Generator for our short links
+ * A simple random-based ID Generator for our shortened links
  */
 public class IdGenerator {
     private final char[] alphabet;

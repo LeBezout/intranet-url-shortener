@@ -5,12 +5,20 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Link Repository.
  * @author lebezout@gmail.com
  */
 public interface LinkRepository extends CrudRepository<LinkEntity, String> {
+
+    /**
+     * Select a link by his target
+     * @param target the target url
+     * @return link
+     */
+    Optional<LinkEntity> findByTarget(String target); // FIXME not private links
 
     /**
      * Select all links created by a specific user

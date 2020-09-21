@@ -16,6 +16,7 @@ public class LinkDTO {
     private LocalDateTime lastUpdatedDate;
     private boolean privateLink;
     private long accessCounter;
+    private long creationCounter;
 
     /** default constructor */
     public LinkDTO() {
@@ -34,6 +35,7 @@ public class LinkDTO {
         lastUpdatedDate = entity.getLastUpdatedDate();
         privateLink = entity.isPrivateLink();
         accessCounter = entity.getAccessCounter();
+        creationCounter = entity.getCreationCounter();
     }
 
     public String getId() {
@@ -92,6 +94,14 @@ public class LinkDTO {
         this.accessCounter = accessCounter;
     }
 
+    public long getCreationCounter() {
+        return creationCounter;
+    }
+
+    public void setCreationCounter(long creationCounter) {
+        this.creationCounter = creationCounter;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", LinkDTO.class.getSimpleName() + " [", "]")
@@ -101,7 +111,8 @@ public class LinkDTO {
                 .add("createdOn=" + createdDate)
                 .add("lastUpdatedOn=" + lastUpdatedDate)
                 .add("isPrivate=" + privateLink)
-                .add("accessed=" + accessCounter)
+                .add("timesAccessed=" + accessCounter)
+                .add("timesCreated=" + creationCounter)
                 .toString();
     }
 }

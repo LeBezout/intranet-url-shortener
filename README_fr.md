@@ -61,22 +61,33 @@ Flux entre composants :
 | Backend REST | Exposer l'API nécessaire au frontend ainsi que la redirection effective vers l'URL ciblée. | Spring Boot + Liquibase + Tomcat Embedded |
 | Base de données relationnelle | Stockage des éléments. | H2, MySQL, MariaDB, PostGreSQL |
 
+### B.3 Modèle de données
+
+| Colonne | Description | Type |
+|---------|-------------|------|
+| `id` | Identifiant interne du lien | `VARCHAR 15` |
+| `target_url` | URL du lien | `VARCHAR 255` |
+| `created_by` | Nom de la personne qui a créé initialement le lien | `VARCHAR 255` |
+| `created_date` | Date de création initiale du lien | `DATETIME` |
+| `last_updated` | Date de dernière mise à jour du lien | `DATETIME` |
+| `is_private` | Ce lien est-il privé ? | `BOOLEAN` |
+| `access_counter` | Nombre d'accès au lien | `BIGINT` |
+| `creation_counter` | Nombre de tentatives de création du lien | `BIGINT` |
+
 ## C- Guide d'utilisation
 
 ### C.1- Configuration
-
 
 #### C.1.1- Configuration URL Shortener
 
 Le comportement du raccourcisseur d'URL peut être configuré avec les paramètres suivants :
 
-| Paramètre | Description | Contraintes | Valeur par défaut |
+| Paramètre | Description | Contraintes | Valeur par défaut |
 |-----------|-------------|------------|-------------------|
 | `urlshortener.http_redirect_status` | Statut HTTP à utiliser pour les redirections | Doit être compris dans l'intervalle [300-399] | `301` |
 | `urlshortener.id_alphabet` | Liste des caractères à utiliser pour générer un ID | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
 | `urlshortener.id_length` | Longueur de l'ID généré | Entier entre 2 et 10 | `5` |
 | `urlshortener.not_found_page` | Page web statique à afficher dans le cas où l'ID fourni n'est pas connu | Une page HTML statique accessible | `static/not_found.html` |
-
 
 #### C.1.2- Configuration de la base données
 
@@ -89,7 +100,7 @@ La base de données utilisée doit être de type relationnelle et ne contient qu
 
 L'accès à la base de données peut être configuré via les paramètres suivants :
 
-| Paramètre | Description | Valeur par défaut |
+| Paramètre | Description | Valeur par défaut |
 |-----------|-------------|-------------------|
 | `spring.datasource.TODO` | TODO | :no_entry_sign: |
 
@@ -99,7 +110,7 @@ Pour une question de simplicité la sécurité est uniquement basée sur un annu
 
 L'annuaire d'entreprise peut être configuré avec la paramètres suivants :
 
-| Paramètre | Description | Exemple |Valeur par défaut |
+| Paramètre | Description | Exemple |Valeur par défaut |
 |-----------|-------------|---------|------------------|
 | `spring.ldap.urls` | L'URL d'accès au serveur d'annuaire | `ldap://myserver.mycompany:389/` | :no_entry_sign: |
 | `spring.ldap.base` | La racine de l'annuaire | `dc=mycompany,dc=org` | :no_entry_sign: |

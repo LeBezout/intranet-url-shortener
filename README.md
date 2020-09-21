@@ -15,7 +15,7 @@ and in particular in an internal company use.
 ### A.2- What is a URL shortener?
 
 A URL shortener or URL reducer is a short link generator, consisting of assigning a unique key
-of few characters to a specific web page and the ability to redirect to the original URL.
+of few characters to a specific web page with the ability to redirect to the original URL.
 
 The HTTP protocol natively provides the redirection issue by the statuses in the `3XX` range (usually `301`, `302` or `307`).
 
@@ -28,8 +28,8 @@ We can cite YouTube, Facebook, Twitter. LinkedIn, Google.
 
 * A reduced URL offered by an Internet service in an internal company use generates useless network flows: we leave the intranet to re-enter it immediately: `intranet -> web proxy -> internet -> firewall -> intranet`
 * A reduced URL obscures the original address. The different providers usually offer the possibility of previewing the destination site instead of being redirected directly to it,...  but who really does it?
-* There may be as many different short links for the same URL as there are shortening services.
-* If the external URL reduction service stops then all the reduced addresses using it become inaccessible, it is therefore impossible to obtain the original address.
+* There may be as many short links for the same URL as there are shortening services.
+* If the external URL reduction service stops then all the reduced addresses using it becomes inaccessible, it is therefore impossible to obtain the original address.
 * External URL reduction services take advantage of this to collect data and other statistics.
 * A URL can be a sensitive data, it can contain important information in parameters (login, token, even password, ...).
 * In the case of internal use, information about the internal infrastructure of the company can be indirectly disclosed.
@@ -62,6 +62,19 @@ Components flow:
 | Rest API | Expose a REST API to manage the lifecycle of the shortened links and to redirect to the expected targets. | Spring Boot + Liquibase + embedded Tomcat |
 | Database | Store the entries. | H2, MySQL, MariaDB, PostGreSQL |
 
+### B.3 - Data model
+
+| Column | Description | Type |
+|---------|-------------|------|
+| `id` | Internal ID | `VARCHAR 15` |
+| `target_url` | Target URL to redirect to | `VARCHAR 255` |
+| `created_by` | Initial creation user code | `VARCHAR 255` |
+| `created_date` | Initial creation  date | `DATETIME` |
+| `last_updated` | Last updated date | `DATETIME` |
+| `is_private` | Is link author private ? | `BOOLEAN` |
+| `access_counter` | Redirection counter | `BIGINT` |
+| `creation_counter` | Creation attempt counter | `BIGINT` |
+
 ## C- How To
 
 ### C.1- Configuring
@@ -70,7 +83,7 @@ Components flow:
 
 The URL shortener behavior can be configured with the following parameters, described below:
 
-| Parameter name | Description | Constraints | Default value |
+| Parameter name | Description | Constraints | Default value |
 |----------------|-------------|-------------|---------------|
 | `urlshortener.http_redirect_status` | The HTTP status to use for the redirection | Must in range of [300-399] | `301` |
 | `urlshortener.id_alphabet` | The alphabet to use for the ID generation | Only single characters separated by comma | `0,...,9,a,...,z,A,...,Z` |
@@ -79,7 +92,7 @@ The URL shortener behavior can be configured with the following parameters, desc
 
 #### C.1.2- Configuring Database
 
-The database used must be a SQL database and is only composed of an unique table named `link`.
+The database used must be a SQL database and is only composed of a unique table named `link`.
 The following JDBC drivers are embedded:
 
 * H2: `com.h2database:h2`
@@ -89,7 +102,7 @@ The following JDBC drivers are embedded:
 
 Database access can be configured with the following parameters:
 
-| Parameter name | Description | Default value |
+| Parameter name | Description | Default value |
 |----------------|-------------|---------------|
 | `spring.datasource.TODO` | TODO | :no_entry_sign: |
 
@@ -99,7 +112,7 @@ For simplicity's sake security is only based on a LDAP or AD directory, without 
 
 The company directory can be configured with the following settings:
 
-| Parameter name | Description | Sample Value |Default value |
+| Parameter name | Description | Sample Value |Default value |
 |----------------|-------------|--------------|--------------|
 | `spring.ldap.urls` | The directory URL | `ldap://myserver.mycompany:389/` | :no_entry_sign: |
 | `spring.ldap.base` | The directory root | `dc=mycompany,dc=org` | :no_entry_sign: |
