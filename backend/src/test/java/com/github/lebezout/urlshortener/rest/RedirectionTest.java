@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Sql("classpath:/data-test.sql")
@@ -32,7 +31,7 @@ class RedirectionTest {
     private MockMvc mvc;
 
     @Test
-    void test_redirection_not_found() throws Exception {
+    void should_redirect_to_the_parameterized_not_found_page() throws Exception {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/redirect/0000"));
         MvcResult result = mvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
@@ -47,7 +46,7 @@ class RedirectionTest {
     }
 
     @Test
-    void test_redirection_found() throws Exception {
+    void should_redirect_to_the_expected_target() throws Exception {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/redirect/AZERTY"));
         MvcResult result = mvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())

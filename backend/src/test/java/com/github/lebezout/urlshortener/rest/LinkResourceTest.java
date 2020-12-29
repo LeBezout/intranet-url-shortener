@@ -30,7 +30,6 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Sql("classpath:/data-test.sql")

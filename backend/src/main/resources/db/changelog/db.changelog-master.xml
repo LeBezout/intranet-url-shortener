@@ -3,15 +3,18 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+    <property name="asChar" value="CHAR" dbms="oracle"/>
+    <property name="asChar" value=""/>
+
     <changeSet author="urlshortener" id="V1.00">
         <createTable tableName="link" remarks="the table to store the links with their generated ids">
-            <column name="id" remarks="ID" type="VARCHAR(15 CHAR)">
+            <column name="id" remarks="ID" type="VARCHAR(15 ${asChar})">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(255 CHAR)">
+            <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(1024 ${asChar})">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" remarks="Creation user code" type="VARCHAR(255 CHAR)">
+            <column name="created_by" remarks="Creation user code" type="VARCHAR(255 ${asChar})">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="created_date" remarks="Creation date" type="DATETIME">
@@ -34,13 +37,13 @@
 
     <changeSet author="urlshortener" id="V1.01">
         <createIndex indexName="idx_target_url" tableName="link" unique="false">
-            <column name="target_url" type="VARCHAR(255 CHAR)"/>
+            <column name="target_url" type="VARCHAR(255 ${asChar})"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="urlshortener" id="V1.02">
         <createIndex indexName="idx_created_by" tableName="link" unique="false">
-            <column name="created_by" type="VARCHAR(255 CHAR)"/>
+            <column name="created_by" type="VARCHAR(255 ${asChar})"/>
         </createIndex>
     </changeSet>
 
