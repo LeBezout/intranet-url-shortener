@@ -98,13 +98,16 @@ The following JDBC drivers are embedded:
 * H2: `com.h2database:h2`
 * MySQL: `mysql:mysql-connector-java`
 * MariaDB: `org.mariadb.jdbc:mariadb-java-client`
-* PostGreSQL: `org.postgresql:postgresql`
+* PostgreSQL: `org.postgresql:postgresql`
 
 Database access can be configured with the following parameters:
 
 | Parameter name | Description | Default value |
 |----------------|-------------|---------------|
-| `spring.datasource.TODO` | TODO | :no_entry_sign: |
+| `spring.jpa.database` | The database type | :no_entry_sign: |
+| `spring.datasource.url` | The database JDBC URL | :no_entry_sign: |
+| `spring.datasource.username` | The database username | :no_entry_sign: |
+| `spring.datasource.password` | The database user password | :no_entry_sign: |
 
 #### C.1.3- Configuring LDAP
 
@@ -118,7 +121,8 @@ The company directory can be configured with the following settings:
 | `spring.ldap.base` | The directory root | `dc=mycompany,dc=org` | :no_entry_sign: |
 | `spring.ldap.username` | Username used to connect to the directory | `uid=ldap_reader,ou=people` | :no_entry_sign: |
 | `spring.ldap.password` | The user password used to connect to the directory | :no_entry_sign: | :no_entry_sign: |
-| `urlshortener.ldap_user_search_filter` | The LDAP search filter to find the users, relative to the root | `uid={0},ou=people` | :no_entry_sign: |
+| `urlshortener.ldap_user_dn_patterns` | If users are at fixed locations in the directory | `uid={0},ou=people` | :no_entry_sign: |
+| `urlshortener.ldap_user_search_filter` | The LDAP search filter to find the users, relative to the root | `(uid={0})` | :no_entry_sign: |
 
 ### C.2- Deploying
 

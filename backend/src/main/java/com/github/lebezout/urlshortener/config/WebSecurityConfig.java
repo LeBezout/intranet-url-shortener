@@ -20,29 +20,32 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSecurityConfig.class);
 
+    @Value("${urlshortener.ldap_user_dn_patterns}") String userDnPatterns;
     @Value("${urlshortener.ldap_user_search_filter}") String userSearchFilter;
+    @Value("${spring.ldap.urls}") String ldapUrl;
+    @Value("${spring.ldap.base}") String ldapBase;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
-        LOGGER.info("CONFIG: LDAP base search is {}", userSearchFilter);
-        auth.ldapAuthentication().userDnPatterns(userSearchFilter);
+        LOGGER.info("CONFIG: LDAP base search is {}, DN patterns is {}, URL is {}{}", userSearchFilter, userDnPatterns, ldapUrl, ldapBase);
+        auth.ldapAuthentication()
+            .userDnPatterns(userDnPatterns)
+            .userSearchFilter(userSearchFilter)
+            .contextSource().url(ldapUrl + ldapBase)
+        ;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.csrf().disable();
-        // allow redirects for everyone and get REST api
-        http.authorizeRequests()
-            .mvcMatchers("/favicon.ico").permitAll()
-            .mvcMatchers("/manage/health").permitAll()
-            .mvcMatchers("/manage/info").permitAll()
-            .antMatchers("/redirect/*").permitAll()
-            .antMatchers("/api/link/*/target").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/link").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/link/**").permitAll();
-        // other REST api calls must be authenticated
-        http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
+        final String apiURLAntMatcher = "/api/**";
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().csrf().disable()
+            .authorizeRequests()
+            .antMatchers(HttpMethod.POST, apiURLAntMatcher).fullyAuthenticated()
+            .antMatchers(HttpMethod.PUT, apiURLAntMatcher).fullyAuthenticated()
+            .antMatchers(HttpMethod.DELETE, apiURLAntMatcher).fullyAuthenticated()
+            .anyRequest().permitAll()
+            .and().httpBasic()
+        ;
     }
 }

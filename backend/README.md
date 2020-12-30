@@ -4,7 +4,7 @@
 
 Expose the REST API.
 
-Talks with the database.
+Talks with and manage the database.
 
 ## Implemented with
 
@@ -46,7 +46,7 @@ sudo docker run --name urlshortener_postgresql \
   bitnami/postgresql:latest
 ```
 
-Validate with `sudo docker exec -it urlshortener_postgresql psql -d urlshortener_db -U demo -c '\l'`
+:bulb: Validate with `sudo docker exec -it urlshortener_postgresql psql -d urlshortener_db -U demo -c '\l'`
 
 ### Directory
 
@@ -63,7 +63,7 @@ sudo docker run --name urlshortener_openldap \
   bitnami/openldap:latest
 ```
 
-Validate with `curl 'ldap://localhost:1389/dc=local,dc=org?*?sub?(objectclass=*)'`
+:bulb: Validate with `curl 'ldap://localhost:1389/dc=local,dc=org?*?sub?(objectclass=*)'`
 
 ### Run the App
 
@@ -71,4 +71,12 @@ Validate with `curl 'ldap://localhost:1389/dc=local,dc=org?*?sub?(objectclass=*)
 * Command Line : `java -jar target/url-shortener-1.0.0-SNAPSHOT.jar --spring.profiles.active=local`
 * IDE : run `src/main/java/[...]/UrlShortenerApplication.java` with _active profiles :_  `local`
 
-Validate with `curl http://localhost:8080/manage/health`
+:bulb: Validate with `curl http://localhost:8080/manage/health`
+
+### Test the app
+
+* Check credentials `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/user/login`
+* Add a new link `curl --fail -X POST -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "target": "http://github.com" }' http://localhost:8080/api/link`
+* Get link infos `curl --fail http://localhost:8080/api/link/{link_id}`
+* Get link target `curl --fail http://localhost:8080/api/link/{link_id}/target`
+* Check redirect in a browser : `http://localhost:8080/redirect/{link_id}`
