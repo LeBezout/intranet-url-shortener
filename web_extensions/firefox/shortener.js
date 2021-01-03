@@ -10,15 +10,24 @@ function protocolIsApplicable(url) {
 }
 
 /*
- * the listener
+ * the config listener
  */
-function shorten(tab) {
-  var gettingActiveTab = browser.tabs.query({active: true, currentWindow: true});
-  gettingActiveTab.then((tabs) => {
-    console.log(tabs[0].url);
-    // TODO shorten this URL
-  });
+function launchConfig() {
+  browser.runtime.openOptionsPage();
+}
 
+/*
+ * the listener for the current location
+ */
+function shorten() {
+  var gettingActiveTabPromise = browser.tabs.query({active: true, currentWindow: true});
+  gettingActiveTabPromise.then((tabs) => {
+    var serverRootUrlPromise = browser.storage.sync.get('shortenerUrl');
+    serverRootUrlPromise.then((res) => {
+      console.log("Shorten '" + tabs[0].url + "' with '" + res.shortenerUrl + "'");
+      // TODO shorten this URL
+    });
+  });
 }
 /*
 Initialize the page action: set icon and title, then show.
@@ -52,10 +61,12 @@ browser.tabs.onUpdated.addListener((id, changeInfo, tab) => {
 });
 
 /*
- * add the listener
+ * add the listener for the page action
  */
 browser.pageAction.onClicked.addListener(shorten);
+/*
+ * add the listener for the browser action
+ */
+browser.browserAction.onClicked.addListener(launchConfig);
 
-//const currentURL = window.document.location.href;
-//console.log(currentURL);
-console.log("shortener is loaded");
+//console.log("shortener is loaded");

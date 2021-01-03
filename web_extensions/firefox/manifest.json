@@ -11,9 +11,19 @@
   },
 
   "permissions": [
+    "storage",
     "activeTab",
     "tabs"
   ],
+
+  "options_ui": {
+      "page": "config.html",
+      "browser_style": true
+  },
+
+  "browser_action": {
+      "default_title": "Configure Intranet URL Shortener"
+  },
 
   "page_action": {
     "default_icon": "icons/url_shortener_ico-32.png",
@@ -22,5 +32,12 @@
 
   "background": {
     "scripts": ["shortener.js"]
+  },
+
+  "browser_specific_settings": {
+      "gecko": {
+          "id": "intranet-url-shortener.lebezout@github.com",
+          "strict_min_version": "57.0a1"
+      }
   }
 }
