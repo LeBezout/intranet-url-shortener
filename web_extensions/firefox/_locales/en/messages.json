@@ -25,7 +25,7 @@
   },
 
   "browserActionTitle": {
-    "message": "Configure Intranet URL Shortener",
+    "message": "URL-Shortener: Configure the add-on",
     "description": "Text for the icon action."
   },
 

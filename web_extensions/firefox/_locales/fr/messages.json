@@ -25,7 +25,7 @@
   },
 
   "browserActionTitle": {
-    "message": "Configurer l'extension",
+    "message": "Raccourcisseur d'URL : configurer l'extension",
     "description": "Infos bulle de l'icône de l'extension."
   },
 
