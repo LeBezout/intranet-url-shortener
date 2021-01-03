@@ -61,6 +61,22 @@ browser.tabs.onUpdated.addListener((id, changeInfo, tab) => {
 });
 
 /*
+ * add the listener for the context menu
+ */
+browser.contextMenus.create({
+  id: "url-shortener-link",
+  title: "Shorten link",
+  contexts: ["link"],
+});
+
+browser.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "url-shortener-link") {
+    console.log("Context URL = " + info.linkUrl);
+    // TODO shorten this URL
+  }
+});
+
+/*
  * add the listener for the page action
  */
 browser.pageAction.onClicked.addListener(shorten);
