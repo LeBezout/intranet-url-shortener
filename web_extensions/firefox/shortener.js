@@ -65,7 +65,7 @@ browser.tabs.onUpdated.addListener((id, changeInfo, tab) => {
  */
 browser.contextMenus.create({
   id: "url-shortener-link",
-  title: "Shorten link",
+  title: browser.i18n.getMessage("contextMenuTitle"),
   contexts: ["link"],
 });
 

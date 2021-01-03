@@ -1,0 +1,36 @@
+{
+  "extensionName": {
+    "message": "Intranet-URL-Shortener",
+    "description": "Nom de l'extension."
+  },
+
+  "extensionDescription": {
+    "message": "Raccourcisseur d'URL pour l'intranet d'entreprise.",
+    "description": "Description de l'extension."
+  },
+
+  "configLabelServerUrl": {
+    "message": "Saisir l'URL du frontal",
+    "description": "Label for the input."
+  },
+
+  "configSaveServerUrl": {
+    "message": "Enregistrer",
+    "description": "Texte du bouton de sauvegarde"
+  },
+
+  "contextMenuTitle": {
+    "message": "Raccourcir ce lien",
+    "description": "Element du menu contextuel"
+  },
+
+  "browserActionTitle": {
+    "message": "Configurer l'extension",
+    "description": "Infos bulle de l'icône de l'extension."
+  },
+
+  "pageActionTitle": {
+    "message": "Raccourcir cette adresse",
+    "description": "Element de la barre d'adresses."
+  }
+}

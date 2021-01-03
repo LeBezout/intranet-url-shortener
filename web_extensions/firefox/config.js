@@ -1,3 +1,8 @@
+// i18n
+document.querySelector("#configLabelServerUrl").innerText = browser.i18n.getMessage("configLabelServerUrl");
+document.querySelector("#configSaveServerUrl").innerText = browser.i18n.getMessage("configSaveServerUrl");
+
+
 function saveOptions(e) {
   browser.storage.sync.set({
     shortenerUrl: document.querySelector("#txtShortenerUrl").value
