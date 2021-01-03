@@ -1,0 +1,26 @@
+{
+  "name": "Intranet-URL-Shortener",
+  "version": "1.0",
+  "description": "A simple URL Shortener for Intranet purpose",
+  "homepage_url": "https://github.com/LeBezout/intranet-url-shortener",
+  "manifest_version": 2,
+
+  "icons": {
+    "32": "icons/url_shortener_ico-32.png",
+    "48": "icons/url_shortener_ico-48.png"
+  },
+
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ],
+
+  "page_action": {
+    "default_icon": "icons/url_shortener_ico-32.png",
+    "default_title": "Shorten this URL"
+  },
+
+  "background": {
+    "scripts": ["shortener.js"]
+  }
+}
