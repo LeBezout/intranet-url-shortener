@@ -18,7 +18,8 @@ public interface LinkRepository extends CrudRepository<LinkEntity, String> {
      * @param target the target url
      * @return link
      */
-    Optional<LinkEntity> findByTarget(String target); // FIXME not private links
+    @Query("from LinkEntity l where l.creator = ?1 and l.privateLink = false")
+    Optional<LinkEntity> findByTarget(String target);
 
     /**
      * Select all links created by a specific user

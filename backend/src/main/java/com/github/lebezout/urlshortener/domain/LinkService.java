@@ -107,7 +107,7 @@ public class LinkService {
             id = idGenerator.generate(params.getIdLength());
             LOGGER.info("New ID generated {}", id);
         }
-        // Target URL already exists ? FIXME what to do if link in private ?
+        // Target URL already exists ?
         Optional<LinkEntity> existingTargetLink = repository.findByTarget(link.getTarget());
         if (existingTargetLink.isPresent()) {
             LinkEntity entity = existingTargetLink.get();
@@ -128,6 +128,7 @@ public class LinkService {
         entity.setLastUpdatedDate(LocalDateTime.now());
         entity.setPrivateLink(link.isPrivateLink());
         entity.setTarget(link.getTarget());
+        entity.setCreationCounter(1);
         // accessCounter defaults to 0
         entity = saveLinkEntity(entity);
         LinkDTO newLink = new LinkDTO(entity);
