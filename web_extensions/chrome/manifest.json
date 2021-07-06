@@ -1,0 +1,6 @@
+{
+  "name": "Intranet-URL-Shortener",
+  "version": "1.0",
+  "description": "A simple URL Shortener for Intranet purpose",
+  "manifest_version": 2
+}

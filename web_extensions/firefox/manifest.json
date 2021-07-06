@@ -1,0 +1,45 @@
+{
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
+  "version": "1.0",
+  "homepage_url": "https://github.com/LeBezout/intranet-url-shortener",
+  "default_locale": "en",
+  "manifest_version": 2,
+
+  "browser_specific_settings": {
+      "gecko": {
+          "id": "intranet-url-shortener.lebezout@github.com",
+          "strict_min_version": "57.0a1"
+      }
+  },
+
+  "icons": {
+    "32": "icons/url_shortener_ico-32.png",
+    "48": "icons/url_shortener_ico-48.png"
+  },
+
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "contextMenus"
+  ],
+
+  "options_ui": {
+      "page": "config.html",
+      "browser_style": true
+  },
+
+  "browser_action": {
+      "default_title": "__MSG_browserActionTitle__"
+  },
+
+  "page_action": {
+    "default_icon": "icons/url_shortener_ico-32.png",
+    "default_title": "__MSG_pageActionTitle__"
+  },
+
+  "background": {
+    "scripts": ["shortener.js"]
+  }
+}
