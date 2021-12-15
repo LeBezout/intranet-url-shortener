@@ -97,16 +97,6 @@ public class LinkService {
     public LinkDTO addNewLink(final NewLinkDTO link, final String creator) {
         Assert.notNull(link, "New link data cannot be null");
         Assert.notNull(creator, "Link creator cannot be null");
-        String id = link.getId();
-        if (StringUtils.hasText(id)) {
-            LOGGER.info("Provided ID is {}", id);
-            IDTooLongException.throwIfNeeded(id);
-            Optional<LinkEntity> existingLink = getLinkEntity(id);
-            IDAlreadyExistsException.throwIfNeeded(existingLink);
-        } else {
-            id = idGenerator.generate(params.getIdLength());
-            LOGGER.info("New ID generated {}", id);
-        }
         // Target URL already exists ?
         Optional<LinkEntity> existingTargetLink = repository.findByTarget(link.getTarget());
         if (existingTargetLink.isPresent()) {
@@ -120,6 +110,16 @@ public class LinkService {
             return existingTargetLink.map(LinkDTO::new).orElseThrow(LinkNotFoundException::new);
         }
 
+        String id = link.getId();
+        if (StringUtils.hasText(id)) {
+            LOGGER.info("Provided ID is {}", id);
+            IDTooLongException.throwIfNeeded(id);
+            Optional<LinkEntity> existingLink = getLinkEntity(id);
+            IDAlreadyExistsException.throwIfNeeded(existingLink);
+        } else {
+            id = idGenerator.generate(params.getIdLength());
+            LOGGER.info("New ID generated {}", id);
+        }
         // create new entity
         LinkEntity entity = new LinkEntity();
         entity.setId(id);

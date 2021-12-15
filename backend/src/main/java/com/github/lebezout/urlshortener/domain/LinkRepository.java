@@ -18,7 +18,7 @@ public interface LinkRepository extends CrudRepository<LinkEntity, String> {
      * @param target the target url
      * @return link
      */
-    @Query("from LinkEntity l where l.creator = ?1 and l.privateLink = false")
+    @Query("from LinkEntity l where l.target = ?1 and l.privateLink = false")
     Optional<LinkEntity> findByTarget(String target);
 
     /**
