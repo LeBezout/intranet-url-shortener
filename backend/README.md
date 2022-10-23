@@ -14,18 +14,7 @@ Talks with and manage the database.
 
 ## Database
 
-One table : `link` to store the _shortened links_ with the following fields:
-
-| Field | Type | Remark |
-|-------|------|--------|
-| id | `VARCHAR(15 CHAR)` | the internal id |
-| target_url | `VARCHAR(255 CHAR)` | the target URL to redirect to |
-| created_by | `VARCHAR(255 CHAR)` | the creator of the shortened link |
-| created_date | `DATETIME` | the date of creation |
-| last_updated | `DATETIME` | the date of the last update |
-| is_private | `BOOLEAN` | is the link only known by the creator |
-| access_count | `BIGINT` | the link redirection counter |
-| creation_counter | `BIGINT` | Creation attempt counter |
+One table : `link` to store the _shortened links_ and one table _counter_ for the count capability.
 
 ## Setting-up a local development environment
 

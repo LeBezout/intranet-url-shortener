@@ -59,21 +59,38 @@ Components flow:
 | Component | Purpose | Technologies |
 |-----------|---------|--------------|
 | Web Frontend | GUI to add/update/delete or display the entries. | Vue.js + Typescript within a NGINX http server |
+| Browsers Extensions | Extensions for Web Browsers (Firefox, Chrome) | Javascript |
 | Rest API | Expose a REST API to manage the lifecycle of the shortened links and to redirect to the expected targets. | Spring Boot + Liquibase + embedded Tomcat |
 | Database | Store the entries. | H2, MySQL, MariaDB, PostGreSQL |
 
 ### B.3 - Data model
 
-| Column | Description | Type |
-|---------|-------------|------|
-| `id` | Internal ID | `VARCHAR 15` |
-| `target_url` | Target URL to redirect to | `VARCHAR 255` |
-| `created_by` | Initial creation user code | `VARCHAR 255` |
-| `created_date` | Initial creation  date | `DATETIME` |
-| `last_updated` | Last updated date | `DATETIME` |
-| `is_private` | Is link author private ? | `BOOLEAN` |
-| `access_counter` | Redirection counter | `BIGINT` |
-| `creation_counter` | Creation attempt counter | `BIGINT` |
+#### link table
+
+Stores the shortened links.
+
+| Column             | Description | Type           |
+|--------------------|-------------|----------------|
+| `id`               | Internal ID | `VARCHAR 15`   |
+| `target_url`       | Target URL to redirect to | `VARCHAR 255`  |
+| `created_by`       | Initial creation user code | `VARCHAR 1024` |
+| `creation_date`    | Initial creation  date | `DATETIME`     |
+| `last_updated`     | Last updated date | `DATETIME`     |
+| `is_private`       | Is link author private ? | `BOOLEAN`      |
+| `access_counter`   | Redirection counter | `BIGINT`       |
+| `creation_counter` | Creation attempt counter | `BIGINT`       |
+
+#### counter table
+
+Stores the visitor counter of any website you want. 
+
+| Column | Description                | Type           |
+|-------|----------------------------|----------------|
+| `id` | Internal ID                | `VARCHAR 15`   |
+| `url` | Target URL to the website  | `VARCHAR 1024` |
+| `created_by` | Initial creation user code | `VARCHAR 255`  |
+| `creation_date` | Initial creation  date     | `DATETIME`     |
+| `visitor_counter` | Website visitor counter    | `BIGINT`       |
 
 ## C- How To
 

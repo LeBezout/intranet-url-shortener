@@ -18,7 +18,7 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureMockMvc
-@Sql("classpath:/data-test.sql")
+@Sql("classpath:/data-test-link.sql")
 @Transactional
 class LinkServiceTest {
     @Autowired
@@ -66,8 +66,8 @@ class LinkServiceTest {
     }
 
     @Test
-    public void test_findByCriteria() {
-        List<LinkDTO> result =  service.findByCriteria(
+    void test_findByCriteria() {
+        List<LinkDTO> result = service.findByCriteria(
             "JUNIT",
             LocalDateTime.of(2018, 11, 10, 0, 0),
             LocalDateTime.of(2018, 11, 12, 0, 0));

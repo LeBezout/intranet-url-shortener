@@ -19,8 +19,8 @@ public class LinkEntity {
     private String target;
     @Column(name = "created_by")
     private String creator;
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
     @Column(name = "last_updated")
     private LocalDateTime lastUpdatedDate;
     @Column(name = "is_private")
@@ -54,12 +54,12 @@ public class LinkEntity {
         this.creator = creator;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setCreationDate(LocalDateTime createdDate) {
+        this.creationDate = createdDate;
     }
 
     public LocalDateTime getLastUpdatedDate() {

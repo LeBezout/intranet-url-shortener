@@ -6,8 +6,8 @@ import com.github.lebezout.urlshortener.error.IDTooLongException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
 import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,25 +25,14 @@ import java.util.stream.Collectors;
  * The service layer to manage our links and to add some cache capabilities.
  * @author lebezout@gmail.com
  */
+@RequiredArgsConstructor
+@Slf4j
 @Service
 @Transactional
 public class LinkService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LinkService.class);
     private final LinkRepository repository;
     private final IdGenerator idGenerator;
     private final Params params;
-
-    /**
-     * Constructor for DI
-     * @param repo the autowired repository instance
-     * @param generator the autowired IdGenerator
-     * @param config the autowired config
-     */
-    public LinkService(LinkRepository repo, IdGenerator generator, Params config) {
-        repository = repo;
-        idGenerator = generator;
-        params = config;
-    }
 
     /**
      * Find all the links of the specified creator
@@ -124,7 +113,7 @@ public class LinkService {
         LinkEntity entity = new LinkEntity();
         entity.setId(id);
         entity.setCreator(creator);
-        entity.setCreatedDate(LocalDateTime.now());
+        entity.setCreationDate(LocalDateTime.now());
         entity.setLastUpdatedDate(LocalDateTime.now());
         entity.setPrivateLink(link.isPrivateLink());
         entity.setTarget(link.getTarget());
