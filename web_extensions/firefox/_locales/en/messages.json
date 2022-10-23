@@ -1,0 +1,36 @@
+{
+  "extensionName": {
+    "message": "Intranet-URL-Shortener",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "A simple URL Shortener for Intranet purpose.",
+    "description": "Description of the add-on."
+  },
+
+  "configLabelServerUrl": {
+    "message": "Type URL Shortener frontend URL",
+    "description": "Label for the input."
+  },
+
+  "configSaveServerUrl": {
+    "message": "Save",
+    "description": "Text for the submit button."
+  },
+
+  "contextMenuTitle": {
+    "message": "Shorten this link",
+    "description": "Text for the context menu item."
+  },
+
+  "browserActionTitle": {
+    "message": "URL-Shortener: Configure the add-on",
+    "description": "Text for the icon action."
+  },
+
+  "pageActionTitle": {
+    "message": "Shorten this location",
+    "description": "Text for the page action."
+  }
+}
