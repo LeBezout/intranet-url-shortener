@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
  * @author lebezout@gmail.com
  */
 @Data
-@Builder
 public class CounterDTO {
     private String id;
     private String url;

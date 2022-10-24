@@ -14,7 +14,7 @@
             <column name="id" remarks="ID" type="VARCHAR(15 ${asChar})">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(${urlMaxLength}} ${asChar})">
+            <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(${urlMaxLength} ${asChar})">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="created_by" remarks="Creation user code" type="VARCHAR(${creatorMaxLength} ${asChar})">
