@@ -116,6 +116,17 @@ class CounterResourceTest {
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn();
     }
+    @Test
+    void test_visitUrl_and_get_svg() throws Exception {
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/count/AZERTY1234/svg"));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("image/svg+xml"))
+            .andReturn();
+        MockHttpServletResponse httpResponse = result.getResponse();
+        String counter = httpResponse.getContentAsString();
+        Assertions.assertTrue(counter.contains("http://www.w3.org/2000/svg"));
+    }
 
     @Test
     @WithMockUser(username = "JUNIT", password = "admin")
