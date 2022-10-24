@@ -102,8 +102,8 @@ class LinkResourceTest {
         MockHttpServletResponse httpResponse = result.getResponse();
         String jsonContent = httpResponse.getContentAsString();
         LOGGER.debug(jsonContent);
+        Assertions.assertTrue(jsonContent.isEmpty());
     }
-
 
     @Test
     void test_getTargetLink() throws Exception {

@@ -10,7 +10,7 @@ import java.util.Optional;
  * A custom exception to map the 400 HTTP status when a provided ID already exists when creating a new link.
  * @author lebezout@gmail.com
  */
-@ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="The provided ID already exists")  // 400
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "The provided ID already exists")  // 400
 public class IDAlreadyExistsException extends RuntimeException {
 
     /**

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * A custom exception to map the 403 HTTP status when a link is attempt to be updated by another person than the creator.
  * @author lebezout@gmail.com
  */
-@ResponseStatus(value= HttpStatus.FORBIDDEN, reason="Only the creator of the link can update it")
+@ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Only the creator of the link can update it")
 public class NotLinkOwnerException extends RuntimeException {
 
     /**

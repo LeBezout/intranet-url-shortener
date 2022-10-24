@@ -5,6 +5,7 @@ import com.github.lebezout.urlshortener.domain.CounterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,21 +51,28 @@ public class CounterResource {
         return service.getFromUrl(url);
     }
 
-    @PutMapping
-    public long visitUrl(String counterId) {
+    @PutMapping(path = "{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String visitUrl(@PathVariable("id") String counterId) {
         assertIdIsProvided(counterId);
         LOGGER.info("Update counter from id {}", counterId);
-        return service.visit(counterId);
+        long counterValue = service.visit(counterId);
+        return Long.toString(counterValue);
     }
 
     // TODO visitAndGetSvg
     // TODO visitAndGetPng
 
-    // TODO reset ?
+    @PutMapping(path = "{id}/reset")
+    public CounterDTO resetCounter(@PathVariable("id") String counterId, Principal principal) {
+        assertIdIsProvided(counterId);
+        Assert.notNull(principal, "No credentials provided");
+        assertIdIsProvided(counterId);
+        return service.resetCounter(counterId, principal.getName());
+    }
 
     // TODO delete ?
 
-    private static void assertIdIsProvided(String idLink) {
-        Assert.hasText(idLink, "No ID provided");
+    private static void assertIdIsProvided(String id) {
+        Assert.hasText(id, "No ID provided");
     }
 }

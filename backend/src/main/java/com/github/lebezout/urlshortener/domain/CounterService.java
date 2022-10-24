@@ -2,6 +2,7 @@ package com.github.lebezout.urlshortener.domain;
 
 import com.github.lebezout.urlshortener.error.CounterAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.CounterNotFoundException;
+import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,23 @@ public class CounterService {
         LOGGER.info("Creating new counter : {}", newCounter);
         repository.save(newCounter);
         return new CounterDTO(newCounter);
+    }
+
+    /**
+     * Reset a counter if owner
+     * @param id id of the counter
+     * @param creator creator of the counter (owner of the website)
+     * @return counter
+     * @throws NotLinkOwnerException if not owner of the counter
+     */
+    public CounterDTO resetCounter(String id, final String creator) {
+        Assert.notNull(id, "Counter id cannot be null");
+        Optional<CounterEntity> existingCounter = repository.findById(id);
+        CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
+        NotLinkOwnerException.throwIfNeeded(entity.getCreator(), creator);
+        entity.setVisitorCounter(0L);
+        repository.save(entity);
+        return new CounterDTO(entity);
     }
 
     /**
