@@ -99,7 +99,7 @@ class CounterResourceTest {
 
     @Test
     void test_visitUrl() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/count/AZERTY1234"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
@@ -111,14 +111,14 @@ class CounterResourceTest {
     }
     @Test
     void test_visitUrl_not_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/count/foobar"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/foobar"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn();
     }
     @Test
     void test_visitUrl_and_get_svg() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/count/AZERTY1234/svg"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/svg"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("image/svg+xml"))

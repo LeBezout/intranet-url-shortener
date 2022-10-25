@@ -52,7 +52,7 @@ public class CounterResource {
         return service.getFromUrl(url);
     }
 
-    @PutMapping(path = "{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(path = "{id}", produces = MediaType.TEXT_PLAIN_VALUE)
     public String visitUrl(@PathVariable("id") String counterId) {
         assertIdIsProvided(counterId);
         LOGGER.info("Update counter from id {}", counterId);
@@ -60,7 +60,7 @@ public class CounterResource {
         return Long.toString(counterValue);
     }
 
-    @PutMapping(path = "{id}/svg", produces = "image/svg+xml")
+    @GetMapping(path = "{id}/svg", produces = "image/svg+xml")
     public byte[] visitAndGetSvg(@PathVariable("id") String counterId) {
         assertIdIsProvided(counterId);
         LOGGER.info("Update counter from id {}", counterId);
@@ -85,6 +85,7 @@ public class CounterResource {
     }
 
     // TODO visitAndGetPng
+    // TODO plain text - ascii \uFE0F
 
     @PutMapping(path = "{id}/reset")
     public CounterDTO resetCounter(@PathVariable("id") String counterId, Principal principal) {
