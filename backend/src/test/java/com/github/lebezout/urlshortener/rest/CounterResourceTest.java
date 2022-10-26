@@ -99,7 +99,7 @@ class CounterResourceTest {
 
     @Test
     void test_visitUrl() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/v"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
@@ -111,7 +111,7 @@ class CounterResourceTest {
     }
     @Test
     void test_visitUrl_not_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/foobar"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/foobar/v"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn();
@@ -124,8 +124,27 @@ class CounterResourceTest {
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("image/svg+xml"))
             .andReturn();
         MockHttpServletResponse httpResponse = result.getResponse();
-        String counter = httpResponse.getContentAsString();
-        Assertions.assertTrue(counter.contains("http://www.w3.org/2000/svg"));
+        String svg = httpResponse.getContentAsString();
+        Assertions.assertTrue(svg.contains("http://www.w3.org/2000/svg"));
+    }
+    @Test
+    void test_visitUrl_and_get_png() throws Exception {
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/png"));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("image/png"))
+            .andReturn();
+        MockHttpServletResponse httpResponse = result.getResponse();
+        byte[] image = httpResponse.getContentAsByteArray();
+        Assertions.assertTrue(image.length > 20, "Size must be > 20 bytes");
+        Assertions.assertAll(
+            () -> Assertions.assertEquals(137, image[0] & 0xFF, "1st byte must be 137"),
+            () -> Assertions.assertEquals('P', image[1] & 0xFF, "2nd byte must be P"),
+            () -> Assertions.assertEquals('N', image[2] & 0xFF, "3rd byte must be N"),
+            () -> Assertions.assertEquals('G', image[3] & 0xFF, "4th byte must be G"),
+            () -> Assertions.assertEquals(13, image[4] & 0xFF, "5th byte must be CR"),
+            () -> Assertions.assertEquals(10, image[5] & 0xFF, "6th byte must be LF")
+        );
     }
 
     @Test

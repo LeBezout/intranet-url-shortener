@@ -3,7 +3,6 @@ package com.github.lebezout.urlshortener.domain;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.StringJoiner;
 
 /**
  * The Link POJO.
@@ -40,6 +39,5 @@ public class LinkDTO {
         accessCounter = entity.getAccessCounter();
         creationCounter = entity.getCreationCounter();
     }
-
 
 }

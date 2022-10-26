@@ -18,6 +18,9 @@ import java.util.Optional;
 @Service
 @Transactional
 public class CounterService {
+    private static final String ASSERTION_MESSAGE_COUNTER_ID_IS_NULL = "Counter id cannot be null";
+    private static final String ASSERTION_MESSAGE_COUNTER_URL_IS_NULL = "Counter url cannot be null";
+
     private final CounterRepository repository;
     private final IdGenerator idGenerator;
 
@@ -27,7 +30,7 @@ public class CounterService {
      * @return counter DTO
      */
     public CounterDTO getFromID(String id) {
-        Assert.notNull(id, "Counter id cannot be null");
+        Assert.notNull(id, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
         Optional<CounterEntity> existingCounter = repository.findById(id);
         return existingCounter.map(CounterDTO::new).orElseThrow(CounterNotFoundException::new);
     }
@@ -38,7 +41,7 @@ public class CounterService {
      * @return counter DTO
      */
     public CounterDTO getFromUrl(String url) {
-        Assert.notNull(url, "Counter url cannot be null");
+        Assert.notNull(url, ASSERTION_MESSAGE_COUNTER_URL_IS_NULL);
         Optional<CounterEntity> existingCounter = repository.findByUrl(url);
         return existingCounter.map(CounterDTO::new).orElseThrow(CounterNotFoundException::new);
     }
@@ -50,7 +53,7 @@ public class CounterService {
      * @return counter DTO
      */
     public CounterDTO initCounter(String url, final String creator) {
-        Assert.notNull(url, "Counter url cannot be null");
+        Assert.notNull(url, ASSERTION_MESSAGE_COUNTER_URL_IS_NULL);
         Assert.notNull(creator, "Counter creator cannot be null");
         // Counter for this url already exists ?
         Optional<CounterEntity> existingCounter = repository.findByUrl(url);
@@ -75,7 +78,7 @@ public class CounterService {
      * @throws NotLinkOwnerException if not owner of the counter
      */
     public CounterDTO resetCounter(String id, final String creator) {
-        Assert.notNull(id, "Counter id cannot be null");
+        Assert.notNull(id, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
         Optional<CounterEntity> existingCounter = repository.findById(id);
         CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
         NotLinkOwnerException.throwIfNeeded(entity.getCreator(), creator);
@@ -90,7 +93,7 @@ public class CounterService {
      * @return counter new value
      */
     public long visit(String id) {
-        Assert.notNull(id, "Counter id cannot be null");
+        Assert.notNull(id, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
         Optional<CounterEntity> existingCounter = repository.findById(id);
         CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
         entity.setVisitorCounter(entity.getVisitorCounter() + 1);

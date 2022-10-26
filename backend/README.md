@@ -61,9 +61,9 @@ sudo docker run --name urlshortener_openldap \
 
 * Maven : `mvn spring-boot:run -Dspring-boot.run.profiles=local`
 * Command Line : `java -jar target/url-shortener-1.0.0-SNAPSHOT.jar --spring.profiles.active=local`
-* IDE : run `src/main/java/[...]/UrlShortenerApplication.java` with _active profiles :_ `local` (or `h2`)
+* IDE : run `src/main/java/[...]/UrlShortenerApplication.java` with _active profiles :_ `local`
 
-:bulb: Validate with `curl http://localhost:8080/manage/health`
+:bulb: Validate with `curl http://localhost:8080/manage/health | jq`
 
 ### Test the app
 
@@ -77,3 +77,8 @@ sudo docker run --name urlshortener_openldap \
   * Check redirect in a browser : `http://localhost:8080/redirect/{link_id}`
 * Visitors counters:
   * Create new counter `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/count?url=https%3A%2F%2Fgithub.com`
+  * Get counter `curl http://localhost:8080/api/count/{counter_id}`
+  * Increment counter and get `curl http://localhost:8080/api/count/{counter_id}/v`
+  * Increment counter and get SVG `curl http://localhost:8080/api/count/{counter_id}/svg`
+  * Increment counter and get one pixel `curl http://localhost:8080/api/count/{counter_id}/px/0074CC --output target/pixel.png`
+  * Increment counter and get PNG `curl http://localhost:8080/api/count/{counter_id}/png --output target/counter.png`

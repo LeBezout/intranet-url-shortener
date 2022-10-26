@@ -28,5 +28,4 @@ public class CounterEntity {
     private LocalDateTime creationDate;
     @Column(name = "visitor_counter")
     private long visitorCounter;
-
 }

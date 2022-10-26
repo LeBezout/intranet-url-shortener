@@ -1,6 +1,5 @@
 package com.github.lebezout.urlshortener.domain;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
