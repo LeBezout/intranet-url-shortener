@@ -65,6 +65,8 @@ sudo docker run --name urlshortener_openldap \
 
 :bulb: Validate with `curl http://localhost:8080/manage/health | jq`
 
+:bulb: [Swagger UI](http://localhost:8080/openapi/swagger-ui/)
+
 ### Test the app
 
 * Check credentials `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/user/login`
@@ -78,6 +80,7 @@ sudo docker run --name urlshortener_openldap \
 * Visitors counters:
   * Create new counter `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/count?url=https%3A%2F%2Fgithub.com`
   * Get counter `curl http://localhost:8080/api/count/{counter_id}`
+  * Get counters created by the user "demo1" `curl --fail http://localhost:8080/api/count/createdBy/demo1 | jq`
   * Increment counter and get `curl http://localhost:8080/api/count/{counter_id}/v`
   * Increment counter and get SVG `curl http://localhost:8080/api/count/{counter_id}/svg`
   * Increment counter and get one pixel `curl http://localhost:8080/api/count/{counter_id}/px/0074CC --output target/pixel.png`

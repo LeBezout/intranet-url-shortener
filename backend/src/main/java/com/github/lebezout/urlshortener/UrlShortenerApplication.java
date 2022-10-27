@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * The main app class
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @SpringBootApplication
 @EnableCaching
+@EnableSwagger2
 public class UrlShortenerApplication extends SpringBootServletInitializer {
     @Controller
     static class FaviconController {

@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -44,6 +46,18 @@ public class CounterService {
         Assert.notNull(url, ASSERTION_MESSAGE_COUNTER_URL_IS_NULL);
         Optional<CounterEntity> existingCounter = repository.findByUrl(url);
         return existingCounter.map(CounterDTO::new).orElseThrow(CounterNotFoundException::new);
+    }
+
+    /**
+     * Find all the counters of the specified creator
+     * @param creator username
+     * @return list of links
+     */
+    @Transactional(readOnly = true)
+    public List<CounterDTO> findByCreator(String creator) {
+        Assert.notNull(creator, "Counter creator cannot be null");
+        List<CounterEntity> entities = repository.findByCreatorOrderByCreationDateDesc(creator);
+        return entities.stream().map(CounterDTO::new).collect(Collectors.toList());
     }
 
     /**

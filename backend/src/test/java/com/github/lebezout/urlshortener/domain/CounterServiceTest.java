@@ -14,6 +14,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureMockMvc
@@ -41,6 +43,17 @@ class CounterServiceTest {
     @Test
     void test_getFromUrl_CounterNotFoundException() {
         Assertions.assertThrows(CounterNotFoundException.class, () -> service.getFromUrl("http://www.foobar.com"));
+    }
+
+    @Test
+    void test_findByCreator() {
+        List<CounterDTO> counters = service.findByCreator("JUNIT");
+        Assertions.assertTrue(counters.size() > 1);
+        counters.forEach(c -> {
+            if (!c.getCreator().equals("JUNIT")) {
+                Assertions.fail("Expected JUNIT creator only");
+            }
+        });
     }
 
     @Test

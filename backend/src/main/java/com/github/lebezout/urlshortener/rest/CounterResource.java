@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * The Counter resource REST controller.
@@ -52,6 +53,13 @@ public class CounterResource {
         Assert.hasText(url, "No URL provided");
         LOGGER.info("Find counter from url {}", url);
         return service.getFromUrl(url);
+    }
+
+    @GetMapping(path = "createdBy/{creator}")
+    public List<CounterDTO> findByCreator(@PathVariable("creator") String creator) {
+        Assert.hasText(creator, "No creator provided");
+        LOGGER.info("Find counter created by {}", creator);
+        return service.findByCreator(creator);
     }
 
     @GetMapping(path = "{id}/v", produces = MediaType.TEXT_PLAIN_VALUE)
