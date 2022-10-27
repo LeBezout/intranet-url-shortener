@@ -35,7 +35,7 @@ class CounterServiceTest {
 
     @Test
     void test_getFromUrl() {
-        Assertions.assertEquals("JUNIT", service.getFromUrl("https://www.github.com").getCreator());
+        Assertions.assertEquals("JUNIT", service.getFromUrl("https://github.com").getCreator());
         Assertions.assertEquals("USER", service.getFromUrl("https://gitmoji.dev").getCreator());
     }
     @Test
@@ -67,7 +67,7 @@ class CounterServiceTest {
     }
     @Test
     void test_initCounter_CounterAlreadyExistsException() {
-        Assertions.assertThrows(CounterAlreadyExistsException.class, () -> service.initCounter("https://www.github.com", "junit"));
+        Assertions.assertThrows(CounterAlreadyExistsException.class, () -> service.initCounter("https://github.com", "junit"));
     }
 
     @Test

@@ -54,7 +54,7 @@ class LinkResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        List<LinkDTO> dtoList =  mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
+        List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
         LOGGER.debug(dtoList.toString());
         Assertions.assertEquals(1, dtoList.size());
     }
@@ -68,7 +68,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        List<LinkDTO> dtoList =  mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
+        List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
         LOGGER.debug(dtoList.toString());
         Assertions.assertEquals(2, dtoList.size());
     }

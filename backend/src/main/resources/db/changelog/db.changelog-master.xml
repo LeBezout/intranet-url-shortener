@@ -73,5 +73,13 @@
             <column name="url" type="VARCHAR(${urlMaxLength} ${asChar})"/>
         </createIndex>
     </changeSet>
-
+    <changeSet author="urlshortener"  id="V1.05">
+        <createView viewName="v_link_item_report" remarks="A view to aggregate Links with their counters based on the URL">
+            select
+                l.id as shortcut_ref, l.target_url as url, l.created_by as shortcut_creator, l.creation_date as shortcut_creation_date, l.access_counter as shortcut_counter,
+                c.id as counter_id, c.created_by as counter_creator, c.creation_date as counter_creation_date, c.last_visited, c.visitor_counter
+                from link l, counter c
+                where c.url=l.target_url
+        </createView>
+    </changeSet>
 </databaseChangeLog>

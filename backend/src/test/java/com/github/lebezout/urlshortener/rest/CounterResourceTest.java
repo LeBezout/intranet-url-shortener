@@ -56,7 +56,7 @@ class CounterResourceTest {
 
     @Test
     void test_getByURL_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count")).queryParam("url", "https://www.github.com");
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count")).queryParam("url", "https://github.com");
 
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())

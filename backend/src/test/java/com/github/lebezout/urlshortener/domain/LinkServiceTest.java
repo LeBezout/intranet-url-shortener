@@ -59,7 +59,7 @@ class LinkServiceTest {
 
     @Test
     void test_findByCreator() {
-        List<LinkDTO> result =  service.findByCreator("JUNIT");
+        List<LinkDTO> result = service.findByCreator("JUNIT");
         Assertions.assertEquals(2, result.size());
     }
 
