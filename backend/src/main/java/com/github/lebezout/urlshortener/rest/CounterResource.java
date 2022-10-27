@@ -2,6 +2,7 @@ package com.github.lebezout.urlshortener.rest;
 
 import com.github.lebezout.urlshortener.domain.CounterDTO;
 import com.github.lebezout.urlshortener.domain.CounterService;
+import com.github.lebezout.urlshortener.utils.CounterFormater;
 import com.github.lebezout.urlshortener.utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,13 +94,13 @@ public class CounterResource {
             "    <rect rx=\"3\" x=\"37\" width=\"75\" height=\"20\" fill=\"#9f9f9f\" />\n" +
             "    <path fill=\"#9f9f9f\" d=\"M37 0h4v20h-4z\"/>\n" +
             "    <g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\">\n" +
-            "        <text x=\"19\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">visit</text>\n" +
-            "        <text x=\"19\" y=\"14\">visit</text>\n" +
+            "        <text x=\"19\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">%s</text>\n" +
+            "        <text x=\"19\" y=\"14\">%s</text>\n" +
             "        <text x=\"75\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">%s</text>\n" +
             "        <text x=\"75\" y=\"14\">%s</text>\n" +
             "    </g>\n" +
             "</svg>";
-        return String.format(svgTemplate, strCounterValue, strCounterValue).getBytes(StandardCharsets.UTF_8);
+        return String.format(svgTemplate, "visits", "visits", strCounterValue, strCounterValue).getBytes(StandardCharsets.UTF_8);
     }
 
     @GetMapping(path = "{id}/png", produces = "image/png")
@@ -122,12 +123,12 @@ public class CounterResource {
         return service.resetCounter(counterId, principal.getName());
     }
 
-    // TODO delete / disable counter ?
+    // TODO delete or disable counter ?
 
     private String incrementAndGetCounterAsString(String counterId) {
         LOGGER.info("Update counter from id {}", counterId);
         long counterValue = service.visit(counterId);
-        return Long.toString(counterValue);
+        return CounterFormater.format(counterValue);
     }
 
     private static void assertIdIsProvided(String id) {
