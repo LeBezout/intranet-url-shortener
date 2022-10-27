@@ -26,6 +26,8 @@ public class CounterEntity {
     private String creator;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+    @Column(name = "last_visited")
+    private LocalDateTime lastVisitedDate;
     @Column(name = "visitor_counter")
     private long visitorCounter;
 }

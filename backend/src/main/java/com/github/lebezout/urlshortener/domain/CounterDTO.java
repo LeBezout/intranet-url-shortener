@@ -14,6 +14,7 @@ public class CounterDTO {
     private String url;
     private String creator;
     private LocalDateTime creationDate;
+    private LocalDateTime lastVisitedDate;
     private long counter;
 
     /** default constructor */
@@ -30,6 +31,7 @@ public class CounterDTO {
         url = entity.getUrl();
         creator = entity.getCreator();
         creationDate = entity.getCreationDate();
+        lastVisitedDate = entity.getLastVisitedDate();
         counter = entity.getVisitorCounter();
     }
 }

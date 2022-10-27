@@ -63,7 +63,8 @@ class CounterServiceTest {
         Assertions.assertAll(
             () -> Assertions.assertEquals("junit", counter.getCreator()),
             () -> Assertions.assertEquals("https://website.org", counter.getUrl()),
-            () -> Assertions.assertTrue(StringUtils.hasText(counter.getId()))
+            () -> Assertions.assertTrue(StringUtils.hasText(counter.getId())),
+            () -> Assertions.assertNull(counter.getLastVisitedDate())
         );
     }
     @Test
@@ -76,13 +77,21 @@ class CounterServiceTest {
         long initialCount = service.getFromID("AZERTY1234").getCounter();
         long count1 = service.visit("AZERTY1234");
         long count2 = service.visit("AZERTY1234");
-        Assertions.assertEquals(initialCount + 2 , count2);
+        Assertions.assertAll(
+            () -> Assertions.assertNotEquals(count1, initialCount),
+            () -> Assertions.assertNotEquals(count1, count2),
+            () -> Assertions.assertEquals(initialCount + 2 , count2),
+            () -> Assertions.assertNotNull(service.getFromID("AZERTY1234").getLastVisitedDate())
+        );
     }
 
     @Test
     void test_resetCounter_owner() {
         CounterDTO counter = service.resetCounter("FOOBAR6789", "USER");
-        Assertions.assertEquals(0, counter.getCounter());
+        Assertions.assertAll(
+            () -> Assertions.assertEquals(0, counter.getCounter()),
+            () -> Assertions.assertNull(counter.getLastVisitedDate())
+        );
     }
     @Test
     void test_resetCounter_not_owner() {

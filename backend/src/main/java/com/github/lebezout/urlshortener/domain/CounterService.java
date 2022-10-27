@@ -78,6 +78,7 @@ public class CounterService {
         newCounter.setId(id);
         newCounter.setCreator(creator);
         newCounter.setCreationDate(LocalDateTime.now());
+        // lastVisited is null at creation
         newCounter.setUrl(url);
         LOGGER.info("Creating new counter : {}", newCounter);
         repository.save(newCounter);
@@ -97,12 +98,13 @@ public class CounterService {
         CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
         NotLinkOwnerException.throwIfNeeded(entity.getCreator(), creator);
         entity.setVisitorCounter(0L);
+        entity.setLastVisitedDate(null);
         repository.save(entity);
         return new CounterDTO(entity);
     }
 
     /**
-     * Increment the visitor counter
+     * Increment the visitor counter and set the last visited date
      * @param id id of the counter
      * @return counter new value
      */
@@ -111,6 +113,7 @@ public class CounterService {
         Optional<CounterEntity> existingCounter = repository.findById(id);
         CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
         entity.setVisitorCounter(entity.getVisitorCounter() + 1);
+        entity.setLastVisitedDate(LocalDateTime.now());
         repository.save(entity);
         return entity.getVisitorCounter();
     }

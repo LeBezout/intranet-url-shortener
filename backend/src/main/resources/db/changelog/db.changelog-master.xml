@@ -62,6 +62,7 @@
             <column name="creation_date" remarks="Creation date" type="DATETIME">
                 <constraints nullable="false" unique="false"/>
             </column>
+            <column name="last_visited" remarks="Last visited date" type="DATETIME" />
             <column name="visitor_counter" remarks="Visitor counter" type="BIGINT" defaultValueNumeric="0">
                 <constraints nullable="false" unique="false"/>
             </column>
