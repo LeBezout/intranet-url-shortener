@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Counter resource REST controller.
@@ -82,7 +83,7 @@ public class CounterResource {
     }
 
     @GetMapping(path = "{id}/svg", produces = "image/svg+xml")
-    public byte[] visitAndGetSvg(@PathVariable("id") String counterId) {
+    public byte[] visitAndGetSvg(@PathVariable("id") String counterId, @RequestParam(name = "label") Optional<String> label) {
         assertIdIsProvided(counterId);
         String strCounterValue = incrementAndGetCounterAsString(counterId);
         String svgTemplate = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"20\">\n" +
@@ -100,7 +101,8 @@ public class CounterResource {
             "        <text x=\"75\" y=\"14\">%s</text>\n" +
             "    </g>\n" +
             "</svg>";
-        return String.format(svgTemplate, "visits", "visits", strCounterValue, strCounterValue).getBytes(StandardCharsets.UTF_8);
+        String caption = label.orElse("visits");
+        return String.format(svgTemplate, caption, caption, strCounterValue, strCounterValue).getBytes(StandardCharsets.UTF_8);
     }
 
     @GetMapping(path = "{id}/png", produces = "image/png")

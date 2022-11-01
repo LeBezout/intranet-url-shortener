@@ -32,6 +32,7 @@ We use a [bitnami](https://hub.docker.com/r/bitnami/postgresql) Postgresql image
 ```shell
 sudo docker run --name urlshortener_postgresql \
   -p 5432:5432 \
+  --detach \
   --env POSTGRESQL_USERNAME=demo \
   --env POSTGRESQL_PASSWORD=s3cret \
   --env POSTGRESQL_DATABASE=urlshortener_db \
@@ -47,6 +48,7 @@ We use a [bitnami](https://hub.docker.com/r/bitnami/openldap/) OpenLDAP image :
 ```shell
 sudo docker run --name urlshortener_openldap \
   -p 1389:1389 \
+  --detach \
   --env LDAP_ROOT=dc=local,dc=org \
   --env LDAP_ADMIN_USERNAME=admin \
   --env LDAP_ADMIN_PASSWORD=s3cret \
@@ -79,7 +81,7 @@ sudo docker run --name urlshortener_openldap \
   * Check redirect in a browser : `http://localhost:8080/redirect/{link_id}`
 * Visitors counters:
   * Create new counter `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/count?url=https%3A%2F%2Fgithub.com`
-  * Get counter `curl http://localhost:8080/api/count/{counter_id}`
+  * Get counter `curl http://localhost:8080/api/count/{counter_id} | jq`
   * Get counters created by the user "demo1" `curl --fail http://localhost:8080/api/count/createdBy/demo1 | jq`
   * Increment counter and get `curl http://localhost:8080/api/count/{counter_id}/v`
   * Increment counter and get SVG `curl http://localhost:8080/api/count/{counter_id}/svg`
