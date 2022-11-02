@@ -73,7 +73,7 @@ sudo docker run --name urlshortener_openldap \
 
 * Check credentials `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/user/login`
 * Shortened Links:
-  * Add a new link `curl --fail -X POST -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "target": "http://github.com" }' http://localhost:8080/api/link`
+  * Add a new link `curl --fail -X POST -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "target": "https://github.com" }' http://localhost:8080/api/link`
   * Get link infos `curl --fail http://localhost:8080/api/link/{link_id} | jq`
   * Get link target `curl --fail http://localhost:8080/api/link/{link_id}/target`
   * Get the links created by the user "demo1" `curl --fail http://localhost:8080/api/link/createdBy/demo1 | jq`

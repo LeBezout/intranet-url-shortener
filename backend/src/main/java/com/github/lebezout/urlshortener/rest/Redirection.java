@@ -51,7 +51,7 @@ public class Redirection {
         LOGGER.info("Redirect to {}", idLink);
         // Find the link data
         Optional<LinkEntity> link = repository.findById(idLink);
-        String targetUrl;//
+        String targetUrl;
         if (link.isPresent()) {
             LinkEntity entity = link.get();
             targetUrl = entity.getTarget();
