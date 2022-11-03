@@ -138,7 +138,6 @@ The company directory can be configured with the following settings:
 | `spring.ldap.base` | The directory root | `dc=mycompany,dc=org` | :no_entry_sign: |
 | `spring.ldap.username` | Username used to connect to the directory | `uid=ldap_reader,ou=people` | :no_entry_sign: |
 | `spring.ldap.password` | The user password used to connect to the directory | :no_entry_sign: | :no_entry_sign: |
-| `urlshortener.ldap_user_dn_patterns` | If users are at fixed locations in the directory | `uid={0},ou=people` | :no_entry_sign: |
 | `urlshortener.ldap_user_search_filter` | The LDAP search filter to find the users, relative to the root | `(uid={0})` | :no_entry_sign: |
 
 ### C.2- Deploying
