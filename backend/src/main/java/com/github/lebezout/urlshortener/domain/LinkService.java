@@ -51,7 +51,7 @@ public class LinkService {
      * Find all the links corresponding to the provided criteria
      * @param creator username of the creator
      * @param start a start date
-     * @param end a end date
+     * @param end an end date
      * @return list of links
      */
     @Transactional(readOnly = true)
@@ -162,7 +162,7 @@ public class LinkService {
         LinkEntity entityToDelete = entity.orElseThrow(LinkNotFoundException::new);
         NotLinkOwnerException.throwIfNeeded(entityToDelete.getCreator(), updater);
         // ok, delete this entity
-        repository.delete(entity.get()); // NOSONAR orElseThrow
+        repository.delete(entity.get()); // NOSONAR orElseThrow used above
     }
 
     private Optional<LinkEntity> getLinkEntity(String id) {

@@ -108,7 +108,7 @@ Le comportement du raccourcisseur d'URL peut être configuré avec les paramètr
 
 #### C.1.2- Configuration de la base données
 
-La base de données utilisée doit être de type relationnelle et ne contient qu'une seule table nommée `link`. Les drivers suivants sont embarqués :
+La base de données utilisée doit être de type relationnelle contient les tables `link` et `count`. Les drivers suivants sont embarqués :
 
 * H2 : `com.h2database:h2`
 * MySQL : `mysql:mysql-connector-java`
@@ -119,7 +119,10 @@ L'accès à la base de données peut être configuré via les paramètres suivan
 
 | Paramètre | Description | Valeur par défaut |
 |-----------|-------------|-------------------|
-| `spring.datasource.TODO` | TODO | :no_entry_sign: |
+| `spring.jpa.database` | The database type | :no_entry_sign: |
+| `spring.datasource.url` | The database JDBC URL | :no_entry_sign: |
+| `spring.datasource.username` | The database username | :no_entry_sign: |
+| `spring.datasource.password` | The database user password | :no_entry_sign: |
 
 #### C.1.3- Configuration LDAP
 

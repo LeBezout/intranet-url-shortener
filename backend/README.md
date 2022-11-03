@@ -63,7 +63,7 @@ sudo docker run --name urlshortener_openldap \
 
 * Maven : `mvn spring-boot:run -Dspring-boot.run.profiles=local`
 * Command Line : `java -jar target/url-shortener-1.0.0-SNAPSHOT.jar --spring.profiles.active=local`
-* IDE : run `src/main/java/[...]/UrlShortenerApplication.java` with _active profiles :_ `local`
+* IDE : run `src/main/java/[...]/UrlShortenerApplication.java` with _active profiles_ : `local`
 
 :bulb: Validate with `curl http://localhost:8080/manage/health | jq`
 
@@ -79,6 +79,7 @@ sudo docker run --name urlshortener_openldap \
   * Get the links created by the user "demo1" `curl --fail http://localhost:8080/api/link/createdBy/demo1 | jq`
   * Get the links created by the user "demo1" between the "2020-01-01" and the "2020-12-31" : `curl --fail "http://localhost:8080/api/link?creator=demo1&from=2020-01-01T00:00:00Z&to=2020-12-31T23:59:59Z" | jq`
   * Check redirect in a browser : `http://localhost:8080/redirect/{link_id}`
+  * Update link (if owner) : `curl --fail -X PUT -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "id": "{link_id}", "target": "https://github.com" }' http://localhost:8080/api/link`
 * Visitors counters:
   * Create new counter `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/count?url=https%3A%2F%2Fgithub.com`
   * Get counter `curl http://localhost:8080/api/count/{counter_id} | jq`
@@ -87,6 +88,7 @@ sudo docker run --name urlshortener_openldap \
   * Increment counter and get SVG `curl http://localhost:8080/api/count/{counter_id}/svg`
   * Increment counter and get one pixel `curl http://localhost:8080/api/count/{counter_id}/px/0074CC --output target/pixel.png`
   * Increment counter and get PNG `curl http://localhost:8080/api/count/{counter_id}/png --output target/counter.png`
+  * Reset counter (if owner) : `curl --fail -X PUT -u "demo1:demo1" http://localhost:8080/api/count/{counter_id}/reset`
 * Aggregated Data:
   * All links with their shortcuts `curl http://localhost:8080/api/report`
   * All links with their shortcuts created by `curl http://localhost:8080/api/report?creator={creator_name}`

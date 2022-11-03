@@ -109,7 +109,7 @@ The URL shortener behavior can be configured with the following parameters, desc
 
 #### C.1.2- Configuring Database
 
-The database used must be a SQL database and is only composed of a unique table named `link`.
+The database used must be a SQL database and is only composed tables named `link` & `count`.
 The following JDBC drivers are embedded:
 
 * H2: `com.h2database:h2`
