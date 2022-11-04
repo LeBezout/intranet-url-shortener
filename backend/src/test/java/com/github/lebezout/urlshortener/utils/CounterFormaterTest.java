@@ -40,7 +40,7 @@ class CounterFormaterTest {
     }
 
     @Test
-    void test_07_millionss() {
+    void test_07_millions() {
         Assertions.assertEquals("01 000 000", CounterFormater.format(1_000_000L));
     }
 }

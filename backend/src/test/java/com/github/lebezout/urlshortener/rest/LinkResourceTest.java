@@ -70,7 +70,7 @@ class LinkResourceTest {
         MockHttpServletResponse httpResponse = result.getResponse();
         List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
         LOGGER.debug(dtoList.toString());
-        Assertions.assertEquals(2, dtoList.size());
+        Assertions.assertEquals(3, dtoList.size());
     }
 
     @Test
@@ -169,7 +169,7 @@ class LinkResourceTest {
         NewLinkDTO newLink = new NewLinkDTO();
         newLink.setId("AZERTY");
         newLink.setPrivateLink(true);
-        newLink.setTarget("http://github.com");
+        newLink.setTarget("https://mywebsite.com");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -190,7 +190,7 @@ class LinkResourceTest {
         NewLinkDTO newLink = new NewLinkDTO();
         newLink.setId("AZERTYAZERTYAZERTYAZERTYAZERTYAZERTYAZERTY");
         newLink.setPrivateLink(true);
-        newLink.setTarget("http://github.com");
+        newLink.setTarget("https://mywebsite.com");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -212,7 +212,7 @@ class LinkResourceTest {
     void test_updateExistingLink() throws Exception {
         Assertions.assertTrue(repository.findById("AZERTY").isPresent());
 
-        LinkDTO existingLink = repository.findById("AZERTY").map(LinkDTO::new).orElseThrow(() -> new IllegalArgumentException("AERTY not found"));
+        LinkDTO existingLink = repository.findById("AZERTY").map(LinkDTO::new).orElseThrow(() -> new IllegalArgumentException("AZERTY not found"));
         existingLink.setCreator("TEST");
         existingLink.setPrivateLink(true);
         existingLink.setTarget("http://github.com");

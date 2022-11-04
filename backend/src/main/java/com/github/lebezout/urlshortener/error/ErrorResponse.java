@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorResponse {
+    public enum ErrorType { CLIENT, SERVER }
+
+    private ErrorType type;
     private String errorMessage;
     private String requestURI;
 }
