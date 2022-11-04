@@ -107,7 +107,7 @@ class CounterResourceTest {
 
         MockHttpServletResponse httpResponse = result.getResponse();
         String counter = httpResponse.getContentAsString();
-        Assertions.assertEquals("00 000 001", counter);
+        Assertions.assertEquals("00 000 001", counter);
     }
     @Test
     void test_visitUrl_not_found() throws Exception {
