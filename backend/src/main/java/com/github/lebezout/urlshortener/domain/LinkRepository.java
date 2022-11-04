@@ -2,6 +2,7 @@ package com.github.lebezout.urlshortener.domain;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,10 +12,11 @@ import java.util.Optional;
  * The Link Repository.
  * @author lebezout@gmail.com
  */
+@Repository
 public interface LinkRepository extends CrudRepository<LinkEntity, String> {
 
     /**
-     * Select a link by his target
+     * Select a link by its target
      * @param target the target url
      * @return link
      */

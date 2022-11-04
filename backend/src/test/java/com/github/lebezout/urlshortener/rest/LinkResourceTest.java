@@ -8,7 +8,6 @@ import com.github.lebezout.urlshortener.domain.NewLinkDTO;
 import com.github.lebezout.urlshortener.error.IDTooLongException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -32,7 +30,7 @@ import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@Sql("classpath:/data-test.sql")
+@Sql("classpath:/data-test-link.sql")
 @Transactional
 class LinkResourceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(LinkResourceTest.class);
@@ -56,7 +54,7 @@ class LinkResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        List<LinkDTO> dtoList =  mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
+        List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
         LOGGER.debug(dtoList.toString());
         Assertions.assertEquals(1, dtoList.size());
     }
@@ -70,9 +68,9 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        List<LinkDTO> dtoList =  mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
+        List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
         LOGGER.debug(dtoList.toString());
-        Assertions.assertEquals(2, dtoList.size());
+        Assertions.assertEquals(3, dtoList.size());
     }
 
     @Test
@@ -104,8 +102,8 @@ class LinkResourceTest {
         MockHttpServletResponse httpResponse = result.getResponse();
         String jsonContent = httpResponse.getContentAsString();
         LOGGER.debug(jsonContent);
+        Assertions.assertTrue(jsonContent.isEmpty());
     }
-
 
     @Test
     void test_getTargetLink() throws Exception {
@@ -171,7 +169,7 @@ class LinkResourceTest {
         NewLinkDTO newLink = new NewLinkDTO();
         newLink.setId("AZERTY");
         newLink.setPrivateLink(true);
-        newLink.setTarget("http://github.com");
+        newLink.setTarget("https://mywebsite.com");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -192,7 +190,7 @@ class LinkResourceTest {
         NewLinkDTO newLink = new NewLinkDTO();
         newLink.setId("AZERTYAZERTYAZERTYAZERTYAZERTYAZERTYAZERTY");
         newLink.setPrivateLink(true);
-        newLink.setTarget("http://github.com");
+        newLink.setTarget("https://mywebsite.com");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -214,7 +212,7 @@ class LinkResourceTest {
     void test_updateExistingLink() throws Exception {
         Assertions.assertTrue(repository.findById("AZERTY").isPresent());
 
-        LinkDTO existingLink = repository.findById("AZERTY").map(LinkDTO::new).orElseThrow(() -> new IllegalArgumentException("AERTY not found"));
+        LinkDTO existingLink = repository.findById("AZERTY").map(LinkDTO::new).orElseThrow(() -> new IllegalArgumentException("AZERTY not found"));
         existingLink.setCreator("TEST");
         existingLink.setPrivateLink(true);
         existingLink.setTarget("http://github.com");

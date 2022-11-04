@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,8 +16,7 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@AutoConfigureMockMvc
-@Sql("classpath:/data-test.sql")
+@Sql("classpath:/data-test-link.sql")
 @Transactional
 class LinkServiceTest {
     @Autowired
@@ -61,13 +59,13 @@ class LinkServiceTest {
 
     @Test
     void test_findByCreator() {
-        List<LinkDTO> result =  service.findByCreator("JUNIT");
-        Assertions.assertEquals(2, result.size());
+        List<LinkDTO> result = service.findByCreator("JUNIT");
+        Assertions.assertEquals(3, result.size());
     }
 
     @Test
-    public void test_findByCriteria() {
-        List<LinkDTO> result =  service.findByCriteria(
+    void test_findByCriteria() {
+        List<LinkDTO> result = service.findByCriteria(
             "JUNIT",
             LocalDateTime.of(2018, 11, 10, 0, 0),
             LocalDateTime.of(2018, 11, 12, 0, 0));

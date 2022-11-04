@@ -1,0 +1,98 @@
+package com.github.lebezout.urlshortener.domain;
+
+import com.github.lebezout.urlshortener.error.CounterAlreadyExistsException;
+import com.github.lebezout.urlshortener.error.CounterNotFoundException;
+import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Sql("classpath:/data-test-counter.sql")
+@Transactional
+class CounterServiceTest {
+    @Autowired
+    private CounterService service;
+
+    @Test
+    void test_getFromID() {
+        Assertions.assertEquals("JUNIT", service.getFromID("AZERTY1234").getCreator());
+        Assertions.assertEquals("USER", service.getFromID("FOOBAR6789").getCreator());
+    }
+    @Test
+    void test_getFromID_CounterNotFoundException() {
+        Assertions.assertThrows(CounterNotFoundException.class, () -> service.getFromID("foobar"));
+    }
+
+    @Test
+    void test_getFromUrl() {
+        Assertions.assertEquals("JUNIT", service.getFromUrl("https://github.com").getCreator());
+        Assertions.assertEquals("USER", service.getFromUrl("https://gitmoji.dev").getCreator());
+    }
+    @Test
+    void test_getFromUrl_CounterNotFoundException() {
+        Assertions.assertThrows(CounterNotFoundException.class, () -> service.getFromUrl("http://www.foobar.com"));
+    }
+
+    @Test
+    void test_findByCreator() {
+        List<CounterDTO> counters = service.findByCreator("JUNIT");
+        Assertions.assertTrue(counters.size() > 1);
+        counters.forEach(c -> {
+            if (!c.getCreator().equals("JUNIT")) {
+                Assertions.fail("Expected JUNIT creator only");
+            }
+        });
+    }
+
+    @Test
+    void test_initCounter() {
+        CounterDTO counter = service.initCounter("https://website.org", "junit");
+        Assertions.assertNotNull(counter);
+        Assertions.assertAll(
+            () -> Assertions.assertEquals("junit", counter.getCreator()),
+            () -> Assertions.assertEquals("https://website.org", counter.getUrl()),
+            () -> Assertions.assertTrue(StringUtils.hasText(counter.getId())),
+            () -> Assertions.assertNull(counter.getLastVisitedDate())
+        );
+    }
+    @Test
+    void test_initCounter_CounterAlreadyExistsException() {
+        Assertions.assertThrows(CounterAlreadyExistsException.class, () -> service.initCounter("https://github.com", "junit"));
+    }
+
+    @Test
+    void test_visit() {
+        long initialCount = service.getFromID("AZERTY1234").getCounter();
+        long count1 = service.visit("AZERTY1234");
+        long count2 = service.visit("AZERTY1234");
+        Assertions.assertAll(
+            () -> Assertions.assertNotEquals(count1, initialCount),
+            () -> Assertions.assertNotEquals(count1, count2),
+            () -> Assertions.assertEquals(initialCount + 2 , count2),
+            () -> Assertions.assertNotNull(service.getFromID("AZERTY1234").getLastVisitedDate())
+        );
+    }
+
+    @Test
+    void test_resetCounter_owner() {
+        CounterDTO counter = service.resetCounter("FOOBAR6789", "USER");
+        Assertions.assertAll(
+            () -> Assertions.assertEquals(0, counter.getCounter()),
+            () -> Assertions.assertNull(counter.getLastVisitedDate())
+        );
+    }
+    @Test
+    void test_resetCounter_not_owner() {
+        Assertions.assertThrows(NotLinkOwnerException.class, () -> service.resetCounter("FOOBAR6789", "OTHER"));
+    }
+}

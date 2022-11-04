@@ -3,8 +3,8 @@ package com.github.lebezout.urlshortener.rest;
 import com.github.lebezout.urlshortener.domain.LinkDTO;
 import com.github.lebezout.urlshortener.domain.LinkService;
 import com.github.lebezout.urlshortener.domain.NewLinkDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,19 +28,12 @@ import java.util.List;
  * The Link resource REST controller.
  * @author lebezout@gmail.com
  */
+@RequiredArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("/api/link")
 public class LinkResource {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LinkResource.class);
     private final LinkService linkService;
-
-    /**
-     * Constructor for DI
-     * @param service the autowired link service
-     */
-    public LinkResource(LinkService service) {
-        linkService = service;
-    }
 
     @GetMapping
     public List<LinkDTO> findLinks(

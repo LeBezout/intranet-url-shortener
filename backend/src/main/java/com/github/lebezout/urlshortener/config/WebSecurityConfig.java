@@ -1,7 +1,6 @@
 package com.github.lebezout.urlshortener.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,24 +14,27 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  * The security configuration for our rest api.
  * @author lebezout@gmail.com
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebSecurityConfig.class);
-
-    @Value("${urlshortener.ldap_user_dn_patterns}") String userDnPatterns;
     @Value("${urlshortener.ldap_user_search_filter}") String userSearchFilter;
     @Value("${spring.ldap.urls}") String ldapUrl;
+    @Value("${spring.ldap.username}") String ldapUser;
+    @Value("${spring.ldap.password}") String ldapPwd;
     @Value("${spring.ldap.base}") String ldapBase;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        LOGGER.info("CONFIG: LDAP base search is {}, DN patterns is {}, URL is {}{}", userSearchFilter, userDnPatterns, ldapUrl, ldapBase);
+        LOGGER.info("CONFIG: LDAP URL is {}, Base is {}, User is {}, search filter is {}", ldapUrl, ldapBase, ldapUser, userSearchFilter);
         auth.ldapAuthentication()
-            .userDnPatterns(userDnPatterns)
+            .userSearchBase(ldapBase)
             .userSearchFilter(userSearchFilter)
-            .contextSource().url(ldapUrl + ldapBase)
-        ;
+            .groupSearchBase(ldapBase)
+            .contextSource()
+                .url(ldapUrl)
+                .managerDn(ldapUser)
+                .managerPassword(ldapPwd);
     }
 
     @Override
@@ -42,6 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and().csrf().disable()
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, apiURLAntMatcher).fullyAuthenticated()
+            .antMatchers(HttpMethod.PUT, "/api/count/*/reset").fullyAuthenticated()
+            .antMatchers(HttpMethod.PUT, "/api/count/**").permitAll()
             .antMatchers(HttpMethod.PUT, apiURLAntMatcher).fullyAuthenticated()
             .antMatchers(HttpMethod.DELETE, apiURLAntMatcher).fullyAuthenticated()
             .anyRequest().permitAll()

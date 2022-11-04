@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog logicalFilePath="db.changelog-master.xml" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<databaseChangeLog logicalFilePath="db.changelog-master.xml" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <property name="asChar" value="CHAR" dbms="oracle"/>
     <property name="asChar" value=""/>
+    <property name="urlMaxLength" value="1024"/>
+    <property name="creatorMaxLength" value="255"/>
 
     <changeSet author="urlshortener" id="V1.00">
         <createTable tableName="link" remarks="the table to store the links with their generated ids">
             <column name="id" remarks="ID" type="VARCHAR(15 ${asChar})">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(1024 ${asChar})">
+            <column name="target_url" remarks="Target URL to redirect to" type="VARCHAR(${urlMaxLength} ${asChar})">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" remarks="Creation user code" type="VARCHAR(255 ${asChar})">
+            <column name="created_by" remarks="Creation user code" type="VARCHAR(${creatorMaxLength} ${asChar})">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_date" remarks="Creation date" type="DATETIME">
+            <column name="creation_date" remarks="Creation date" type="DATETIME">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="last_updated" remarks="Last updated date" type="DATETIME">
@@ -34,17 +37,49 @@
             </column>
         </createTable>
     </changeSet>
-
     <changeSet author="urlshortener" id="V1.01">
         <createIndex indexName="idx_target_url" tableName="link" unique="false">
-            <column name="target_url" type="VARCHAR(255 ${asChar})"/>
+            <column name="target_url" type="VARCHAR(${urlMaxLength} ${asChar})"/>
         </createIndex>
     </changeSet>
-
     <changeSet author="urlshortener" id="V1.02">
         <createIndex indexName="idx_created_by" tableName="link" unique="false">
-            <column name="created_by" type="VARCHAR(255 ${asChar})"/>
+            <column name="created_by" type="VARCHAR(${creatorMaxLength} ${asChar})"/>
         </createIndex>
     </changeSet>
 
+    <changeSet author="urlshortener" id="V1.03">
+        <createTable tableName="counter" remarks="the table to store the websites visits counter">
+            <column name="id" remarks="ID" type="VARCHAR(15 ${asChar})">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="url" remarks="Target URL to the webs" type="VARCHAR(${urlMaxLength} ${asChar})">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_by" remarks="Creation user code" type="VARCHAR(${creatorMaxLength} ${asChar})">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="creation_date" remarks="Creation date" type="DATETIME">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="last_visited" remarks="Last visited date" type="DATETIME" />
+            <column name="visitor_counter" remarks="Visitor counter" type="BIGINT" defaultValueNumeric="0">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="urlshortener" id="V1.04">
+        <createIndex indexName="idx_counter_url" tableName="counter" unique="true">
+            <column name="url" type="VARCHAR(${urlMaxLength} ${asChar})"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="urlshortener"  id="V1.05">
+        <createView viewName="v_link_item_report" remarks="A view to aggregate Links with their counters based on the URL">
+            select
+                l.id as shortcut_ref, l.target_url as url, l.created_by as shortcut_creator, l.creation_date as shortcut_creation_date, l.access_counter as shortcut_counter,
+                c.id as counter_id, c.created_by as counter_creator, c.creation_date as counter_creation_date, c.last_visited, c.visitor_counter
+                from link l, counter c
+                where c.url=l.target_url
+        </createView>
+    </changeSet>
 </databaseChangeLog>

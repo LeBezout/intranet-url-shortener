@@ -59,21 +59,38 @@ Components flow:
 | Component | Purpose | Technologies |
 |-----------|---------|--------------|
 | Web Frontend | GUI to add/update/delete or display the entries. | Vue.js + Typescript within a NGINX http server |
+| Browsers Extensions | Extensions for Web Browsers (Firefox, Chrome) | Javascript |
 | Rest API | Expose a REST API to manage the lifecycle of the shortened links and to redirect to the expected targets. | Spring Boot + Liquibase + embedded Tomcat |
 | Database | Store the entries. | H2, MySQL, MariaDB, PostGreSQL |
 
 ### B.3 - Data model
 
-| Column | Description | Type |
-|---------|-------------|------|
-| `id` | Internal ID | `VARCHAR 15` |
-| `target_url` | Target URL to redirect to | `VARCHAR 255` |
-| `created_by` | Initial creation user code | `VARCHAR 255` |
-| `created_date` | Initial creation  date | `DATETIME` |
-| `last_updated` | Last updated date | `DATETIME` |
-| `is_private` | Is link author private ? | `BOOLEAN` |
-| `access_counter` | Redirection counter | `BIGINT` |
-| `creation_counter` | Creation attempt counter | `BIGINT` |
+#### link table
+
+Stores the shortened links.
+
+| Column             | Description | Type           |
+|--------------------|-------------|----------------|
+| `id`               | Internal ID | `VARCHAR 15`   |
+| `target_url`       | Target URL to redirect to | `VARCHAR 255`  |
+| `created_by`       | Initial creation user code | `VARCHAR 1024` |
+| `creation_date`    | Initial creation  date | `DATETIME`     |
+| `last_updated`     | Last updated date | `DATETIME`     |
+| `is_private`       | Is link author private ? | `BOOLEAN`      |
+| `access_counter`   | Redirection counter | `BIGINT`       |
+| `creation_counter` | Creation attempt counter | `BIGINT`       |
+
+#### counter table
+
+Stores the visitor counter of any website you want. 
+
+| Column | Description                | Type           |
+|-------|----------------------------|----------------|
+| `id` | Internal ID                | `VARCHAR 15`   |
+| `url` | Target URL to the website  | `VARCHAR 1024` |
+| `created_by` | Initial creation user code | `VARCHAR 255`  |
+| `creation_date` | Initial creation  date     | `DATETIME`     |
+| `visitor_counter` | Website visitor counter    | `BIGINT`       |
 
 ## C- How To
 
@@ -92,7 +109,7 @@ The URL shortener behavior can be configured with the following parameters, desc
 
 #### C.1.2- Configuring Database
 
-The database used must be a SQL database and is only composed of a unique table named `link`.
+The database used must be a SQL database and is only composed tables named `link` & `count`.
 The following JDBC drivers are embedded:
 
 * H2: `com.h2database:h2`
@@ -121,7 +138,6 @@ The company directory can be configured with the following settings:
 | `spring.ldap.base` | The directory root | `dc=mycompany,dc=org` | :no_entry_sign: |
 | `spring.ldap.username` | Username used to connect to the directory | `uid=ldap_reader,ou=people` | :no_entry_sign: |
 | `spring.ldap.password` | The user password used to connect to the directory | :no_entry_sign: | :no_entry_sign: |
-| `urlshortener.ldap_user_dn_patterns` | If users are at fixed locations in the directory | `uid={0},ou=people` | :no_entry_sign: |
 | `urlshortener.ldap_user_search_filter` | The LDAP search filter to find the users, relative to the root | `(uid={0})` | :no_entry_sign: |
 
 ### C.2- Deploying

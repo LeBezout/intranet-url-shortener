@@ -58,21 +58,38 @@ Flux entre composants :
 | Composant | Description | Technologies |
 |-----------|-------------|--------------|
 | Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détail d'un lien. | Vue.js + Typescript dans un serveur NGINX |
+| Extension pour navigateur | Extensions pour les navigateurs Web | Javascript |
 | Backend REST | Exposer l'API nécessaire au frontend ainsi que la redirection effective vers l'URL ciblée. | Spring Boot + Liquibase + Tomcat Embedded |
 | Base de données relationnelle | Stockage des éléments. | H2, MySQL, MariaDB, PostGreSQL |
 
 ### B.3 Modèle de données
 
-| Colonne | Description | Type |
-|---------|-------------|------|
-| `id` | Identifiant interne du lien | `VARCHAR 15` |
-| `target_url` | URL du lien | `VARCHAR 255` |
-| `created_by` | Nom de la personne qui a créé initialement le lien | `VARCHAR 255` |
-| `created_date` | Date de création initiale du lien | `DATETIME` |
-| `last_updated` | Date de dernière mise à jour du lien | `DATETIME` |
-| `is_private` | Ce lien est-il privé ? | `BOOLEAN` |
-| `access_counter` | Nombre d'accès au lien | `BIGINT` |
-| `creation_counter` | Nombre de tentatives de création du lien | `BIGINT` |
+#### Table 'link'
+
+Permet le stockage des liens raccourcis.
+
+| Colonne | Description | Type           |
+|---------|-------------|----------------|
+| `id` | Identifiant interne du lien | `VARCHAR 15`   |
+| `target_url` | URL du lien | `VARCHAR 1024` |
+| `created_by` | Nom de la personne qui a créé initialement le lien | `VARCHAR 255`  |
+| `creation_date` | Date de création initiale du lien | `DATETIME`     |
+| `last_updated` | Date de dernière mise à jour du lien | `DATETIME`     |
+| `is_private` | Ce lien est-il privé ? | `BOOLEAN`      |
+| `access_counter` | Nombre d'accès au lien | `BIGINT`       |
+| `creation_counter` | Nombre de tentatives de création du lien | `BIGINT`       |
+
+#### Table 'counter'
+
+Permet le stockage d'un compteur de visites pour n'importe quel site.
+
+| Column | Description                                        | Type           |
+|--------|----------------------------------------------------|----------------|
+| `id` | Internal ID                                        | `VARCHAR 15`   |
+| `url` | URL du lien                                        | `VARCHAR 1024` |
+| `created_by` | Nom de la personne qui a créé initialement le lien | `VARCHAR 255`  |
+| `creation_date` | Date de création initiale du lien                  | `DATETIME`     |
+| `visitor_counter` | Nombre d'accès au site                             | `BIGINT`       |
 
 ## C- Guide d'utilisation
 
@@ -91,7 +108,7 @@ Le comportement du raccourcisseur d'URL peut être configuré avec les paramètr
 
 #### C.1.2- Configuration de la base données
 
-La base de données utilisée doit être de type relationnelle et ne contient qu'une seule table nommée `link`. Les drivers suivants sont embarqués :
+La base de données utilisée doit être de type relationnelle contient les tables `link` et `count`. Les drivers suivants sont embarqués :
 
 * H2 : `com.h2database:h2`
 * MySQL : `mysql:mysql-connector-java`
@@ -102,7 +119,10 @@ L'accès à la base de données peut être configuré via les paramètres suivan
 
 | Paramètre | Description | Valeur par défaut |
 |-----------|-------------|-------------------|
-| `spring.datasource.TODO` | TODO | :no_entry_sign: |
+| `spring.jpa.database` | The database type | :no_entry_sign: |
+| `spring.datasource.url` | The database JDBC URL | :no_entry_sign: |
+| `spring.datasource.username` | The database username | :no_entry_sign: |
+| `spring.datasource.password` | The database user password | :no_entry_sign: |
 
 #### C.1.3- Configuration LDAP
 
