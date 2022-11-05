@@ -95,4 +95,23 @@ class CounterServiceTest {
     void test_resetCounter_not_owner() {
         Assertions.assertThrows(NotLinkOwnerException.class, () -> service.resetCounter("FOOBAR6789", "OTHER"));
     }
+
+    @Test
+    void test_takeSnapshot_CounterNotFoundException() {
+        Assertions.assertThrows(CounterNotFoundException.class, () -> service.takeSnapshot("invalidid", "JUNIT"));
+    }
+    @Test
+    void test_takeSnapshot_OK() {
+        service.takeSnapshot("AZERTY1234", "JUNIT");
+    }
+
+    @Test
+    void test_getAllSnapshots() throws InterruptedException {
+        String counterId = "AZERTY1234";
+        service.takeSnapshot(counterId, "JUNIT1");
+        Thread.sleep(350);
+        service.takeSnapshot(counterId, "JUNIT2");
+        List<CounterSnapshotDTO> dtos = service.getAllSnapshots(counterId);
+        Assertions.assertTrue(dtos.size() >= 2);
+    }
 }

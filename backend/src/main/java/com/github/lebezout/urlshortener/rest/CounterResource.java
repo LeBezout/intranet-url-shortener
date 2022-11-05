@@ -2,6 +2,7 @@ package com.github.lebezout.urlshortener.rest;
 
 import com.github.lebezout.urlshortener.domain.CounterDTO;
 import com.github.lebezout.urlshortener.domain.CounterService;
+import com.github.lebezout.urlshortener.domain.CounterSnapshotDTO;
 import com.github.lebezout.urlshortener.utils.CounterFormater;
 import com.github.lebezout.urlshortener.utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,15 @@ public class CounterResource {
         return service.initCounter(url, principal.getName());
     }
 
+    @PostMapping(path = "{id}/snapshot")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void takeSnapshot(@PathVariable("id") String counterId, Principal principal) {
+        assertIdIsProvided(counterId);
+        Assert.notNull(principal, "No credentials provided");
+        LOGGER.info("Take snapshot for counter {} claimed by {}", counterId, principal.getName());
+        service.takeSnapshot(counterId, principal.getName());
+    }
+
     @GetMapping(path = "{id}")
     public CounterDTO getByID(@PathVariable("id") String counterId) {
         assertIdIsProvided(counterId);
@@ -62,6 +72,13 @@ public class CounterResource {
         Assert.hasText(creator, "No creator provided");
         LOGGER.info("Find counter created by {}", creator);
         return service.findByCreator(creator);
+    }
+
+    @GetMapping(path = "{id}/snapshots")
+    public List<CounterSnapshotDTO> findCounterSnapshots(@PathVariable("id") String counterId) {
+        assertIdIsProvided(counterId);
+        LOGGER.info("Find snapshots for counter {}", counterId);
+        return service.getAllSnapshots(counterId);
     }
 
     @GetMapping(path = "{id}/v", produces = MediaType.TEXT_PLAIN_VALUE)

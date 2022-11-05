@@ -24,6 +24,7 @@ public class CounterService {
     private static final String ASSERTION_MESSAGE_COUNTER_URL_IS_NULL = "Counter url cannot be null";
 
     private final CounterRepository repository;
+    private final CounterSnapshotRepository snapshotRepository;
     private final IdGenerator idGenerator;
 
     /**
@@ -116,5 +117,33 @@ public class CounterService {
         entity.setLastVisitedDate(LocalDateTime.now());
         repository.save(entity);
         return entity.getVisitorCounter();
+    }
+
+    /**
+     * Take a snapshot for this counter
+     * @param counterId id of the counter
+     * @param claimant snapshot claimant name
+     */
+    public void takeSnapshot(String counterId, String claimant) {
+        Assert.notNull(counterId, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
+        Assert.notNull(claimant, "Snapshot claimant cannot be null");
+        CounterEntity counter = repository.findById(counterId).orElseThrow(CounterNotFoundException::new);
+        CounterSnapshotEntity snapshot = new CounterSnapshotEntity();
+        snapshot.setCounterId(counter.getId());
+        snapshot.setClaimant(claimant);
+        snapshot.setSnapshotDate(LocalDateTime.now());
+        snapshot.setCounterValue(counter.getVisitorCounter());
+        snapshotRepository.save(snapshot);
+    }
+
+    /**
+     * Get all snapshots for a counter
+     * @param counterId id of the counter
+     * @return list of DTO
+     */
+    public List<CounterSnapshotDTO> getAllSnapshots(String counterId) {
+        Assert.notNull(counterId, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
+        return snapshotRepository.findByCounterIdOrderBySnapshotDateDesc(counterId)
+            .stream().map(CounterSnapshotDTO::new).collect(Collectors.toList());
     }
 }

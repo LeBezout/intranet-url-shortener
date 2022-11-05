@@ -75,6 +75,13 @@ public class ExceptionHandlerControllerAdvice {
         return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, exception.getMessage(), request.getRequestURI());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody ErrorResponse handleIllegalArgumentException(IllegalArgumentException exception, HttpServletRequest request) {
+        LOGGER.error("IllegalArgumentException error occurred : ", exception);
+        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, exception.getMessage(), request.getRequestURI());
+    }
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody ErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException exception, HttpServletRequest request) {
