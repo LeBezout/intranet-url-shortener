@@ -36,10 +36,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-
-        Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"));
-        Assertions.assertTrue(jsonContent.contains("JUNIT"));
+        ResourceTestUtils.assertValidJSonObjectResponse(httpResponse, "JUNIT");
     }
     @Test
     void test_getByID_not_found() throws Exception {
@@ -50,8 +47,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        assertValidJSonErrorResponse(jsonContent, "Expected counter not found");
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "Expected counter not found");
     }
 
     @Test
@@ -64,10 +60,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-
-        Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"));
-        Assertions.assertTrue(jsonContent.contains("JUNIT"));
+        ResourceTestUtils.assertValidJSonObjectResponse(httpResponse, "JUNIT");
     }
     @Test
     void test_getByURL_not_found() throws Exception {
@@ -78,8 +71,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        assertValidJSonErrorResponse(jsonContent, "Expected counter not found");
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "Expected counter not found");
     }
 
     @Test
@@ -92,9 +84,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"));
-        Assertions.assertTrue(jsonContent.contains("admin") && jsonContent.contains("mywebsite.org"));
+        ResourceTestUtils.assertValidJSonObjectResponse(httpResponse, "admin", "mywebsite.org");
     }
 
     @Test
@@ -106,8 +96,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String counter = httpResponse.getContentAsString();
-        Assertions.assertEquals("00 000 001", counter);
+        ResourceTestUtils.assertValidTextPlainResponse(httpResponse, "00 000 001");
     }
     @Test
     void test_visitUrl_not_found() throws Exception {
@@ -115,6 +104,9 @@ class CounterResourceTest {
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "Expected counter not found");
     }
     @Test
     void test_visitUrl_and_get_svg() throws Exception {
@@ -123,6 +115,7 @@ class CounterResourceTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("image/svg+xml"))
             .andReturn();
+
         MockHttpServletResponse httpResponse = result.getResponse();
         String svg = httpResponse.getContentAsString();
         Assertions.assertTrue(svg.contains("http://www.w3.org/2000/svg"));
@@ -157,8 +150,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"));
+        ResourceTestUtils.assertValidJSonObjectResponse(httpResponse, "0");
     }
     @Test
     @WithMockUser(username = "admin", password = "admin")
@@ -169,8 +161,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        assertValidJSonErrorResponse(jsonContent, "Only the creator of the link can update it");
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "Only the creator of the link can update it");
     }
 
     @Test
@@ -183,8 +174,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String counter = httpResponse.getContentAsString();
-        Assertions.assertEquals("5", counter);
+        ResourceTestUtils.assertValidTextPlainResponse(httpResponse, "5");
     }
 
     @Test
@@ -197,15 +187,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        Assertions.assertTrue(jsonContent.startsWith("[") && jsonContent.endsWith("]") && jsonContent.contains("18"));
+        ResourceTestUtils.assertValidJSonArrayResponse(httpResponse, "18");
     }
 
-    private static void assertValidJSonErrorResponse(String jsonContent, String message) {
-        Assertions.assertAll(
-            () -> Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"), "Valid JSON Object expected"),
-            () -> Assertions.assertTrue(jsonContent.contains("errorMessage"), "errorMessage attribut expected"),
-            () -> Assertions.assertTrue(jsonContent.contains(message), message + " expected")
-        );
-    }
 }
