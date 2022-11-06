@@ -6,6 +6,7 @@ import com.github.lebezout.urlshortener.error.ErrorResponse;
 import com.github.lebezout.urlshortener.error.IDAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.IDTooLongException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
+import com.github.lebezout.urlshortener.error.NotAuthenticatedException;
 import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,13 @@ public class ExceptionHandlerControllerAdvice {
                                                           final HttpServletRequest request) {
         LOGGER.error("Error occurred : ", exception);
         return new ErrorResponse(ErrorResponse.ErrorType.SERVER, exception.getMessage(), request.getRequestURI());
+    }
+    @ExceptionHandler(NotAuthenticatedException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public @ResponseBody ErrorResponse handleNotAuthenticatedException(final Exception exception,
+                                                                       final HttpServletRequest request) {
+        LOGGER.error("NotAuthenticatedException error occurred : ", exception);
+        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, exception.getMessage(), request.getRequestURI());
     }
     @ExceptionHandler(LinkNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

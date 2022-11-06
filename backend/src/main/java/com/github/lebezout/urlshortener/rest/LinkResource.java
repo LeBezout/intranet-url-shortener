@@ -3,6 +3,7 @@ package com.github.lebezout.urlshortener.rest;
 import com.github.lebezout.urlshortener.domain.LinkDTO;
 import com.github.lebezout.urlshortener.domain.LinkService;
 import com.github.lebezout.urlshortener.domain.NewLinkDTO;
+import com.github.lebezout.urlshortener.error.NotAuthenticatedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -68,28 +69,35 @@ public class LinkResource {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public LinkDTO addNewLink(@RequestBody final NewLinkDTO link, Principal principal) {
+        assertAuthenticated(principal);
         Assert.notNull(link, "No data provided");
         Assert.hasText(link.getTarget(), "No target URL provided");
-        Assert.notNull(principal, "No credentials provided");
         return linkService.addNewLink(link, principal.getName());
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateExistingLink(@RequestBody final LinkDTO link, Principal principal) {
+        assertAuthenticated(principal);
         Assert.notNull(link, "No data provided");
         assertIdIsProvided(link.getId());
         Assert.hasText(link.getTarget(), "No target URL provided");
-        Assert.notNull(principal, "No credentials provided");
         linkService.updateLink(link, principal.getName());
     }
 
     @DeleteMapping(path = "{idLink}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteExistingLink(@PathVariable("idLink") String idLink, Principal principal) {
+        assertAuthenticated(principal);
         assertIdIsProvided(idLink);
         LOGGER.info("Delete link {}", idLink);
         linkService.deleteLink(idLink, principal.getName());
+    }
+
+    private static void assertAuthenticated(Principal principal) {
+        if (principal == null) {
+            throw new NotAuthenticatedException();
+        }
     }
 
     private static void assertIdIsProvided(String idLink) {

@@ -3,6 +3,7 @@ package com.github.lebezout.urlshortener.rest;
 import com.github.lebezout.urlshortener.domain.CounterDTO;
 import com.github.lebezout.urlshortener.domain.CounterService;
 import com.github.lebezout.urlshortener.domain.CounterSnapshotDTO;
+import com.github.lebezout.urlshortener.error.NotAuthenticatedException;
 import com.github.lebezout.urlshortener.utils.CounterFormater;
 import com.github.lebezout.urlshortener.utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -39,15 +39,15 @@ public class CounterResource {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CounterDTO createCounter(@RequestParam("url") String url, Principal principal) {
+        assertAuthenticated(principal);
         Assert.hasText(url, "No URL provided");
-        Assert.notNull(principal, "No credentials provided");
         return service.initCounter(url, principal.getName());
     }
 
     @PostMapping(path = "{id}/snapshot", produces = MediaType.TEXT_PLAIN_VALUE)
     public String takeSnapshot(@PathVariable("id") String counterId, Principal principal) {
+        assertAuthenticated(principal);
         assertIdIsProvided(counterId);
-        Assert.notNull(principal, "No credentials provided");
         LOGGER.info("Take snapshot for counter {} claimed by {}", counterId, principal.getName());
         long counterValue = service.takeSnapshot(counterId, principal.getName());
         return Long.toString(counterValue);
@@ -114,15 +114,14 @@ public class CounterResource {
         try {
             return ImageUtils.fromText(strCounterValue, 20, true, "#2D3362", "#FFFFFF");
         } catch (IOException e) {
-            LOGGER.error("Can't generate  image", e);
+            LOGGER.error("Can't generate image", e);
             return new byte[0];
         }
     }
 
     @PutMapping(path = "{id}/reset")
     public CounterDTO resetCounter(@PathVariable("id") String counterId, Principal principal) {
-        assertIdIsProvided(counterId);
-        Assert.notNull(principal, "No credentials provided");
+        assertAuthenticated(principal);
         assertIdIsProvided(counterId);
         return service.resetCounter(counterId, principal.getName());
     }
@@ -133,6 +132,12 @@ public class CounterResource {
         LOGGER.info("Update counter from id {}", counterId);
         long counterValue = service.visit(counterId);
         return CounterFormater.format(counterValue);
+    }
+
+    private static void assertAuthenticated(Principal principal) {
+        if (principal == null) {
+            throw new NotAuthenticatedException();
+        }
     }
 
     private static void assertIdIsProvided(String id) {
