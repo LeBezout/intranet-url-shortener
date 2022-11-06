@@ -85,10 +85,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        LOGGER.debug(jsonContent);
-        Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"));
-        Assertions.assertTrue(jsonContent.contains("JUNIT"));
+        ResourceTestUtils.assertValidJSonObjectResponse(httpResponse, "JUNIT");
     }
 
     @Test
@@ -100,9 +97,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String jsonContent = httpResponse.getContentAsString();
-        LOGGER.debug(jsonContent);
-        Assertions.assertTrue(jsonContent.isEmpty());
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "Expected link not found");
     }
 
     @Test
@@ -117,9 +112,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String target = httpResponse.getContentAsString();
-        LOGGER.debug("TARGET URL = {}", target);
-        Assertions.assertEquals("http://localhost:8080/api/link/1234156", target);
+        ResourceTestUtils.assertValidTextPlainResponse(httpResponse, "http://localhost:8080/api/link/1234156");
     }
 
     @Test
@@ -127,7 +120,7 @@ class LinkResourceTest {
     void test_addNewLink_generated_ID() throws Exception {
         NewLinkDTO newLink = new NewLinkDTO();
         newLink.setPrivateLink(true);
-        newLink.setTarget("http://github.com");
+        newLink.setTarget("https://mywebsite.org");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -139,8 +132,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String response = httpResponse.getContentAsString();
-        LOGGER.debug(response);
+        ResourceTestUtils.assertValidJSonObjectResponse(httpResponse, "admin", "mywebsite.org");
     }
     @Test
     @WithMockUser(username = "admin", password = "admin")
@@ -148,7 +140,7 @@ class LinkResourceTest {
         NewLinkDTO newLink = new NewLinkDTO();
         newLink.setId("TEST-ID");
         newLink.setPrivateLink(true);
-        newLink.setTarget("http://github.com");
+        newLink.setTarget("https://myprofile.com");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/link"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -160,8 +152,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String response = httpResponse.getContentAsString();
-        LOGGER.debug(response);
+        ResourceTestUtils.assertValidJSonObjectResponse(httpResponse, "admin", "TEST-ID", "myprofile.com");
     }
     @Test
     @WithMockUser(username = "admin", password = "admin")
@@ -180,9 +171,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String response = httpResponse.getErrorMessage();
-        LOGGER.debug(response);
-        Assertions.assertEquals("The provided ID already exists", response);
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "The provided ID already exists");
     }
     @Test
     @WithMockUser(username = "admin", password = "admin")
@@ -201,9 +190,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String response = httpResponse.getErrorMessage();
-        LOGGER.debug(response);
-        Assertions.assertEquals("The provided ID is too long (must be lower than " + IDTooLongException.ID_MAX_LENGTH + " characters)", response);
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "The provided ID is too long (must be lower than " + IDTooLongException.ID_MAX_LENGTH + " characters)");
     }
 
 
@@ -215,13 +202,15 @@ class LinkResourceTest {
         LinkDTO existingLink = repository.findById("AZERTY").map(LinkDTO::new).orElseThrow(() -> new IllegalArgumentException("AZERTY not found"));
         existingLink.setCreator("TEST");
         existingLink.setPrivateLink(true);
-        existingLink.setTarget("http://github.com");
+        existingLink.setTarget("https://github.com");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/link"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(mapper.writeValueAsBytes(existingLink));
+        MvcResult result = mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNoContent()).andReturn();
 
-        mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNoContent());
+        MockHttpServletResponse httpResponse = result.getResponse();
+        ResourceTestUtils.assertEmptyResponseBody(httpResponse);
     }
 
     @Test

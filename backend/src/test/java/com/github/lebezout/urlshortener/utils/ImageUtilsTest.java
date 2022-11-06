@@ -17,6 +17,16 @@ class ImageUtilsTest {
     }
 
     @Test
+    void test_svgBadge() throws IOException {
+        String label = "visits";
+        String value = "001 456 789";
+
+        byte[] data = ImageUtils.svgBadge(label, value);
+        Files.write(OUTPUT_ROOT_DIR.resolve("badge_visits.svg"), data);
+        Assertions.assertTrue(Files.exists(OUTPUT_ROOT_DIR.resolve("badge_visits.svg")));
+    }
+
+    @Test
     void test_pixel_blue() throws IOException {
         String color = "0074CC";
         byte[] data = ImageUtils.pixel(color);

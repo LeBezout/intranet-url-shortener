@@ -82,4 +82,20 @@
                 where c.url=l.target_url
         </createView>
     </changeSet>
+    <changeSet author="urlshortener"  id="V1.06">
+        <createTable tableName="counter_snapshot" remarks="the table to store the counter snapshot">
+            <column name="counter_id" remarks="ID of the counter" type="VARCHAR(15 ${asChar})">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="snapshot_date" remarks="Date of the counter snapshot" type="DATETIME">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="claimant" remarks="User code of the snapshot claimant" type="VARCHAR(${creatorMaxLength} ${asChar})">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="counter_value" remarks="The counter value" type="BIGINT" defaultValueNumeric="0">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
