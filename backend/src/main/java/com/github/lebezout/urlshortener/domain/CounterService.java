@@ -83,6 +83,8 @@ public class CounterService {
         newCounter.setUrl(url);
         LOGGER.info("Creating new counter : {}", newCounter);
         repository.save(newCounter);
+        // init snapshot
+        takeSnapshot(newCounter, creator);
         return new CounterDTO(newCounter);
     }
 
@@ -101,6 +103,10 @@ public class CounterService {
         entity.setVisitorCounter(0L);
         entity.setLastVisitedDate(null);
         repository.save(entity);
+        // Delete snapshots
+        snapshotRepository.deleteByCounterId(entity.getId());
+        // Reinit snapshot
+        takeSnapshot(entity, creator);
         return new CounterDTO(entity);
     }
 
@@ -130,13 +136,17 @@ public class CounterService {
         Assert.notNull(claimant, "Snapshot claimant cannot be null");
         CounterEntity counter = repository.findById(counterId).orElseThrow(CounterNotFoundException::new);
         long value = counter.getVisitorCounter();
+        takeSnapshot(counter, claimant);
+        return value;
+    }
+
+    private void takeSnapshot(CounterEntity counter, String claimant) {
         CounterSnapshotEntity snapshot = new CounterSnapshotEntity();
         snapshot.setCounterId(counter.getId());
         snapshot.setClaimant(claimant);
         snapshot.setSnapshotDate(LocalDateTime.now());
-        snapshot.setCounterValue(value);
+        snapshot.setCounterValue(counter.getVisitorCounter());
         snapshotRepository.save(snapshot);
-        return value;
     }
 
     /**

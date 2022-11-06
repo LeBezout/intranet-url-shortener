@@ -9,4 +9,6 @@ import java.util.List;
 public interface CounterSnapshotRepository extends CrudRepository<CounterSnapshotEntity, CounterSnapshotPK> {
 
     List<CounterSnapshotEntity> findByCounterIdOrderBySnapshotDateDesc(String counterId);
+
+    void deleteByCounterId(String counterId);
 }
