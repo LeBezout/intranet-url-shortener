@@ -103,23 +103,8 @@ public class CounterResource {
     public byte[] visitAndGetSvg(@PathVariable("id") String counterId, @RequestParam(name = "label") Optional<String> label) {
         assertIdIsProvided(counterId);
         String strCounterValue = incrementAndGetCounterAsString(counterId);
-        String svgTemplate = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"20\">\n" +
-            "    <linearGradient id=\"a\" x2=\"0\" y2=\"100%%\">\n" +
-            "        <stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/>\n" +
-            "        <stop offset=\"1\" stop-opacity=\".1\"/>\n" +
-            "    </linearGradient>\n" +
-            "    <rect rx=\"3\" width=\"110\" height=\"20\" fill=\"#555\" />\n" +
-            "    <rect rx=\"3\" x=\"37\" width=\"75\" height=\"20\" fill=\"#9f9f9f\" />\n" +
-            "    <path fill=\"#9f9f9f\" d=\"M37 0h4v20h-4z\"/>\n" +
-            "    <g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\">\n" +
-            "        <text x=\"19\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">%s</text>\n" +
-            "        <text x=\"19\" y=\"14\">%s</text>\n" +
-            "        <text x=\"75\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">%s</text>\n" +
-            "        <text x=\"75\" y=\"14\">%s</text>\n" +
-            "    </g>\n" +
-            "</svg>";
         String caption = label.orElse("visits");
-        return String.format(svgTemplate, caption, caption, strCounterValue, strCounterValue).getBytes(StandardCharsets.UTF_8);
+        return ImageUtils.svgBadge(caption, strCounterValue);
     }
 
     @GetMapping(path = "{id}/png", produces = "image/png")
