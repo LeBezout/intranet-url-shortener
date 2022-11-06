@@ -123,17 +123,20 @@ public class CounterService {
      * Take a snapshot for this counter
      * @param counterId id of the counter
      * @param claimant snapshot claimant name
+     * @return current counter value
      */
-    public void takeSnapshot(String counterId, String claimant) {
+    public long takeSnapshot(String counterId, String claimant) {
         Assert.notNull(counterId, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
         Assert.notNull(claimant, "Snapshot claimant cannot be null");
         CounterEntity counter = repository.findById(counterId).orElseThrow(CounterNotFoundException::new);
+        long value = counter.getVisitorCounter();
         CounterSnapshotEntity snapshot = new CounterSnapshotEntity();
         snapshot.setCounterId(counter.getId());
         snapshot.setClaimant(claimant);
         snapshot.setSnapshotDate(LocalDateTime.now());
-        snapshot.setCounterValue(counter.getVisitorCounter());
+        snapshot.setCounterValue(value);
         snapshotRepository.save(snapshot);
+        return value;
     }
 
     /**

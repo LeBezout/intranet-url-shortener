@@ -44,13 +44,13 @@ public class CounterResource {
         return service.initCounter(url, principal.getName());
     }
 
-    @PostMapping(path = "{id}/snapshot")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void takeSnapshot(@PathVariable("id") String counterId, Principal principal) {
+    @PostMapping(path = "{id}/snapshot", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String takeSnapshot(@PathVariable("id") String counterId, Principal principal) {
         assertIdIsProvided(counterId);
         Assert.notNull(principal, "No credentials provided");
         LOGGER.info("Take snapshot for counter {} claimed by {}", counterId, principal.getName());
-        service.takeSnapshot(counterId, principal.getName());
+        long counterValue = service.takeSnapshot(counterId, principal.getName());
+        return Long.toString(counterValue);
     }
 
     @GetMapping(path = "{id}")
@@ -75,7 +75,7 @@ public class CounterResource {
     }
 
     @GetMapping(path = "{id}/snapshots")
-    public List<CounterSnapshotDTO> findCounterSnapshots(@PathVariable("id") String counterId) {
+    public List<CounterSnapshotDTO> getCounterSnapshots(@PathVariable("id") String counterId) {
         assertIdIsProvided(counterId);
         LOGGER.info("Find snapshots for counter {}", counterId);
         return service.getAllSnapshots(counterId);

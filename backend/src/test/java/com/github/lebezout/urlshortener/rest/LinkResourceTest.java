@@ -102,7 +102,7 @@ class LinkResourceTest {
         MockHttpServletResponse httpResponse = result.getResponse();
         String jsonContent = httpResponse.getContentAsString();
         LOGGER.debug(jsonContent);
-        Assertions.assertTrue(jsonContent.isEmpty());
+        assertValidJSonErrorResponse(jsonContent, "Expected link not found");
     }
 
     @Test
@@ -180,9 +180,8 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String response = httpResponse.getErrorMessage();
-        LOGGER.debug(response);
-        Assertions.assertEquals("The provided ID already exists", response);
+        String jsonContent = httpResponse.getContentAsString();
+        assertValidJSonErrorResponse(jsonContent, "The provided ID already exists");
     }
     @Test
     @WithMockUser(username = "admin", password = "admin")
@@ -201,9 +200,8 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        String response = httpResponse.getErrorMessage();
-        LOGGER.debug(response);
-        Assertions.assertEquals("The provided ID is too long (must be lower than " + IDTooLongException.ID_MAX_LENGTH + " characters)", response);
+        String jsonContent = httpResponse.getContentAsString();
+        assertValidJSonErrorResponse(jsonContent, "The provided ID is too long (must be lower than " + IDTooLongException.ID_MAX_LENGTH + " characters)");
     }
 
 
@@ -234,5 +232,13 @@ class LinkResourceTest {
         mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNoContent());
 
         Assertions.assertFalse(repository.findById("ABCDEF").isPresent());
+    }
+
+    private static void assertValidJSonErrorResponse(String jsonContent, String message) {
+        Assertions.assertAll(
+            () -> Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"), "Valid JSON Object expected"),
+            () -> Assertions.assertTrue(jsonContent.contains("errorMessage"), "errorMessage attribut expected"),
+            () -> Assertions.assertTrue(jsonContent.contains(message), message + " expected")
+        );
     }
 }

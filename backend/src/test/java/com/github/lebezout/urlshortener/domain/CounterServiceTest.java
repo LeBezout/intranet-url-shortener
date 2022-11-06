@@ -102,7 +102,8 @@ class CounterServiceTest {
     }
     @Test
     void test_takeSnapshot_OK() {
-        service.takeSnapshot("AZERTY1234", "JUNIT");
+        long currentCounterValue = service.takeSnapshot("DEMO$123@6", "JUNIT");
+        Assertions.assertTrue(currentCounterValue >= 66);
     }
 
     @Test

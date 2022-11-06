@@ -51,7 +51,7 @@ class CounterResourceTest {
 
         MockHttpServletResponse httpResponse = result.getResponse();
         String jsonContent = httpResponse.getContentAsString();
-        Assertions.assertTrue(jsonContent.isEmpty());
+        assertValidJSonErrorResponse(jsonContent, "Expected counter not found");
     }
 
     @Test
@@ -79,7 +79,7 @@ class CounterResourceTest {
 
         MockHttpServletResponse httpResponse = result.getResponse();
         String jsonContent = httpResponse.getContentAsString();
-        Assertions.assertTrue(jsonContent.isEmpty());
+        assertValidJSonErrorResponse(jsonContent, "Expected counter not found");
     }
 
     @Test
@@ -167,5 +167,45 @@ class CounterResourceTest {
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isForbidden())
             .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        String jsonContent = httpResponse.getContentAsString();
+        assertValidJSonErrorResponse(jsonContent, "Only the creator of the link can update it");
+    }
+
+    @Test
+    @WithMockUser(username = "JUNIT", password = "admin")
+    void test_takeSnapshot_OK() throws Exception {
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/count/FOOBAR6789/snapshot"));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+            .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        String counter = httpResponse.getContentAsString();
+        Assertions.assertEquals("5", counter);
+    }
+
+    @Test
+    @Sql("classpath:/data-test-countersnapshot.sql")
+    void test_getCounterSnapshots() throws Exception {
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/snapshots"));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        String jsonContent = httpResponse.getContentAsString();
+        Assertions.assertTrue(jsonContent.startsWith("[") && jsonContent.endsWith("]") && jsonContent.contains("18"));
+    }
+
+    private static void assertValidJSonErrorResponse(String jsonContent, String message) {
+        Assertions.assertAll(
+            () -> Assertions.assertTrue(jsonContent.startsWith("{") && jsonContent.endsWith("}"), "Valid JSON Object expected"),
+            () -> Assertions.assertTrue(jsonContent.contains("errorMessage"), "errorMessage attribut expected"),
+            () -> Assertions.assertTrue(jsonContent.contains(message), message + " expected")
+        );
     }
 }
