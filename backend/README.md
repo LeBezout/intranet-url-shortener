@@ -89,6 +89,9 @@ sudo docker run --name urlshortener_openldap \
   * Increment counter and get one pixel `curl http://localhost:8080/api/count/{counter_id}/px/0074CC --output target/pixel.png`
   * Increment counter and get PNG `curl http://localhost:8080/api/count/{counter_id}/png --output target/counter.png`
   * Reset counter (if owner) : `curl --fail -X PUT -u "demo1:demo1" http://localhost:8080/api/count/{counter_id}/reset`
+* Counter snapshots:
+  * Take a snapshot `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/count/{counter_id}/snapshot`
+  * Get all snapshots `curl --fail http://localhost:8080/api/count/{counter_id}/snapshots | jq`
 * Aggregated Data:
   * All links with their shortcuts `curl http://localhost:8080/api/report`
   * All links with their shortcuts created by `curl http://localhost:8080/api/report?creator={creator_name}`

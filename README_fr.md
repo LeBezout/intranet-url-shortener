@@ -55,12 +55,12 @@ Flux entre composants :
 
 ### B.2- Détail des composants
 
-| Composant | Description | Technologies |
-|-----------|-------------|--------------|
-| Frontend Web | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détail d'un lien. | Vue.js + Typescript dans un serveur NGINX |
-| Extension pour navigateur | Extensions pour les navigateurs Web | Javascript |
-| Backend REST | Exposer l'API nécessaire au frontend ainsi que la redirection effective vers l'URL ciblée. | Spring Boot + Liquibase + Tomcat Embedded |
-| Base de données relationnelle | Stockage des éléments. | H2, MySQL, MariaDB, PostGreSQL |
+| Composant                     | Description                                                                                                            | Technologies                              |
+|-------------------------------|------------------------------------------------------------------------------------------------------------------------|-------------------------------------------|
+| Frontend Web                  | Interface permettant d'enregistrer, modifier, supprimer de nouveaux liens. Rechercher ou afficher le détail d'un lien. | Vue.js + Typescript dans un serveur NGINX |
+| Extension pour navigateur     | Extensions pour les navigateurs Web                                                                                    | Javascript                                |
+| Backend REST                  | Exposer l'API nécessaire au frontend ainsi que la redirection effective vers l'URL ciblée.                             | Spring Boot + Liquibase + Tomcat Embedded |
+| Base de données relationnelle | Stockage des éléments.                                                                                                 | H2, MySQL, MariaDB, PostGreSQL            |
 
 ### B.3 Modèle de données
 
@@ -68,28 +68,39 @@ Flux entre composants :
 
 Permet le stockage des liens raccourcis.
 
-| Colonne | Description | Type           |
-|---------|-------------|----------------|
-| `id` | Identifiant interne du lien | `VARCHAR 15`   |
-| `target_url` | URL du lien | `VARCHAR 1024` |
-| `created_by` | Nom de la personne qui a créé initialement le lien | `VARCHAR 255`  |
-| `creation_date` | Date de création initiale du lien | `DATETIME`     |
-| `last_updated` | Date de dernière mise à jour du lien | `DATETIME`     |
-| `is_private` | Ce lien est-il privé ? | `BOOLEAN`      |
-| `access_counter` | Nombre d'accès au lien | `BIGINT`       |
-| `creation_counter` | Nombre de tentatives de création du lien | `BIGINT`       |
+| Colonne            | Description                                        | Type           |
+|--------------------|----------------------------------------------------|----------------|
+| `id`               | Identifiant interne du lien                        | `VARCHAR 15`   |
+| `target_url`       | URL du lien                                        | `VARCHAR 1024` |
+| `created_by`       | Nom de la personne qui a créé initialement le lien | `VARCHAR 255`  |
+| `creation_date`    | Date de création initiale du lien                  | `DATETIME`     |
+| `last_updated`     | Date de dernière mise à jour du lien               | `DATETIME`     |
+| `is_private`       | Ce lien est-il privé ?                             | `BOOLEAN`      |
+| `access_counter`   | Nombre d'accès au lien                             | `BIGINT`       |
+| `creation_counter` | Nombre de tentatives de création du lien           | `BIGINT`       |
 
 #### Table 'counter'
 
 Permet le stockage d'un compteur de visites pour n'importe quel site.
 
-| Column | Description                                        | Type           |
-|--------|----------------------------------------------------|----------------|
-| `id` | Internal ID                                        | `VARCHAR 15`   |
-| `url` | URL du lien                                        | `VARCHAR 1024` |
-| `created_by` | Nom de la personne qui a créé initialement le lien | `VARCHAR 255`  |
-| `creation_date` | Date de création initiale du lien                  | `DATETIME`     |
+| Column            | Description                                        | Type           |
+|-------------------|----------------------------------------------------|----------------|
+| `id`              | Internal ID                                        | `VARCHAR 15`   |
+| `url`             | URL du lien                                        | `VARCHAR 1024` |
+| `created_by`      | Nom de la personne qui a créé initialement le lien | `VARCHAR 255`  |
+| `creation_date`   | Date de création initiale du lien                  | `DATETIME`     |
 | `visitor_counter` | Nombre d'accès au site                             | `BIGINT`       |
+
+### Table 'counter_snapshot'
+
+Permet d'historiser l'évolution du compteur.
+
+| Colonne          | Description                                  | Type           |
+|------------------|----------------------------------------------|----------------|
+| `counter_id`     | ID du compteur                               | `VARCHAR 15`   |
+| `claimant`       | Nom de la personne qui demande l'instantané  | `VARCHAR 255`  |
+| `snapshot_date`  | Date de l'instantané                         | `DATETIME`     |
+| `counter_value`  | Valeur du compteur au moment de l'instantané | `BIGINT`       |
 
 ## C- Guide d'utilisation
 
@@ -99,14 +110,14 @@ Permet le stockage d'un compteur de visites pour n'importe quel site.
 
 Le comportement du raccourcisseur d'URL peut être configuré avec les paramètres suivants :
 
-| Paramètre | Description | Contraintes | Valeur par défaut |
-|-----------|-------------|------------|-------------------|
-| `urlshortener.http_redirect_status` | Statut HTTP à utiliser pour les redirections | Doit être compris dans l'intervalle [300-399] | `301` |
-| `urlshortener.id_alphabet` | Liste des caractères à utiliser pour générer un ID | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
-| `urlshortener.id_length` | Longueur de l'ID généré | Entier entre 2 et 10 | `5` |
-| `urlshortener.not_found_page` | Page web statique à afficher dans le cas où l'ID fourni n'est pas connu | Une page HTML statique accessible | `static/not_found.html` |
+| Paramètre                           | Description                                                             | Contraintes                                                                        | Valeur par défaut         |
+|-------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------------------------------|---------------------------|
+| `urlshortener.http_redirect_status` | Statut HTTP à utiliser pour les redirections                            | Doit être compris dans l'intervalle [300-399]                                      | `301`                     |
+| `urlshortener.id_alphabet`          | Liste des caractères à utiliser pour générer un ID                      | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
+| `urlshortener.id_length`            | Longueur de l'ID généré                                                 | Entier entre 2 et 10                                                               | `5`                       |
+| `urlshortener.not_found_page`       | Page web statique à afficher dans le cas où l'ID fourni n'est pas connu | Une page HTML statique accessible                                                  | `static/not_found.html`   |
 
-#### C.1.2- Configuration de la base données
+#### C.1.2- Configuration de la base de données
 
 La base de données utilisée doit être de type relationnelle contient les tables `link` et `count`. Les drivers suivants sont embarqués :
 
@@ -117,12 +128,12 @@ La base de données utilisée doit être de type relationnelle contient les tabl
 
 L'accès à la base de données peut être configuré via les paramètres suivants :
 
-| Paramètre | Description | Valeur par défaut |
-|-----------|-------------|-------------------|
-| `spring.jpa.database` | The database type | :no_entry_sign: |
-| `spring.datasource.url` | The database JDBC URL | :no_entry_sign: |
-| `spring.datasource.username` | The database username | :no_entry_sign: |
-| `spring.datasource.password` | The database user password | :no_entry_sign: |
+| Paramètre                    | Description                | Valeur par défaut |
+|------------------------------|----------------------------|-------------------|
+| `spring.jpa.database`        | The database type          | :no_entry_sign:   |
+| `spring.datasource.url`      | The database JDBC URL      | :no_entry_sign:   |
+| `spring.datasource.username` | The database username      | :no_entry_sign:   |
+| `spring.datasource.password` | The database user password | :no_entry_sign:   |
 
 #### C.1.3- Configuration LDAP
 
@@ -130,13 +141,13 @@ Pour une question de simplicité la sécurité est uniquement basée sur un annu
 
 L'annuaire d'entreprise peut être configuré avec la paramètres suivants :
 
-| Paramètre | Description | Exemple |Valeur par défaut |
-|-----------|-------------|---------|------------------|
-| `spring.ldap.urls` | L'URL d'accès au serveur d'annuaire | `ldap://myserver.mycompany:389/` | :no_entry_sign: |
-| `spring.ldap.base` | La racine de l'annuaire | `dc=mycompany,dc=org` | :no_entry_sign: |
-| `spring.ldap.username` | Le nom d'utilisateur à utiliser pour se connecter | `uid=ldap_reader,ou=people` | :no_entry_sign: |
-| `spring.ldap.password` | Le mot de passe de l'utilisateur à utiliser pour se connecter | :no_entry_sign: | :no_entry_sign: |
-| `urlshortener.ldap_user_search_filter` | Le filtre pour la recherche des utilisateurs, relatif par rapport à la racine indiquée | `uid={0},ou=people` | :no_entry_sign: |
+| Paramètre                              | Description                                                                            | Exemple                          | Valeur par défaut |
+|----------------------------------------|----------------------------------------------------------------------------------------|----------------------------------|-------------------|
+| `spring.ldap.urls`                     | L'URL d'accès au serveur d'annuaire                                                    | `ldap://myserver.mycompany:389/` | :no_entry_sign:   |
+| `spring.ldap.base`                     | La racine de l'annuaire                                                                | `dc=mycompany,dc=org`            | :no_entry_sign:   |
+| `spring.ldap.username`                 | Le nom d'utilisateur à utiliser pour se connecter                                      | `uid=ldap_reader,ou=people`      | :no_entry_sign:   |
+| `spring.ldap.password`                 | Le mot de passe de l'utilisateur à utiliser pour se connecter                          | :no_entry_sign:                  | :no_entry_sign:   |
+| `urlshortener.ldap_user_search_filter` | Le filtre pour la recherche des utilisateurs, relatif par rapport à la racine indiquée | `uid={0},ou=people`              | :no_entry_sign:   |
 
 ### C.2- Installation
 
@@ -150,17 +161,17 @@ TODO
 
 ### Annexe B : détail des statuts HTTP de redirection
 
-| Code | Message | Signification |
-|---|---|---|
-| `300` | **Multiple Choices** | L'URI demandée se rapporte à plusieurs ressources. |
-| `301` | **Moved Permanently** | Document déplacé de façon permanente. |
-| `302` | **Found** | Document déplacé de façon temporaire. |
-| `303` | **See Other** | La réponse à cette requête est ailleurs. |
-| `304` | **Not Modified** | Document non modifié depuis la dernière requête. |
-| `305` | **Use Proxy** | (depuis HTTP/1.1) La requête doit être ré-adressée au proxy. |
-| `306` | **Switch Proxy** | Code utilisé par une ancienne version de la RFC 26166, à présent réservé. Elle signifiait "Les requêtes suivantes doivent utiliser le proxy spécifié". |
-| `307` | **Temporary Redirect** | La requête doit être redirigée temporairement vers l'URI spécifiée. |
-| `308` | **Permanent Redirect** | La requête doit être redirigée définitivement vers l'URI spécifiée. |
-| `310` | **Too many Redirects** | La requête doit être redirigée de trop nombreuses fois, ou est victime d’une boucle de redirection. |
+| Code  | Message                | Signification                                                                                                                                          |
+|-------|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `300` | **Multiple Choices**   | L'URI demandée se rapporte à plusieurs ressources.                                                                                                     |
+| `301` | **Moved Permanently**  | Document déplacé de façon permanente.                                                                                                                  |
+| `302` | **Found**              | Document déplacé de façon temporaire.                                                                                                                  |
+| `303` | **See Other**          | La réponse à cette requête est ailleurs.                                                                                                               |
+| `304` | **Not Modified**       | Document non modifié depuis la dernière requête.                                                                                                       |
+| `305` | **Use Proxy**          | (depuis HTTP/1.1) La requête doit être ré-adressée au proxy.                                                                                           |
+| `306` | **Switch Proxy**       | Code utilisé par une ancienne version de la RFC 26166, à présent réservé. Elle signifiait "Les requêtes suivantes doivent utiliser le proxy spécifié". |
+| `307` | **Temporary Redirect** | La requête doit être redirigée temporairement vers l'URI spécifiée.                                                                                    |
+| `308` | **Permanent Redirect** | La requête doit être redirigée définitivement vers l'URI spécifiée.                                                                                    |
+| `310` | **Too many Redirects** | La requête doit être redirigée de trop nombreuses fois, ou est victime d’une boucle de redirection.                                                    |
 
 Source : [Wikipedia](https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP#3xx_-_Redirection)
