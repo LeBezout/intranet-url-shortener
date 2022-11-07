@@ -91,7 +91,7 @@ Permet le stockage d'un compteur de visites pour n'importe quel site.
 | `creation_date`   | Date de création initiale du lien                  | `DATETIME`     |
 | `visitor_counter` | Nombre d'accès au site                             | `BIGINT`       |
 
-### Table 'counter_snapshot'
+#### Table 'counter_snapshot'
 
 Permet d'historiser l'évolution du compteur.
 

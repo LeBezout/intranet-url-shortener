@@ -92,7 +92,7 @@ Stores the visitor counter of any website you want.
 | `creation_date`   | Initial creation  date     | `DATETIME`     |
 | `visitor_counter` | Website visitor counter    | `BIGINT`       |
 
-### Table 'counter_snapshot'
+#### counter_snapshot table
 
 Stores the history of a counter with snapshots.
 
