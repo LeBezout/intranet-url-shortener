@@ -6,3 +6,5 @@ INSERT INTO link (id, target_url, created_by, creation_date, last_updated, is_pr
     VALUES ('ABCDEF', 'https://github.com', 'JUNIT', TO_DATE('2018-10-10', 'yyyy-mm-dd'), TO_DATE('2018-11-11', 'yyyy-mm-dd'), false, 255, 4);
 INSERT INTO link (id, target_url, created_by, creation_date, last_updated, is_private, access_counter, creation_counter)
     VALUES ('QWERTY1', 'https://gitmoji.dev', 'JUNIT', TO_DATE('2022-05-12', 'yyyy-mm-dd'), TO_DATE('2022-10-11', 'yyyy-mm-dd'), false, 4, 1);
+INSERT INTO link (id, target_url, created_by, creation_date, last_updated, is_private, access_counter, creation_counter)
+    VALUES ('QWERTY2', 'https://stackoverflow.com/', 'DEMO', TO_DATE('2018-02-142', 'yyyy-mm-dd'), TO_DATE('2018-11-11', 'yyyy-mm-dd'), false, 2, 2);

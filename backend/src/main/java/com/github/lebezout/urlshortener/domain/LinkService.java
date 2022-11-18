@@ -49,14 +49,17 @@ public class LinkService {
 
     /**
      * Find all the links corresponding to the provided criteria
-     * @param creator username of the creator
-     * @param start a start date
-     * @param end an end date
+     * @param creator username of the creator (optional)
+     * @param start a start date (required)
+     * @param end an end date (required)
      * @return list of links
      */
     @Transactional(readOnly = true)
     public List<LinkDTO> findByCriteria(String creator, LocalDateTime start, LocalDateTime end) {
-        List<LinkEntity> entities = repository.findByCreatorAndLastUpdatedDate(creator, start, end);
+        List<LinkEntity> entities = StringUtils.hasText(creator)
+            ? repository.findByCreatorAndLastUpdatedDate(creator, start, end)
+            : repository.findByLastUpdatedDate(start, end);
+        // TODO Pageable for limiting results
         return entities.stream().map(LinkDTO::new).collect(Collectors.toList());
     }
 

@@ -73,6 +73,15 @@ class LinkServiceTest {
     }
 
     @Test
+    void test_findByCriteria_NoCreator() {
+        List<LinkDTO> result = service.findByCriteria(
+            "",
+            LocalDateTime.of(2018, 11, 10, 0, 0),
+            LocalDateTime.of(2018, 11, 12, 0, 0));
+        Assertions.assertEquals(2, result.size());
+    }
+
+    @Test
     void test_updateLink() {
         LinkDTO link = service.getByID("ABCDEF");
         Assertions.assertEquals("JUNIT", link.getCreator());

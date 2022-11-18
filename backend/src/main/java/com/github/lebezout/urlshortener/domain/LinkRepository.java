@@ -14,7 +14,6 @@ import java.util.Optional;
  */
 @Repository
 public interface LinkRepository extends CrudRepository<LinkEntity, String> {
-
     /**
      * Select a link by its target
      * @param target the target url
@@ -29,6 +28,15 @@ public interface LinkRepository extends CrudRepository<LinkEntity, String> {
      * @return list of links
      */
     List<LinkEntity> findByCreatorOrderByLastUpdatedDateDesc(String creator);
+
+    /**
+     * Select all links where lastUpdatedDate is between the two specified dates
+     * @param startDate start of range
+     * @param endDate  end of range
+     * @return list of links
+     */
+    @Query("from LinkEntity l where l.lastUpdatedDate between ?1 and ?2 order by l.lastUpdatedDate desc")
+    List<LinkEntity> findByLastUpdatedDate(LocalDateTime startDate, LocalDateTime endDate);
 
     /**
      * Select all links created by a specific user where lastUpdatedDate is between the two specified dates
