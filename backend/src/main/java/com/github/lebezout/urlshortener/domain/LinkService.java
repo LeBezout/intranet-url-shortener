@@ -89,26 +89,26 @@ public class LinkService {
     public LinkDTO addNewLink(final NewLinkDTO link, final String creator) {
         Assert.notNull(link, "New link data cannot be null");
         Assert.notNull(creator, "Link creator cannot be null");
-        // Target URL already exists ?
-        Optional<LinkEntity> existingTargetLink = repository.findByTarget(link.getTarget());
-        if (existingTargetLink.isPresent()) {
-            LinkEntity entity = existingTargetLink.get();
-            // increment counter
-            long created = entity.getCreationCounter() + 1;
-            LOGGER.info("Attempt to create an existing target link : {}, {} times", link.getTarget(), created);
-            entity.setCreationCounter(created);
-            repository.save(entity);
-            // return data
-            return existingTargetLink.map(LinkDTO::new).orElseThrow(LinkNotFoundException::new);
-        }
-
         String id = link.getId();
         if (StringUtils.hasText(id)) {
             LOGGER.info("Provided ID is {}", id);
             IDTooLongException.throwIfNeeded(id);
-            Optional<LinkEntity> existingLink = getLinkEntity(id);
-            IDAlreadyExistsException.throwIfNeeded(existingLink);
+            getLinkEntity(id).ifPresent(l -> { throw new IDAlreadyExistsException(); });
+            // If id is provided, we don't check if target URL already exists
         } else {
+            // Check if target URL already exists ?
+            Optional<LinkEntity> existingTargetLink = repository.findByTarget(link.getTarget());
+            if (existingTargetLink.isPresent()) {
+                LinkEntity entity = existingTargetLink.get();
+                // increment counter
+                long created = entity.getCreationCounter() + 1;
+                LOGGER.info("Attempt to create an existing target link : {}, {} times", link.getTarget(), created);
+                entity.setCreationCounter(created);
+                repository.save(entity);
+                // return data
+                return new LinkDTO(entity);
+            }
+            // else generate ID
             id = idGenerator.generate(params.getIdLength());
             LOGGER.info("New ID generated {}", id);
         }

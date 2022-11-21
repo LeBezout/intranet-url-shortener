@@ -45,8 +45,8 @@ class LinkServiceTest {
     }
 
     @Test
-    void test_addNewLink_exists() {
-        // attempt to create 'https://github.com' defined in data-sql.test  (author=JUNIT, creation_counter=4)
+    void test_addNewLink_exists_no_ID_provided() {
+        // attempt to create 'https://github.com' defined in data-sql.test (author=JUNIT, creation_counter=4)
         NewLinkDTO dto = new NewLinkDTO();
         dto.setTarget("https://github.com");
         LinkDTO existing = service.addNewLink(dto, "OTHER1");
@@ -55,6 +55,16 @@ class LinkServiceTest {
         existing = service.addNewLink(dto, "OTHER2");
         Assertions.assertEquals("JUNIT", existing.getCreator()); // not OTHER2
         Assertions.assertEquals(4 + 2, existing.getCreationCounter());
+    }
+    @Test
+    void test_addNewLink_exists_ID_is_provided() {
+        // attempt to create 'https://github.com' defined in data-sql.test (author=JUNIT, creation_counter=4), with a specific ID
+        NewLinkDTO dto = new NewLinkDTO();
+        dto.setId("github");
+        dto.setTarget("https://github.com");
+        LinkDTO existing = service.addNewLink(dto, "OTHER1");
+        Assertions.assertEquals("OTHER1", existing.getCreator()); // not JUNIT
+        Assertions.assertEquals(1, existing.getCreationCounter()); // not 4+1
     }
 
     @Test
