@@ -23,20 +23,20 @@ class UrlShortenerApplicationTests {
 
     @Test
     void should_load_the_configuration() {
-        LOGGER.debug("ID LENGTH : " + params.getIdLength());
+        LOGGER.debug("ID LENGTH : " + params.getGeneratedIdLength());
         LOGGER.debug("REDIRECT STATUS CODE : " + params.getHttpRedirectStatus());
         LOGGER.debug("NOT FOUND PAGE : " + params.getNotFoundPage());
         LOGGER.debug("ALPHABET ID LENGTH : " + params.getIdAlphabet().length);
 
         Assertions.assertAll(
-            () -> Assertions.assertEquals(6, params.getIdLength()),
+            () -> Assertions.assertEquals(6, params.getGeneratedIdLength()),
             () -> Assertions.assertEquals(307, params.getHttpRedirectStatus()),
             () -> Assertions.assertEquals("http://localhost:8080/demo/404.html", params.getNotFoundPage()),
             () -> Assertions.assertEquals(36, params.getIdAlphabet().length)
         );
 
         Stream.of(params.getIdAlphabet()).forEach(c -> LOGGER.debug(String.valueOf(c)));
-        String sampleId = generator.generate(params.getIdLength());
+        String sampleId = generator.generate(params.getGeneratedIdLength());
         LOGGER.debug("SAMPLE ID : " + sampleId);
         Assertions.assertEquals(6, sampleId.length());
     }

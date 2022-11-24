@@ -110,12 +110,15 @@ Permet d'historiser l'évolution du compteur.
 
 Le comportement du raccourcisseur d'URL peut être configuré avec les paramètres suivants :
 
-| Paramètre                           | Description                                                             | Contraintes                                                                        | Valeur par défaut         |
-|-------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------------------------------|---------------------------|
-| `urlshortener.http_redirect_status` | Statut HTTP à utiliser pour les redirections                            | Doit être compris dans l'intervalle [300-399]                                      | `301`                     |
-| `urlshortener.id_alphabet`          | Liste des caractères à utiliser pour générer un ID                      | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
-| `urlshortener.id_length`            | Longueur de l'ID généré                                                 | Entier entre 2 et 10                                                               | `5`                       |
-| `urlshortener.not_found_page`       | Page web statique à afficher dans le cas où l'ID fourni n'est pas connu | Une page HTML statique accessible                                                  | `static/not_found.html`   |
+| Paramètre                             | Description                                                             | Contraintes                                                                        | Valeur par défaut         |
+|---------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------------------------------|---------------------------|
+| `urlshortener.http_redirect_status`   | Statut HTTP à utiliser pour les redirections                            | Doit être compris dans l'intervalle [300-399]                                      | `301`                     |
+| `urlshortener.id_alphabet`            | Liste des caractères à utiliser pour générer un ID                      | Uniquement des caractères, séparés par une virgule. Eviter les caractères spéciaux | `0,...,9,a,...,z,A,...,Z` |
+| `urlshortener.generated_id_length`    | Longueur de l'ID généré                                                 | Entier entre 2 et 10                                                               | `5`                       |
+| `urlshortener.not_found_page`         | Page web statique à afficher dans le cas où l'ID fourni n'est pas connu | Une page HTML statique accessible                                                  | `static/not_found.html`   |
+| `urlshortener.forbidden_ids`          | Liste d'identifiants qui ne seront pas acceptés                         |                                                                                    | `[]`                      |
+| `urlshortener.provided_id_min_length` | Taille minimale pour les identifiants qui seront fournis                | Integer > 0                                                                        | `2`                       |
+| `urlshortener.provided_id_max_length` | Taille maximale pour les identifiants qui seront fournis                | Integer > 0                                                                        | `115`                     |
 
 #### C.1.2- Configuration de la base de données
 

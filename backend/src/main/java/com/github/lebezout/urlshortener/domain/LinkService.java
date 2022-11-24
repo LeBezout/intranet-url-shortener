@@ -2,10 +2,11 @@ package com.github.lebezout.urlshortener.domain;
 
 import com.github.lebezout.urlshortener.config.Params;
 import com.github.lebezout.urlshortener.error.IDAlreadyExistsException;
-import com.github.lebezout.urlshortener.error.IDTooLongException;
+import com.github.lebezout.urlshortener.error.IDNotAcceptedException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
 import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
+import com.github.lebezout.urlshortener.utils.IdValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class LinkService {
     private final LinkRepository repository;
     private final IdGenerator idGenerator;
+    private final IdValidator idValidator;
     private final Params params;
 
     /**
@@ -83,7 +85,7 @@ public class LinkService {
      * @param creator username
      * @return new link data (with a new id if not provided)
      * @throws IDAlreadyExistsException if the provided id already exists
-     * @throws IDTooLongException if the provided id is too long
+     * @throws IDNotAcceptedException if the provided id is too long
      */
     @CachePut(cacheNames="links") // the method is always executed and its result is placed into the cache
     public LinkDTO addNewLink(final NewLinkDTO link, final String creator) {
@@ -92,7 +94,9 @@ public class LinkService {
         String id = link.getId();
         if (StringUtils.hasText(id)) {
             LOGGER.info("Provided ID is {}", id);
-            IDTooLongException.throwIfNeeded(id);
+            if (!idValidator.isValid(id)) {
+                throw new IDNotAcceptedException();
+            }
             getLinkEntity(id).ifPresent(l -> { throw new IDAlreadyExistsException(); });
             // If id is provided, we don't check if target URL already exists
         } else {
@@ -109,7 +113,7 @@ public class LinkService {
                 return new LinkDTO(entity);
             }
             // else generate ID
-            id = idGenerator.generate(params.getIdLength());
+            id = idGenerator.generate(params.getGeneratedIdLength());
             LOGGER.info("New ID generated {}", id);
         }
         // create new entity

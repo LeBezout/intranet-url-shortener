@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lebezout.urlshortener.domain.LinkDTO;
 import com.github.lebezout.urlshortener.domain.LinkRepository;
 import com.github.lebezout.urlshortener.domain.NewLinkDTO;
-import com.github.lebezout.urlshortener.error.IDTooLongException;
+import com.github.lebezout.urlshortener.error.IDNotAcceptedException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -190,7 +190,7 @@ class LinkResourceTest {
                 .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "The provided ID is too long (must be lower than " + IDTooLongException.ID_MAX_LENGTH + " characters)");
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "The provided ID is rejected by our policy");
     }
 
 

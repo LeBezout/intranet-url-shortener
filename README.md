@@ -111,12 +111,15 @@ Stores the history of a counter with snapshots.
 
 The URL shortener behavior can be configured with the following parameters, described below:
 
-| Parameter name                      | Description                                  | Constraints                               | Default value             |
-|-------------------------------------|----------------------------------------------|-------------------------------------------|---------------------------|
-| `urlshortener.http_redirect_status` | The HTTP status to use for the redirection   | Must in range of [300-399]                | `301`                     |
-| `urlshortener.id_alphabet`          | The alphabet to use for the ID generation    | Only single characters separated by comma | `0,...,9,a,...,z,A,...,Z` |
-| `urlshortener.id_length`            | The length of the generated id               | Integer between 2 & 10                    | `5`                       |
-| `urlshortener.not_found_page`       | The page to use when we redirect to a bad id | An accessible static web page             | `static/not_found.html`   |
+| Parameter name                        | Description                                  | Constraints                               | Default value             |
+|---------------------------------------|----------------------------------------------|-------------------------------------------|---------------------------|
+| `urlshortener.http_redirect_status`   | The HTTP status to use for the redirection   | Must in range of [300-399]                | `301`                     |
+| `urlshortener.id_alphabet`            | The alphabet to use for the ID generation    | Only single characters separated by comma | `0,...,9,a,...,z,A,...,Z` |
+| `urlshortener.generated_id_length`    | The length of the generated id               | Integer between 2 & 10                    | `5`                       |
+| `urlshortener.not_found_page`         | The page to use when we redirect to a bad id | An accessible static web page             | `static/not_found.html`   |
+| `urlshortener.forbidden_ids`          | List of IDs that we don't accept             |                                           | `[]`                      |
+| `urlshortener.provided_id_min_length` | The minimum length for the provided IDs      | Integer > 0                               | `2`                       |
+| `urlshortener.provided_id_max_length` | The maximum length for the provided IDs      | Integer > 0                               | `115`                     |
 
 #### C.1.2- Configuring Database
 

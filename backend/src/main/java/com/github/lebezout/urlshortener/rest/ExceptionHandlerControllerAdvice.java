@@ -4,7 +4,7 @@ import com.github.lebezout.urlshortener.error.CounterAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.CounterNotFoundException;
 import com.github.lebezout.urlshortener.error.ErrorResponse;
 import com.github.lebezout.urlshortener.error.IDAlreadyExistsException;
-import com.github.lebezout.urlshortener.error.IDTooLongException;
+import com.github.lebezout.urlshortener.error.IDNotAcceptedException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
 import com.github.lebezout.urlshortener.error.NotAuthenticatedException;
 import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
@@ -69,12 +69,12 @@ public class ExceptionHandlerControllerAdvice {
         LOGGER.error("IDAlreadyExistsException error occurred:", exception);
         return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "The provided ID already exists", request.getRequestURI());
     }
-    @ExceptionHandler(IDTooLongException.class)
+    @ExceptionHandler(IDNotAcceptedException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody ErrorResponse handleIDTooLongException(final Exception exception,
-                                                                final HttpServletRequest request) {
-        LOGGER.error("IDTooLongException error occurred:", exception);
-        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "The provided ID is too long (must be lower than " + IDTooLongException.ID_MAX_LENGTH + " characters)", request.getRequestURI());
+    public @ResponseBody ErrorResponse handleIDNotAcceptedException(final Exception exception,
+                                                                    final HttpServletRequest request) {
+        LOGGER.error("IDNotAcceptedException error occurred:", exception);
+        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "The provided ID is rejected by our policy", request.getRequestURI());
     }
     @ExceptionHandler(NotLinkOwnerException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
