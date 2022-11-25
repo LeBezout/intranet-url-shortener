@@ -32,7 +32,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/count")
+@RequestMapping("/api/counter")
 public class CounterResource {
     private final CounterService service;
 

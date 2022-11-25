@@ -28,7 +28,7 @@ class CounterResourceTest {
 
     @Test
     void test_getByID_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter/AZERTY1234"));
 
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
@@ -40,7 +40,7 @@ class CounterResourceTest {
     }
     @Test
     void test_getByID_not_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/ZZZZZ"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter/ZZZZZ"));
 
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -52,7 +52,7 @@ class CounterResourceTest {
 
     @Test
     void test_getByURL_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count")).queryParam("url", "https://github.com");
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter")).queryParam("url", "https://github.com");
 
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
@@ -64,7 +64,7 @@ class CounterResourceTest {
     }
     @Test
     void test_getByURL_not_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count")).queryParam("url", "https://www.website.org");
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter")).queryParam("url", "https://www.website.org");
 
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -77,7 +77,7 @@ class CounterResourceTest {
     @Test
     @WithMockUser(username = "admin", password = "admin")
     void test_createCounter() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/count")).queryParam("url", "https://www.mywebsite.org");
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/counter")).queryParam("url", "https://www.mywebsite.org");
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isCreated())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -89,7 +89,7 @@ class CounterResourceTest {
 
     @Test
     void test_visitUrl() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/v"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter/AZERTY1234/v"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
@@ -100,7 +100,7 @@ class CounterResourceTest {
     }
     @Test
     void test_visitUrl_not_found() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/foobar/v"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter/foobar/v"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn();
@@ -110,7 +110,7 @@ class CounterResourceTest {
     }
     @Test
     void test_visitUrl_and_get_svg() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/svg"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter/AZERTY1234/svg"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("image/svg+xml"))
@@ -122,7 +122,7 @@ class CounterResourceTest {
     }
     @Test
     void test_visitUrl_and_get_png() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/png"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter/AZERTY1234/png"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("image/png"))
@@ -143,7 +143,7 @@ class CounterResourceTest {
     @Test
     @WithMockUser(username = "JUNIT", password = "admin")
     void test_resetCounter_owner() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/count/AZERTY1234/reset"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/counter/AZERTY1234/reset"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -155,7 +155,7 @@ class CounterResourceTest {
     @Test
     @WithMockUser(username = "admin", password = "admin")
     void test_resetCounter_not_owner() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/count/FOOBAR6789/reset"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(new URI("/api/counter/FOOBAR6789/reset"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isForbidden())
             .andReturn();
@@ -167,7 +167,7 @@ class CounterResourceTest {
     @Test
     @WithMockUser(username = "JUNIT", password = "admin")
     void test_takeSnapshot_OK() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/count/FOOBAR6789/snapshot"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(new URI("/api/counter/FOOBAR6789/snapshot"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
@@ -180,7 +180,7 @@ class CounterResourceTest {
     @Test
     @Sql("classpath:/data-test-countersnapshot.sql")
     void test_getCounterSnapshots() throws Exception {
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/count/AZERTY1234/snapshots"));
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/counter/AZERTY1234/snapshots"));
         MvcResult result = mvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

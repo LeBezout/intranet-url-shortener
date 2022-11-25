@@ -81,17 +81,17 @@ sudo docker run --name urlshortener_openldap \
   * Check redirect in a browser : `http://localhost:8080/redirect/{link_id}`
   * Update link (if owner) : `curl --fail -X PUT -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "id": "{link_id}", "target": "https://github.com" }' http://localhost:8080/api/link`
 * Visitors counters:
-  * Create new counter `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/count?url=https%3A%2F%2Fgithub.com`
-  * Get counter `curl http://localhost:8080/api/count/{counter_id} | jq`
-  * Get counters created by the user "demo1" `curl --fail http://localhost:8080/api/count/createdBy/demo1 | jq`
-  * Increment counter and get `curl http://localhost:8080/api/count/{counter_id}/v`
-  * Increment counter and get SVG `curl http://localhost:8080/api/count/{counter_id}/svg`
-  * Increment counter and get one pixel `curl http://localhost:8080/api/count/{counter_id}/px/0074CC --output target/pixel.png`
-  * Increment counter and get PNG `curl http://localhost:8080/api/count/{counter_id}/png --output target/counter.png`
-  * Reset counter (if owner) : `curl --fail -X PUT -u "demo1:demo1" http://localhost:8080/api/count/{counter_id}/reset`
+  * Create new counter `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/counter?url=https%3A%2F%2Fgithub.com`
+  * Get counter `curl http://localhost:8080/api/counter/{counter_id} | jq`
+  * Get counters created by the user "demo1" `curl --fail http://localhost:8080/api/counter/createdBy/demo1 | jq`
+  * Increment counter and get `curl http://localhost:8080/api/counter/{counter_id}/v`
+  * Increment counter and get SVG `curl http://localhost:8080/api/counter/{counter_id}/svg`
+  * Increment counter and get one pixel `curl http://localhost:8080/api/counter/{counter_id}/px/0074CC --output target/pixel.png`
+  * Increment counter and get PNG `curl http://localhost:8080/api/counter/{counter_id}/png --output target/counter.png`
+  * Reset counter (if owner) : `curl --fail -X PUT -u "demo1:demo1" http://localhost:8080/api/counter/{counter_id}/reset`
 * Counter snapshots:
-  * Take a snapshot `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/count/{counter_id}/snapshot`
-  * Get all snapshots `curl --fail http://localhost:8080/api/count/{counter_id}/snapshots | jq`
+  * Take a snapshot `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/counter/{counter_id}/snapshot`
+  * Get all snapshots `curl --fail http://localhost:8080/api/counter/{counter_id}/snapshots | jq`
 * Aggregated Data:
   * All links with their shortcuts `curl http://localhost:8080/api/report`
   * All links with their shortcuts created by `curl http://localhost:8080/api/report?creator={creator_name}`
