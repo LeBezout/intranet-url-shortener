@@ -21,10 +21,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class UrlShortenerApplication extends SpringBootServletInitializer {
     @Controller
-    static class FaviconController {
+    static class BaseController {
+        @GetMapping({ "/", "/redirect/" })
+        public String index() {
+            return "index.html";
+        }
         @GetMapping("favicon.ico")
         @ResponseBody
-        void returnNoFavicon() {
+        public void disableFavicon() {
             // disable favicon without 404
         }
     }
