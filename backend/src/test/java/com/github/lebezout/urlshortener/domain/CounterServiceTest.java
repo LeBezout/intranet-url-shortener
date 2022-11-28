@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
@@ -114,5 +115,15 @@ class CounterServiceTest {
         service.takeSnapshot(counterId, "JUNIT2");
         List<CounterSnapshotDTO> dtos = service.getAllSnapshots(counterId);
         Assertions.assertTrue(dtos.size() >= 2);
+    }
+
+    @Test
+    @Sql("classpath:/data-test-countersnapshot.sql")
+    void test_getAllSnapshotsBetween() {
+        String counterId = "AZERTY1234";
+        LocalDate start = LocalDate.of(2018, 1, 1);
+        LocalDate end = LocalDate.of(2019, 12, 31);
+        List<CounterSnapshotDTO> dtos = service.getAllSnapshotsBetween(counterId, start, end);
+        Assertions.assertTrue(dtos.size() >= 6);
     }
 }

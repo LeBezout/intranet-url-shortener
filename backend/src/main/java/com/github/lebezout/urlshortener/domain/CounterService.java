@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -157,6 +158,18 @@ public class CounterService {
     public List<CounterSnapshotDTO> getAllSnapshots(String counterId) {
         Assert.notNull(counterId, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
         return snapshotRepository.findByCounterIdOrderBySnapshotDateDesc(counterId)
+            .stream().map(CounterSnapshotDTO::new).collect(Collectors.toList());
+    }
+
+    /**
+     * Get all snapshots for a counter between two dates
+     * @param counterId id of the counter
+     * @return list of DTO
+     */
+    public List<CounterSnapshotDTO> getAllSnapshotsBetween(String counterId, LocalDate start, LocalDate end) {
+        Assert.notNull(counterId, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
+        Assert.notNull(start, "Start date cannot be null");
+        return snapshotRepository.findByCounterIdBetween(counterId, start.atStartOfDay(), end.plusDays(1).atStartOfDay())
             .stream().map(CounterSnapshotDTO::new).collect(Collectors.toList());
     }
 }

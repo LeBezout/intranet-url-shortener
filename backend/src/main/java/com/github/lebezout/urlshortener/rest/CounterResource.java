@@ -8,6 +8,7 @@ import com.github.lebezout.urlshortener.utils.CounterFormater;
 import com.github.lebezout.urlshortener.utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,10 +77,15 @@ public class CounterResource {
     }
 
     @GetMapping(path = "{id}/snapshots")
-    public List<CounterSnapshotDTO> getCounterSnapshots(@PathVariable("id") String counterId) {
+    public List<CounterSnapshotDTO> getCounterSnapshots(@PathVariable("id") String counterId,
+                                                        @RequestParam(name = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                        @RequestParam(name = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         assertIdIsProvided(counterId);
         LOGGER.info("Find snapshots for counter {}", counterId);
-        return service.getAllSnapshots(counterId);
+        if (startDate == null) {
+            return service.getAllSnapshots(counterId);
+        }
+        return service.getAllSnapshotsBetween(counterId, startDate, endDate);
     }
 
     @GetMapping(path = "{id}/v", produces = MediaType.TEXT_PLAIN_VALUE)

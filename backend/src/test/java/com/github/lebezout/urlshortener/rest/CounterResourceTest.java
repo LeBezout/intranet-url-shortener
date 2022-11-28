@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
+import java.net.URLEncoder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
@@ -190,4 +191,20 @@ class CounterResourceTest {
         ResourceTestUtils.assertValidJSonArrayResponse(httpResponse, "18");
     }
 
+    @Test
+    @Sql("classpath:/data-test-countersnapshot.sql")
+    void test_getCounterSnapshotsBetween() throws Exception {
+        String counterId = "AZERTY1234";
+        String startDate = URLEncoder.encode("2018-01-01", "UTF-8");
+        String endDate = URLEncoder.encode("2019-12-31", "UTF-8");
+        String uri = String.format("/api/count/%s/snapshots?from=%s&to=%s", counterId, startDate, endDate);
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI(uri));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        ResourceTestUtils.assertValidJSonArrayResponse(httpResponse, "77");
+    }
 }
