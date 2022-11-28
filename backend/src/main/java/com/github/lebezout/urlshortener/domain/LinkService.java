@@ -66,6 +66,17 @@ public class LinkService {
     }
 
     /**
+     * Find all the links corresponding to the provided target URL
+     * @param targetUrl target url
+     * @return list of links
+     */
+    @Transactional(readOnly = true)
+    public List<LinkDTO> findByTargetUrl(String targetUrl) {
+        Assert.notNull(targetUrl, "Target URL cannot be null");
+        return repository.findByTarget(targetUrl).stream().map(LinkDTO::new).collect(Collectors.toList());
+    }
+
+    /**
      * Find a link by its ID
      * @param id id of the link
      * @return link data
@@ -101,9 +112,9 @@ public class LinkService {
             // If id is provided, we don't check if target URL already exists
         } else {
             // Check if target URL already exists ?
-            Optional<LinkEntity> existingTargetLink = repository.findByTarget(link.getTarget());
-            if (existingTargetLink.isPresent()) {
-                LinkEntity entity = existingTargetLink.get();
+            List<LinkEntity> existingTargetLinks = repository.findByTarget(link.getTarget());
+            if (!existingTargetLinks.isEmpty()) {
+                LinkEntity entity = existingTargetLinks.get(0);
                 // increment counter
                 long created = entity.getCreationCounter() + 1;
                 LOGGER.info("Attempt to create an existing target link : {}, {} times", link.getTarget(), created);

@@ -52,6 +52,13 @@ public class LinkResource {
         return linkService.findByCreator(creator);
     }
 
+    @GetMapping(path = "search")
+    public List<LinkDTO> findLinksByTargetUrl(@RequestParam("target") String targetUrl) {
+        Assert.hasText(targetUrl, "No target Url provided");
+        LOGGER.info("Find links for target {}", targetUrl);
+        return linkService.findByTargetUrl(targetUrl);
+    }
+
     @GetMapping(path = "{idLink}")
     public LinkDTO getByID(@PathVariable("idLink") String idLink) {
         assertIdIsProvided(idLink);

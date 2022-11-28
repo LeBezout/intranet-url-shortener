@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The Link Repository.
@@ -20,7 +19,7 @@ public interface LinkRepository extends CrudRepository<LinkEntity, String> {
      * @return link
      */
     @Query("from LinkEntity l where l.target = ?1 and l.privateLink = false")
-    Optional<LinkEntity> findByTarget(String target);
+    List<LinkEntity> findByTarget(String target);
 
     /**
      * Select all links created by a specific user

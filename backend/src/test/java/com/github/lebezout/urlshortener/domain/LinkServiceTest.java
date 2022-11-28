@@ -69,26 +69,34 @@ class LinkServiceTest {
 
     @Test
     void test_findByCreator() {
-        List<LinkDTO> result = service.findByCreator("JUNIT");
-        Assertions.assertEquals(3, result.size());
+        List<LinkDTO> results = service.findByCreator("JUNIT");
+        Assertions.assertEquals(3, results.size());
     }
 
     @Test
     void test_findByCriteria() {
-        List<LinkDTO> result = service.findByCriteria(
+        List<LinkDTO> results = service.findByCriteria(
             "JUNIT",
             LocalDateTime.of(2018, 11, 10, 0, 0),
             LocalDateTime.of(2018, 11, 12, 0, 0));
-        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals(1, results.size());
     }
 
     @Test
     void test_findByCriteria_NoCreator() {
-        List<LinkDTO> result = service.findByCriteria(
+        List<LinkDTO> results = service.findByCriteria(
             "",
             LocalDateTime.of(2018, 11, 10, 0, 0),
             LocalDateTime.of(2018, 11, 12, 0, 0));
-        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(2, results.size());
+    }
+
+    @Test
+    void test_findByTargetUrl() {
+        List<LinkDTO> results = service.findByTargetUrl("https://notfound.com");
+        Assertions.assertTrue(results.isEmpty());
+        results = service.findByTargetUrl("https://github.com");
+        Assertions.assertEquals(1, results.size());
     }
 
     @Test

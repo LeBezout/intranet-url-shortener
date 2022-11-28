@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -71,6 +72,21 @@ class LinkResourceTest {
         List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
         LOGGER.debug(dtoList.toString());
         Assertions.assertEquals(3, dtoList.size());
+    }
+
+    @Test
+    void test_findLinksByTargetUrl() throws Exception {
+        String targetUrl = URLEncoder.encode("https://github.com", "UTF-8");
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/link/search?target=" + targetUrl));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
+        LOGGER.debug(dtoList.toString());
+        Assertions.assertEquals(1, dtoList.size());
     }
 
     @Test
