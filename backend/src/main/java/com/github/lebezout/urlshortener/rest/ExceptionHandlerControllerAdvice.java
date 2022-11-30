@@ -10,6 +10,7 @@ import com.github.lebezout.urlshortener.error.NotAuthenticatedException;
 import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,6 +34,12 @@ public class ExceptionHandlerControllerAdvice {
                                                           final HttpServletRequest request) {
         LOGGER.error("Unknown error occurred:", exception);
         return new ErrorResponse(ErrorResponse.ErrorType.SERVER, exception.getMessage(), request.getRequestURI());
+    }
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public @ResponseBody ErrorResponse handleAuthenticationException(final Exception exception, final HttpServletRequest request) {
+        LOGGER.error("AuthenticationException error occurred:", exception);
+        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, exception.getMessage(), request.getRequestURI());
     }
     @ExceptionHandler(NotAuthenticatedException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)

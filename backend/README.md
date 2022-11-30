@@ -71,27 +71,27 @@ sudo docker run --name urlshortener_openldap \
 
 ### Test the app
 
-* Check credentials `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/user/login`
+* Check credentials `curl --fail-with-body -X POST -u "demo1:demo1" http://localhost:8080/api/user/login`
 * Shortened Links:
-  * Add a new link `curl --fail -X POST -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "target": "https://github.com" }' http://localhost:8080/api/link`
-  * Get link infos `curl --fail http://localhost:8080/api/link/{link_id} | jq`
-  * Get link target `curl --fail http://localhost:8080/api/link/{link_id}/target`
-  * Get the links created by the user "demo1" `curl --fail http://localhost:8080/api/link/createdBy/demo1 | jq`
-  * Get the links created by the user "demo1" between the "2020-01-01" and the "2020-12-31" : `curl --fail "http://localhost:8080/api/link?creator=demo1&from=2020-01-01T00:00:00Z&to=2020-12-31T23:59:59Z" | jq`
+  * Add a new link `curl --fail-with-body -X POST -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "target": "https://github.com" }' http://localhost:8080/api/link`
+  * Get link infos `curl --fail-with-body http://localhost:8080/api/link/{link_id} | jq`
+  * Get link target `curl --fail-with-body http://localhost:8080/api/link/{link_id}/target`
+  * Get the links created by the user "demo1" `curl --fail-with-body http://localhost:8080/api/link/createdBy/demo1 | jq`
+  * Get the links created by the user "demo1" between the "2020-01-01" and the "2020-12-31" : `curl --fail-with-body "http://localhost:8080/api/link?creator=demo1&from=2020-01-01T00:00:00Z&to=2020-12-31T23:59:59Z" | jq`
   * Check redirect in a browser : `http://localhost:8080/redirect/{link_id}`
-  * Update link (if owner) : `curl --fail -X PUT -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "id": "{link_id}", "target": "https://github.com" }' http://localhost:8080/api/link`
+  * Update link (if owner) : `curl --fail-with-body -X PUT -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "id": "{link_id}", "target": "https://github.com" }' http://localhost:8080/api/link`
 * Visitors counters:
-  * Create new counter `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/counter?url=https%3A%2F%2Fgithub.com`
+  * Create new counter `curl --fail-with-body -X POST -u "demo1:demo1" http://localhost:8080/api/counter?url=https%3A%2F%2Fgithub.com`
   * Get counter `curl http://localhost:8080/api/counter/{counter_id} | jq`
-  * Get counters created by the user "demo1" `curl --fail http://localhost:8080/api/counter/createdBy/demo1 | jq`
+  * Get counters created by the user "demo1" `curl --fail-with-body http://localhost:8080/api/counter/createdBy/demo1 | jq`
   * Increment counter and get `curl http://localhost:8080/api/counter/{counter_id}/v`
   * Increment counter and get SVG `curl http://localhost:8080/api/counter/{counter_id}/svg`
   * Increment counter and get one pixel `curl http://localhost:8080/api/counter/{counter_id}/px/0074CC --output target/pixel.png`
   * Increment counter and get PNG `curl http://localhost:8080/api/counter/{counter_id}/png --output target/counter.png`
-  * Reset counter (if owner) : `curl --fail -X PUT -u "demo1:demo1" http://localhost:8080/api/counter/{counter_id}/reset`
+  * Reset counter (if owner) : `curl --fail-with-body -X PUT -u "demo1:demo1" http://localhost:8080/api/counter/{counter_id}/reset`
 * Counter snapshots:
-  * Take a snapshot `curl --fail -X POST -u "demo1:demo1" http://localhost:8080/api/counter/{counter_id}/snapshot`
-  * Get all snapshots `curl --fail http://localhost:8080/api/counter/{counter_id}/snapshots | jq`
+  * Take a snapshot `curl --fail-with-body -X POST -u "demo1:demo1" http://localhost:8080/api/counter/{counter_id}/snapshot`
+  * Get all snapshots `curl --fail-with-body http://localhost:8080/api/counter/{counter_id}/snapshots | jq`
 * Aggregated Data:
   * All links with their shortcuts `curl http://localhost:8080/api/report`
   * All links with their shortcuts created by `curl http://localhost:8080/api/report?creator={creator_name}`

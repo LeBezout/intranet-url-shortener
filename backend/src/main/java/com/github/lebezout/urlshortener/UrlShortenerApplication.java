@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -35,7 +36,7 @@ public class UrlShortenerApplication extends SpringBootServletInitializer {
 
     @Controller
     static class CustomErrorController implements ErrorController {
-        @RequestMapping("/error")
+        @RequestMapping(value = "/error", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
         public String handleError() {
             return "error.html";
         }
