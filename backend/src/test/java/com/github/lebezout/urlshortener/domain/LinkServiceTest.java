@@ -68,9 +68,15 @@ class LinkServiceTest {
     }
 
     @Test
-    void test_findByCreator() {
-        List<LinkDTO> results = service.findByCreator("JUNIT");
+    void test_findPublicByCreator() {
+        List<LinkDTO> results = service.findPublicByCreator("JUNIT");
         Assertions.assertEquals(3, results.size());
+    }
+
+    @Test
+    void test_findAllByCreator() {
+        List<LinkDTO> results = service.findAllByCreator("JUNIT");
+        Assertions.assertEquals(4, results.size());
     }
 
     @Test

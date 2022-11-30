@@ -76,8 +76,9 @@ sudo docker run --name urlshortener_openldap \
   * Add a new link `curl --fail-with-body -X POST -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "target": "https://github.com" }' http://localhost:8080/api/link`
   * Get link infos `curl --fail-with-body http://localhost:8080/api/link/{link_id} | jq`
   * Get link target `curl --fail-with-body http://localhost:8080/api/link/{link_id}/target`
-  * Get the links created by the user "demo1" `curl --fail-with-body http://localhost:8080/api/link/createdBy/demo1 | jq`
-  * Get the links created by the user "demo1" between the "2020-01-01" and the "2020-12-31" : `curl --fail-with-body "http://localhost:8080/api/link?creator=demo1&from=2020-01-01T00:00:00Z&to=2020-12-31T23:59:59Z" | jq`
+  * Get all the links of the current user `curl --fail-with-body -X POST -u "demo1:demo1" http://localhost:8080/api/link/owned`
+  * Get the public links created by the user "demo1" `curl --fail-with-body http://localhost:8080/api/link/createdBy/demo1 | jq`
+  * Get the public links created by the user "demo1" between the "2020-01-01" and the "2020-12-31" : `curl --fail-with-body "http://localhost:8080/api/link?creator=demo1&from=2020-01-01T00:00:00Z&to=2020-12-31T23:59:59Z" | jq`
   * Check redirect in a browser : `http://localhost:8080/redirect/{link_id}`
   * Update link (if owner) : `curl --fail-with-body -X PUT -u "demo1:demo1" -H "Content-Type: application/json" -d '{ "id": "{link_id}", "target": "https://github.com" }' http://localhost:8080/api/link`
 * Visitors counters:

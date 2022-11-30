@@ -31,20 +31,32 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class LinkService {
+    private static final String ASSERTION_MESSAGE_CREATOR_IS_NULL = "Link creator cannot be null";
     private final LinkRepository repository;
     private final IdGenerator idGenerator;
     private final IdValidator idValidator;
     private final Params params;
 
     /**
+     * Find all public links of the specified creator
+     * @param creator username
+     * @return list of links
+     */
+    @Transactional(readOnly = true)
+    public List<LinkDTO> findPublicByCreator(String creator) {
+        Assert.notNull(creator, ASSERTION_MESSAGE_CREATOR_IS_NULL);
+        List<LinkEntity> entities = repository.findByCreatorAndPrivateLinkIsFalseOrderByLastUpdatedDateDesc(creator);
+        return entities.stream().map(LinkDTO::new).collect(Collectors.toList());
+    }
+
+    /**
      * Find all the links of the specified creator
      * @param creator username
      * @return list of links
      */
-    //TODO @Cacheable(cacheNames="links-by-creator", key="#creator")
     @Transactional(readOnly = true)
-    public List<LinkDTO> findByCreator(String creator) {
-        Assert.notNull(creator, "Link creator cannot be null");
+    public List<LinkDTO> findAllByCreator(String creator) {
+        Assert.notNull(creator, ASSERTION_MESSAGE_CREATOR_IS_NULL);
         List<LinkEntity> entities = repository.findByCreatorOrderByLastUpdatedDateDesc(creator);
         return entities.stream().map(LinkDTO::new).collect(Collectors.toList());
     }
@@ -101,7 +113,7 @@ public class LinkService {
     @CachePut(cacheNames="links") // the method is always executed and its result is placed into the cache
     public LinkDTO addNewLink(final NewLinkDTO link, final String creator) {
         Assert.notNull(link, "New link data cannot be null");
-        Assert.notNull(creator, "Link creator cannot be null");
+        Assert.notNull(creator, ASSERTION_MESSAGE_CREATOR_IS_NULL);
         String id = link.getId();
         if (StringUtils.hasText(id)) {
             LOGGER.info("Provided ID is {}", id);
@@ -175,7 +187,7 @@ public class LinkService {
     @CacheEvict(cacheNames="links", key = "#id")
     public void deleteLink(String id, final String updater) {
         Assert.hasText(id, "No ID provided");
-        Assert.notNull(updater, "Link updater cannot be null");
+        Assert.notNull(updater, ASSERTION_MESSAGE_CREATOR_IS_NULL);
         Optional<LinkEntity> entity = getLinkEntity(id);
         LinkEntity entityToDelete = entity.orElseThrow(LinkNotFoundException::new);
         NotOwnerException.throwIfNeeded(entityToDelete.getCreator(), updater);

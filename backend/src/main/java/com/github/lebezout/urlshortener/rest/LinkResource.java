@@ -49,7 +49,14 @@ public class LinkResource {
     public List<LinkDTO> findLinksByCreator(@PathVariable("creator") String creator) {
         Assert.hasText(creator, "No creator provided");
         LOGGER.info("Find links created by {}", creator);
-        return linkService.findByCreator(creator);
+        return linkService.findPublicByCreator(creator);
+    }
+
+    @GetMapping("/owned")
+    public List<LinkDTO> findOwnedLinks(Principal principal) {
+        assertAuthenticated(principal);
+        LOGGER.info("Find all links created by {}", principal.getName());
+        return linkService.findAllByCreator(principal.getName());
     }
 
     @GetMapping(path = "search")

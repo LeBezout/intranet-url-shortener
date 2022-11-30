@@ -75,6 +75,21 @@ class LinkResourceTest {
     }
 
     @Test
+    @WithMockUser(username = "JUNIT", password = "admin")
+    void test_findOwnedLinks() throws Exception {
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/links/owned"));
+        MvcResult result = mvc.perform(builder)
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        MockHttpServletResponse httpResponse = result.getResponse();
+        List<LinkDTO> dtoList = mapper.readValue(httpResponse.getContentAsByteArray(), new TypeReference<List<LinkDTO>>() {});
+        LOGGER.debug(dtoList.toString());
+        Assertions.assertEquals(4, dtoList.size());
+    }
+
+    @Test
     void test_findLinksByTargetUrl() throws Exception {
         String targetUrl = URLEncoder.encode("https://github.com", "UTF-8");
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(new URI("/api/link/search?target=" + targetUrl));

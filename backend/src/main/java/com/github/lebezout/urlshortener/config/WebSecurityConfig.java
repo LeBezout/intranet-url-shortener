@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().csrf().disable()
             .authorizeRequests()
+            .antMatchers(HttpMethod.GET, "/api/links/owned").fullyAuthenticated()
             .antMatchers(HttpMethod.POST, apiURLAntMatcher).fullyAuthenticated()
             .antMatchers(HttpMethod.PUT, apiURLAntMatcher).fullyAuthenticated()
             .antMatchers(HttpMethod.DELETE, apiURLAntMatcher).fullyAuthenticated()

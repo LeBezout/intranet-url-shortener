@@ -14,9 +14,9 @@ import java.util.List;
 @Repository
 public interface LinkRepository extends CrudRepository<LinkEntity, String> {
     /**
-     * Select a link by its target
+     * Select public links by target url
      * @param target the target url
-     * @return link
+     * @return list of links
      */
     @Query("from LinkEntity l where l.target = ?1 and l.privateLink = false")
     List<LinkEntity> findByTarget(String target);
@@ -27,6 +27,13 @@ public interface LinkRepository extends CrudRepository<LinkEntity, String> {
      * @return list of links
      */
     List<LinkEntity> findByCreatorOrderByLastUpdatedDateDesc(String creator);
+
+    /**
+     * Select only the public links created by a specific user
+     * @param creator the user who created the link
+     * @return list of links
+     */
+    List<LinkEntity> findByCreatorAndPrivateLinkIsFalseOrderByLastUpdatedDateDesc(String creator);
 
     /**
      * Select all links where lastUpdatedDate is between the two specified dates

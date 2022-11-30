@@ -88,7 +88,7 @@ public class ExceptionHandlerControllerAdvice {
     public @ResponseBody ErrorResponse handleNotLinkOwnerException(final Exception exception,
                                                                    final HttpServletRequest request) {
         LOGGER.error("NotOwnerException error occurred:", exception);
-        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "Only the creator of the link can update it", request.getRequestURI());
+        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "Only the creator of the link/counter can update/delete it", request.getRequestURI());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

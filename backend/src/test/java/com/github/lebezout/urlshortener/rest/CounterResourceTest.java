@@ -162,7 +162,7 @@ class CounterResourceTest {
             .andReturn();
 
         MockHttpServletResponse httpResponse = result.getResponse();
-        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "Only the creator of the link can update it");
+        ResourceTestUtils.assertValidJSonErrorResponse(httpResponse, "Only the creator of the link/counter can update/delete it");
     }
 
     @Test
