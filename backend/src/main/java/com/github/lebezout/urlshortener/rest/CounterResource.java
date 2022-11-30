@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -133,7 +134,14 @@ public class CounterResource {
         return service.resetCounter(counterId, principal.getName());
     }
 
-    // TODO delete or disable counter ?
+    @DeleteMapping(path = "{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCounter(@PathVariable("id") String counterId, Principal principal) {
+        assertAuthenticated(principal);
+        assertIdIsProvided(counterId);
+        LOGGER.info("Delete counter {}", counterId);
+        service.deleteCounter(counterId, principal.getName());
+    }
 
     private String incrementAndGetCounterAsString(String counterId) {
         LOGGER.info("Update counter from id {}", counterId);

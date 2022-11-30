@@ -112,6 +112,23 @@ public class CounterService {
     }
 
     /**
+     * Delete a counter if owner
+     * @param id id of the counter
+     * @param creator creator of the counter (owner of the website)
+     * @throws NotLinkOwnerException if not owner of the counter
+     */
+    public void deleteCounter(String id, final String creator) {
+        Assert.notNull(id, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
+        Optional<CounterEntity> existingCounter = repository.findById(id);
+        CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
+        NotLinkOwnerException.throwIfNeeded(entity.getCreator(), creator);
+        // Delete all snapshots
+        snapshotRepository.deleteByCounterId(id);
+        // Delete counter
+        repository.delete(entity);
+    }
+
+    /**
      * Increment the visitor counter and set the last visited date
      * @param id id of the counter
      * @return counter new value

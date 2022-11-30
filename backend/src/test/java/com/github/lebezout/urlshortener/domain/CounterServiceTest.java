@@ -98,6 +98,17 @@ class CounterServiceTest {
     }
 
     @Test
+    void test_deleteCounter_owner() {
+        service.deleteCounter("DELETEME", "JUNIT");
+        Assertions.assertThrows(CounterNotFoundException.class, () -> service.getFromID("DELETEME"));
+        Assertions.assertTrue(service.getAllSnapshots("DELETEME").isEmpty());
+    }
+    @Test
+    void test_deleteCounter_not_owner() {
+        Assertions.assertThrows(NotLinkOwnerException.class, () -> service.deleteCounter("FOOBAR6789", "OTHER"));
+    }
+
+    @Test
     void test_takeSnapshot_CounterNotFoundException() {
         Assertions.assertThrows(CounterNotFoundException.class, () -> service.takeSnapshot("invalidid", "JUNIT"));
     }
