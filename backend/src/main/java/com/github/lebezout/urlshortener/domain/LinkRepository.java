@@ -34,7 +34,7 @@ public interface LinkRepository extends CrudRepository<LinkEntity, String> {
      * @param endDate  end of range
      * @return list of links
      */
-    @Query("from LinkEntity l where l.lastUpdatedDate between ?1 and ?2 order by l.lastUpdatedDate desc")
+    @Query("from LinkEntity l where l.lastUpdatedDate between ?1 and ?2 and l.privateLink = false order by l.lastUpdatedDate desc")
     List<LinkEntity> findByLastUpdatedDate(LocalDateTime startDate, LocalDateTime endDate);
 
     /**
@@ -44,6 +44,6 @@ public interface LinkRepository extends CrudRepository<LinkEntity, String> {
      * @param endDate  end of range
      * @return list of links
      */
-    @Query("from LinkEntity l where l.creator = ?1 and (l.lastUpdatedDate between ?2 and ?3) order by l.lastUpdatedDate desc")
+    @Query("from LinkEntity l where l.creator = ?1 and (l.lastUpdatedDate between ?2 and ?3) and l.privateLink = false order by l.lastUpdatedDate desc")
     List<LinkEntity> findByCreatorAndLastUpdatedDate(String creator, LocalDateTime startDate, LocalDateTime endDate);
 }
