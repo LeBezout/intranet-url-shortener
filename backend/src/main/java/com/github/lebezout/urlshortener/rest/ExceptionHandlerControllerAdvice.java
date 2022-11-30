@@ -7,7 +7,7 @@ import com.github.lebezout.urlshortener.error.IDAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.IDNotAcceptedException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
 import com.github.lebezout.urlshortener.error.NotAuthenticatedException;
-import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
+import com.github.lebezout.urlshortener.error.NotOwnerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -83,11 +83,11 @@ public class ExceptionHandlerControllerAdvice {
         LOGGER.error("IDNotAcceptedException error occurred:", exception);
         return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "The provided ID is rejected by our policy", request.getRequestURI());
     }
-    @ExceptionHandler(NotLinkOwnerException.class)
+    @ExceptionHandler(NotOwnerException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public @ResponseBody ErrorResponse handleNotLinkOwnerException(final Exception exception,
                                                                    final HttpServletRequest request) {
-        LOGGER.error("NotLinkOwnerException error occurred:", exception);
+        LOGGER.error("NotOwnerException error occurred:", exception);
         return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "Only the creator of the link can update it", request.getRequestURI());
     }
 

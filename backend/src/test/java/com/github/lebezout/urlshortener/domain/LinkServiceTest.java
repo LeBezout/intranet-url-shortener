@@ -1,7 +1,7 @@
 package com.github.lebezout.urlshortener.domain;
 
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
-import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
+import com.github.lebezout.urlshortener.error.NotOwnerException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -125,7 +125,7 @@ class LinkServiceTest {
     }
     @Test
     void test_updateLink_NotOwner() {
-        Assertions.assertThrows(NotLinkOwnerException.class, () -> service.updateLink(service.getByID("ABCDEF"), "TEST"));
+        Assertions.assertThrows(NotOwnerException.class, () -> service.updateLink(service.getByID("ABCDEF"), "TEST"));
     }
 
     @Test
@@ -145,8 +145,8 @@ class LinkServiceTest {
     void test_deleteLink_NotOwner() {
         try {
             service.deleteLink("ABCDEF", "TEST");
-            Assertions.fail("Expected NotLinkOwnerException");
-        } catch (NotLinkOwnerException e) {
+            Assertions.fail("Expected NotOwnerException");
+        } catch (NotOwnerException e) {
             // OK
             service.getByID("ABCDEF");
         }

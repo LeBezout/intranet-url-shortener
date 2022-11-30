@@ -2,7 +2,7 @@ package com.github.lebezout.urlshortener.domain;
 
 import com.github.lebezout.urlshortener.error.CounterAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.CounterNotFoundException;
-import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
+import com.github.lebezout.urlshortener.error.NotOwnerException;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,13 +94,13 @@ public class CounterService {
      * @param id id of the counter
      * @param creator creator of the counter (owner of the website)
      * @return counter
-     * @throws NotLinkOwnerException if not owner of the counter
+     * @throws NotOwnerException if not owner of the counter
      */
     public CounterDTO resetCounter(String id, final String creator) {
         Assert.notNull(id, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
         Optional<CounterEntity> existingCounter = repository.findById(id);
         CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
-        NotLinkOwnerException.throwIfNeeded(entity.getCreator(), creator);
+        NotOwnerException.throwIfNeeded(entity.getCreator(), creator);
         entity.setVisitorCounter(0L);
         entity.setLastVisitedDate(null);
         repository.save(entity);
@@ -115,13 +115,13 @@ public class CounterService {
      * Delete a counter if owner
      * @param id id of the counter
      * @param creator creator of the counter (owner of the website)
-     * @throws NotLinkOwnerException if not owner of the counter
+     * @throws NotOwnerException if not owner of the counter
      */
     public void deleteCounter(String id, final String creator) {
         Assert.notNull(id, ASSERTION_MESSAGE_COUNTER_ID_IS_NULL);
         Optional<CounterEntity> existingCounter = repository.findById(id);
         CounterEntity entity = existingCounter.orElseThrow(CounterNotFoundException::new);
-        NotLinkOwnerException.throwIfNeeded(entity.getCreator(), creator);
+        NotOwnerException.throwIfNeeded(entity.getCreator(), creator);
         // Delete all snapshots
         snapshotRepository.deleteByCounterId(id);
         // Delete counter

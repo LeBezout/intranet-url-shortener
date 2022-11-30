@@ -4,7 +4,7 @@ import com.github.lebezout.urlshortener.config.Params;
 import com.github.lebezout.urlshortener.error.IDAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.IDNotAcceptedException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
-import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
+import com.github.lebezout.urlshortener.error.NotOwnerException;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
 import com.github.lebezout.urlshortener.utils.IdValidator;
 import lombok.RequiredArgsConstructor;
@@ -148,7 +148,7 @@ public class LinkService {
      * @param link data of the link to update
      * @param updater username
      * @throws LinkNotFoundException if the id is not found
-     * @throws NotLinkOwnerException if the updater is not the owner of the link
+     * @throws NotOwnerException if the updater is not the owner of the link
      */
     @CachePut(cacheNames="links")
     public void updateLink(LinkDTO link, final String updater) {
@@ -157,7 +157,7 @@ public class LinkService {
         Assert.hasText(link.getId(), "No ID provided");
         Optional<LinkEntity> entity = getLinkEntity(link.getId());
         LinkEntity entityToUpdate = entity.orElseThrow(LinkNotFoundException::new);
-        NotLinkOwnerException.throwIfNeeded(entityToUpdate.getCreator(), updater);
+        NotOwnerException.throwIfNeeded(entityToUpdate.getCreator(), updater);
         // ok, update this entity
         entityToUpdate.setLastUpdatedDate(LocalDateTime.now());
         entityToUpdate.setPrivateLink(link.isPrivateLink());
@@ -170,7 +170,7 @@ public class LinkService {
      * @param id id of the expected link
      * @param updater username
      * @throws LinkNotFoundException in the id is not found
-     * @throws NotLinkOwnerException if the updater is not the owner of the link
+     * @throws NotOwnerException if the updater is not the owner of the link
      */
     @CacheEvict(cacheNames="links", key = "#id")
     public void deleteLink(String id, final String updater) {
@@ -178,7 +178,7 @@ public class LinkService {
         Assert.notNull(updater, "Link updater cannot be null");
         Optional<LinkEntity> entity = getLinkEntity(id);
         LinkEntity entityToDelete = entity.orElseThrow(LinkNotFoundException::new);
-        NotLinkOwnerException.throwIfNeeded(entityToDelete.getCreator(), updater);
+        NotOwnerException.throwIfNeeded(entityToDelete.getCreator(), updater);
         // ok, delete this entity
         repository.delete(entity.get()); // NOSONAR orElseThrow used above
     }

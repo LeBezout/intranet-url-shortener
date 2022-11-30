@@ -2,7 +2,7 @@ package com.github.lebezout.urlshortener.domain;
 
 import com.github.lebezout.urlshortener.error.CounterAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.CounterNotFoundException;
-import com.github.lebezout.urlshortener.error.NotLinkOwnerException;
+import com.github.lebezout.urlshortener.error.NotOwnerException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -94,7 +94,7 @@ class CounterServiceTest {
     }
     @Test
     void test_resetCounter_not_owner() {
-        Assertions.assertThrows(NotLinkOwnerException.class, () -> service.resetCounter("FOOBAR6789", "OTHER"));
+        Assertions.assertThrows(NotOwnerException.class, () -> service.resetCounter("FOOBAR6789", "OTHER"));
     }
 
     @Test
@@ -105,7 +105,7 @@ class CounterServiceTest {
     }
     @Test
     void test_deleteCounter_not_owner() {
-        Assertions.assertThrows(NotLinkOwnerException.class, () -> service.deleteCounter("FOOBAR6789", "OTHER"));
+        Assertions.assertThrows(NotOwnerException.class, () -> service.deleteCounter("FOOBAR6789", "OTHER"));
     }
 
     @Test
