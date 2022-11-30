@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Sql("classpath:/data-test-link.sql")
 @Transactional
 class LinkServiceTest {
