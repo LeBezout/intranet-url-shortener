@@ -33,7 +33,7 @@ class LinkServiceTest {
     void test_addNewLink() {
         NewLinkDTO dto = new NewLinkDTO();
         dto.setId("provided");
-        dto.setTarget("URL");
+        dto.setTarget("https://my-web-site.com");
         LinkDTO inserted = service.addNewLink(dto, "JUNIT");
         Assertions.assertEquals("JUNIT", inserted.getCreator());
         Assertions.assertEquals("provided", inserted.getId());
@@ -111,14 +111,14 @@ class LinkServiceTest {
         Assertions.assertEquals("JUNIT", link.getCreator());
         Assertions.assertEquals("https://github.com", link.getTarget());
         Assertions.assertFalse(link.isPrivateLink());
-        link.setTarget("TEST");
+        link.setTarget("https://github.com/profile");
         link.setPrivateLink(true);
 
         service.updateLink(link, "JUNIT");
 
         link = service.getByID("ABCDEF");
         Assertions.assertEquals("JUNIT", link.getCreator());
-        Assertions.assertEquals("TEST", link.getTarget());
+        Assertions.assertEquals("https://github.com/profile", link.getTarget());
         Assertions.assertTrue(link.isPrivateLink());
     }
     @Test

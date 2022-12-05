@@ -9,18 +9,23 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class IdGenerator {
     private final char[] alphabet;
+    private final int defaultLength;
 
     /** Constructor with array of primitives
+     * @param defaultLength the default fixed length if none is provided
      * @param pChars array of chars
      */
-    public IdGenerator(final char... pChars) {
+    public IdGenerator(final int defaultLength, final char... pChars) {
+        this.defaultLength = defaultLength;
         alphabet = Objects.requireNonNull(pChars, "Alphabet array cannot be null");
     }
 
     /** Constructor with array of wrapped characters
+     * @param defaultLength the default fixed length if none is provided
      * @param pChars array of characters
      */
-    public IdGenerator(final Character... pChars) {
+    public IdGenerator(final int defaultLength, final Character... pChars) {
+        this.defaultLength = defaultLength;
         Objects.requireNonNull(pChars, "Alphabet array cannot be null");
         alphabet = new char[pChars.length];
         for (int i = 0; i < pChars.length; i++) {
@@ -61,6 +66,13 @@ public class IdGenerator {
      */
     public String generate(final int length) {
         return generate(length, length);
+    }
+
+    /** generate a new id with of the default fixed length
+     * @return new Id
+     */
+    public String generate() {
+        return generate(defaultLength);
     }
 
     private static int generateInt(final int min, final int max) {

@@ -8,6 +8,7 @@ import com.github.lebezout.urlshortener.error.IDNotAcceptedException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
 import com.github.lebezout.urlshortener.error.NotAuthenticatedException;
 import com.github.lebezout.urlshortener.error.NotOwnerException;
+import com.github.lebezout.urlshortener.error.UrlNotAcceptedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -82,6 +83,12 @@ public class ExceptionHandlerControllerAdvice {
                                                                     final HttpServletRequest request) {
         LOGGER.error("IDNotAcceptedException error occurred:", exception);
         return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "The provided ID is rejected by our policy", request.getRequestURI());
+    }
+    @ExceptionHandler(UrlNotAcceptedException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody ErrorResponse handleUrlNotAcceptedException(final Exception exception, final HttpServletRequest request) {
+        LOGGER.error("UrlNotAcceptedException error occurred:", exception);
+        return new ErrorResponse(ErrorResponse.ErrorType.CLIENT, "The provided target URL is rejected by our policy", request.getRequestURI());
     }
     @ExceptionHandler(NotOwnerException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)

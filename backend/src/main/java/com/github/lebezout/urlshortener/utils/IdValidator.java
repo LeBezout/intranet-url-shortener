@@ -23,6 +23,6 @@ public class IdValidator {
     }
 
     private boolean isForbidden(String value) {
-        return Arrays.stream(forbiddenIds).anyMatch(e -> e.equalsIgnoreCase(value));
+        return Arrays.stream(forbiddenIds).anyMatch(value::equalsIgnoreCase);
     }
 }

@@ -1,12 +1,13 @@
 package com.github.lebezout.urlshortener.domain;
 
-import com.github.lebezout.urlshortener.config.Params;
 import com.github.lebezout.urlshortener.error.IDAlreadyExistsException;
 import com.github.lebezout.urlshortener.error.IDNotAcceptedException;
 import com.github.lebezout.urlshortener.error.LinkNotFoundException;
 import com.github.lebezout.urlshortener.error.NotOwnerException;
+import com.github.lebezout.urlshortener.error.UrlNotAcceptedException;
 import com.github.lebezout.urlshortener.utils.IdGenerator;
 import com.github.lebezout.urlshortener.utils.IdValidator;
+import com.github.lebezout.urlshortener.utils.TargetUrlValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,7 +36,7 @@ public class LinkService {
     private final LinkRepository repository;
     private final IdGenerator idGenerator;
     private final IdValidator idValidator;
-    private final Params params;
+    private final TargetUrlValidator urlValidator;
 
     /**
      * Find all public links of the specified creator
@@ -136,8 +137,12 @@ public class LinkService {
                 return new LinkDTO(entity);
             }
             // else generate ID
-            id = idGenerator.generate(params.getGeneratedIdLength());
+            id = idGenerator.generate();
             LOGGER.info("New ID generated {}", id);
+        }
+        // validate target URL
+        if (!urlValidator.accept(link.getTarget())) {
+            throw new UrlNotAcceptedException();
         }
         // create new entity
         LinkEntity entity = new LinkEntity();
@@ -170,6 +175,10 @@ public class LinkService {
         Optional<LinkEntity> entity = getLinkEntity(link.getId());
         LinkEntity entityToUpdate = entity.orElseThrow(LinkNotFoundException::new);
         NotOwnerException.throwIfNeeded(entityToUpdate.getCreator(), updater);
+        // validate target URL
+        if (!urlValidator.accept(link.getTarget())) {
+            throw new UrlNotAcceptedException();
+        }
         // ok, update this entity
         entityToUpdate.setLastUpdatedDate(LocalDateTime.now());
         entityToUpdate.setPrivateLink(link.isPrivateLink());

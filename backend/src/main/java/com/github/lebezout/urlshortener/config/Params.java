@@ -2,6 +2,7 @@ package com.github.lebezout.urlshortener.config;
 
 import com.github.lebezout.urlshortener.utils.IdGenerator;
 import com.github.lebezout.urlshortener.utils.IdValidator;
+import com.github.lebezout.urlshortener.utils.TargetUrlValidator;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ public class Params {
     private int providedIdMinLength;
     private int providedIdMaxLength;
 
+    private String[] forbiddenTargetUrlKeywords;
+
     @PostConstruct
     public void setDefaultValues() {
         if (httpRedirectStatus < 300 || httpRedirectStatus > 399) {
@@ -43,6 +46,9 @@ public class Params {
         }
         if (forbiddenIds == null) {
             forbiddenIds = new String[0];
+        }
+        if (forbiddenTargetUrlKeywords == null) {
+            forbiddenTargetUrlKeywords = new String[0];
         }
         if (providedIdMinLength == 0) {
             providedIdMinLength = 2;
@@ -101,6 +107,14 @@ public class Params {
         this.forbiddenIds = forbiddenIds;
     }
     /** DO NOT USE - Only for Spring */
+    public String[] getForbiddenTargetUrlKeywords() {
+        return forbiddenTargetUrlKeywords;
+    }
+    /** DO NOT USE - Only for Spring */
+    public void setForbiddenTargetUrlKeywords(String[] forbiddenTargetUrlKeywords) {
+        this.forbiddenTargetUrlKeywords = forbiddenTargetUrlKeywords;
+    }
+    /** DO NOT USE - Only for Spring */
     public int getProvidedIdMinLength() {
         return providedIdMinLength;
     }
@@ -123,7 +137,7 @@ public class Params {
      */
     @Bean
     public IdGenerator getIdGenerator() {
-        return new IdGenerator(idAlphabet);
+        return new IdGenerator(generatedIdLength, idAlphabet);
     }
 
     /**
@@ -133,5 +147,14 @@ public class Params {
     @Bean
     public IdValidator getIdValidator() {
         return new IdValidator(forbiddenIds, providedIdMinLength, providedIdMaxLength);
+    }
+
+    /**
+     * For dependency injection of our TargetUrlValidator
+     * @return new instance
+     */
+    @Bean
+    public TargetUrlValidator getTargetUrlValidator() {
+        return new TargetUrlValidator(forbiddenTargetUrlKeywords);
     }
 }
