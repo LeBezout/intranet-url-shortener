@@ -6,6 +6,8 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.security.Principal;
+
 @Configuration
 public class OpenApiConfig {
     @Bean
@@ -13,7 +15,7 @@ public class OpenApiConfig {
         Docket dk = new Docket(DocumentationType.SWAGGER_2).select()
             .apis(RequestHandlerSelectors.basePackage("com.github.lebezout.urlshortener.rest"))
             .build();
-        dk.ignoredParameterTypes(org.springframework.core.io.Resource.class, java.io.InputStream.class);
+        dk.ignoredParameterTypes(org.springframework.core.io.Resource.class, java.io.InputStream.class, Principal.class);
         return dk;
     }
 }
