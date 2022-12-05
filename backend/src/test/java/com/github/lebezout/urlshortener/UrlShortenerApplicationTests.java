@@ -48,7 +48,7 @@ class UrlShortenerApplicationTests {
         LOGGER.debug("SAMPLE ID : " + sampleId);
         Assertions.assertEquals(6, sampleId.length());
 
-        Assertions.assertTrue(idValidator.isValid("junit"));
+        Assertions.assertTrue(idValidator.accept("junit"));
         Assertions.assertTrue(urlValidator.accept("https://github.com"));
     }
 }

@@ -18,11 +18,7 @@ public class IdValidator {
      * @param id id
      * @return true if accepted
      */
-    public boolean isValid(String id) {
-        return id != null && id.length() >= minLength && id.length() <= maxLength && !isForbidden(id);
-    }
-
-    private boolean isForbidden(String value) {
-        return Arrays.stream(forbiddenIds).anyMatch(value::equalsIgnoreCase);
+    public boolean accept(String id) {
+        return id != null && id.length() >= minLength && id.length() <= maxLength && Arrays.stream(forbiddenIds).noneMatch(id::equalsIgnoreCase);
     }
 }

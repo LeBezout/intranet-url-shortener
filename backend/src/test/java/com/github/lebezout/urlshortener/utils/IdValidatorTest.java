@@ -9,13 +9,13 @@ class IdValidatorTest {
     void test_not_isValid() {
         IdValidator validator = new IdValidator(new String[] { "admin", "foo", "bar" }, 3, 8);
         Assertions.assertAll(
-            () -> Assertions.assertFalse(validator.isValid(null)),
-            () -> Assertions.assertFalse(validator.isValid("")),
-            () -> Assertions.assertFalse(validator.isValid("qw")), // < minLength
-            () -> Assertions.assertFalse(validator.isValid("123456789")), // > maxLength
-            () -> Assertions.assertFalse(validator.isValid("admin")),
-            () -> Assertions.assertFalse(validator.isValid("foo")),
-            () -> Assertions.assertFalse(validator.isValid("bar"))
+            () -> Assertions.assertFalse(validator.accept(null)),
+            () -> Assertions.assertFalse(validator.accept("")),
+            () -> Assertions.assertFalse(validator.accept("qw")), // < minLength
+            () -> Assertions.assertFalse(validator.accept("123456789")), // > maxLength
+            () -> Assertions.assertFalse(validator.accept("admin")),
+            () -> Assertions.assertFalse(validator.accept("foo")),
+            () -> Assertions.assertFalse(validator.accept("bar"))
         );
     }
 
@@ -23,10 +23,10 @@ class IdValidatorTest {
     void test_isValid() {
         IdValidator validator = new IdValidator(new String[] { "admin", "foo", "bar" }, 3, 5);
         Assertions.assertAll(
-            () -> Assertions.assertTrue(validator.isValid("123")),
-            () -> Assertions.assertTrue(validator.isValid("1234")),
-            () -> Assertions.assertTrue(validator.isValid("12345")),
-            () -> Assertions.assertTrue(validator.isValid("myid"))
+            () -> Assertions.assertTrue(validator.accept("123")),
+            () -> Assertions.assertTrue(validator.accept("1234")),
+            () -> Assertions.assertTrue(validator.accept("12345")),
+            () -> Assertions.assertTrue(validator.accept("myid"))
         );
     }
 }

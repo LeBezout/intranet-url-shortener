@@ -118,7 +118,7 @@ public class LinkService {
         String id = link.getId();
         if (StringUtils.hasText(id)) {
             LOGGER.info("Provided ID is {}", id);
-            if (!idValidator.isValid(id)) {
+            if (!idValidator.accept(id)) {
                 throw new IDNotAcceptedException();
             }
             getLinkEntity(id).ifPresent(l -> { throw new IDAlreadyExistsException(); });
