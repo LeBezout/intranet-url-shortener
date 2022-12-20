@@ -110,6 +110,7 @@ public class LinkService {
      * @return new link data (with a new id if not provided)
      * @throws IDAlreadyExistsException if the provided id already exists
      * @throws IDNotAcceptedException if the provided id is too long
+     * @throws UrlNotAcceptedException if the provided target url is rejected
      */
     @CachePut(cacheNames="links") // the method is always executed and its result is placed into the cache
     public LinkDTO addNewLink(final NewLinkDTO link, final String creator) {
@@ -166,6 +167,7 @@ public class LinkService {
      * @param updater username
      * @throws LinkNotFoundException if the id is not found
      * @throws NotOwnerException if the updater is not the owner of the link
+     * @throws UrlNotAcceptedException if the provided target url is rejected
      */
     @CachePut(cacheNames="links")
     public void updateLink(LinkDTO link, final String updater) {
